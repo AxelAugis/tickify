@@ -1,19 +1,48 @@
-{% extends 'base.html.twig' %}
+{% extends 'auth/base.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Inscription{% endblock %}
 
 {% block body %}
-    <h1>Register</h1>
+<div class="w-full h-full flex flex-col gap-y-16 justify-center items-center ">
+        <h1 class="text-6xl font-bold">Bienvenu sur <span class="text-outline">Tickify</span> </h1>
+    <div class="w-1/2 flex flex-col gap-y-8 justify-center items-center shadow-default rounded-xl py-10 px-8 bg-white">
+        <h2 class="self-start text-3xl font-bold">Créer mon compte</h2>
+        {{ form_errors(registrationForm) }}
+        {{ form_start(registrationForm, {'attr': {'class': 'w-full flex flex-col items-center gap-y-5'}}) }}
+            <div class="w-full grid grid-cols-2 gap-x-3">
+                <div class="w-full flex flex-col gap-y-0.5 gap-x-3">
+                    {{ form_label(registrationForm.firstname, 'Prénom', {'label_attr': {'class': 'mb-2 font-medium'}}) }}
+                    {{ form_widget(registrationForm.firstname, {'attr': {'class': 'w-full bg-white p-2 rounded-md border border-neutral-200/80 focus:outline-none focus:ring focus:ring-outline/20'}}) }}
+                </div>
+                <div class="w-full flex flex-col gap-y-0.5 gap-x-3">
+                    {{ form_label(registrationForm.lastname, 'Nom', {'label_attr': {'class': 'mb-2 font-medium'}}) }}
+                    {{ form_widget(registrationForm.lastname, {'attr': {'class': 'w-full bg-white p-2 rounded-md border border-neutral-200/80 focus:outline-none focus:ring focus:ring-outline/20'}}) }}
+                </div>
+            </div>
+            <div class="w-full flex flex-col gap-y-0.5 gap-x-3">
+                {{ form_label(registrationForm.email, 'Email', {'label_attr': {'class': 'mb-2 font-medium'}}) }}
+                {{ form_widget(registrationForm.email, {'attr': {'class': 'w-full bg-white p-2 rounded-md border border-neutral-200/80 focus:outline-none focus:ring focus:ring-outline/20'}}) }}
+            </div>
+            <div class="w-full grid grid-cols-2 gap-x-3">
+                <div class="w-full flex flex-col gap-y-0.5 gap-x-3">
+                    {{ form_label(registrationForm.plainPassword.first, 'Mot de passe', {'label_attr': {'class': 'mb-2 font-medium'}}) }}
+                    {{ form_widget(registrationForm.plainPassword.first, {'attr': {'class': 'w-full bg-white p-2 rounded-md border border-neutral-200/80 focus:outline-none focus:ring focus:ring-outline/20'}}) }}
+                </div>
+                <div class="w-full flex flex-col gap-y-0.5 gap-x-3">
+                    {{ form_label(registrationForm.plainPassword.second, 'Confirmer le mot de passe', {'label_attr': {'class': 'mb-2 font-medium'}}) }}
+                    {{ form_widget(registrationForm.plainPassword.second, {'attr': {'class': 'w-full bg-white p-2 rounded-md border border-neutral-200/80 focus:outline-none focus:ring focus:ring-outline/20'}}) }}
+                </div>
+            </div>
+            <div class="w-full flex items-center  gap-x-1">
+                {{ form_label(registrationForm.agreeTerms, 'Accepter les conditions', {'label_attr': {'class': ' font-medium'}}) }}
+                {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'bg-white p-2 rounded-md  ml-2'}}) }}
+            </div>
 
-    {{ form_errors(registrationForm) }}
-
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
-
-        <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+            <div class="w-full flex justify-between items-center">
+                <a href="{{ path('app_login') }}" class="text-outline transition-all hover:underline">Déjà un compte ?</a>
+                <button type="submit" class=" self-end py-2 px-10 text-lg rounded-md bg-transparent border border-outline text-outline  hover:bg-outline hover:text-white transition-all">Inscription</button>
+            </div>
+        {{ form_end(registrationForm) }}
+    </div>
+</div>
 {% endblock %}
