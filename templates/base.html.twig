@@ -13,7 +13,35 @@
             {% block importmap %}{{ importmap('app') }}{% endblock %}
         {% endblock %}
     </head>
-    <body class="w-screen h-screen relative bg-layout-light">
-        {% block body %}{% endblock %}
+    <body class="w-screen h-screen relative bg-layout-light text-primary font-inter">
+        <nav class="w-full flex items-center justify-between py-4 px-8 sticky top-0 left-O bg-layout-light  border-b-2 border-neutral-200/50 ">
+            <a href="{{ path('app_home') }}" class="text-2xl font-bold">Tickify</a>
+            <div class="flex items-center gap-x-8">
+                <div class="flex items-center   border border-neutral-200/80 rounded-md">
+                    <div class=" h-11 px-2 py-2 border-r border-neutral-200/80">
+                        <img src="{{ asset('images/icons/magnifier.svg') }}" alt="avatar" class="w-full h-full rounded-full">
+                    </div>
+                    <input type="text" class="  w-60 h-7 pl-2 bg-transparent focus:outline-none" placeholder="Rechercher">
+                </div>
+                <button class="w-12 h-12 flex justify-center items-center p-2 bg-outline text-white text-2xl font-medium rounded-full">
+                    A
+                </button>
+            </div>
+        </nav>
+        <section class="w-full h-full flex">
+            <aside class="w-1/6 h-full py-16 pl-4 px-4 flex flex-col  gap-y-4 bg-layout-light text-primary border-r border-neutral-200/80 font-medium text-xl">
+                <a class="w-full flex items-center gap-x-3 py-2 pl-4 hover:text-white  bg-transparent hover:bg-outline/60  rounded-md transition-colors" href="{{ path('app_home') }}">
+                    <img src="{{ asset('images/aside/project.svg') }}" alt="home" class="w-6 h-6 inline-block">
+                    Projets
+                </a>
+                <a class="w-full flex items-center gap-x-3 py-2 pl-4 hover:text-white  bg-transparent hover:bg-outline/60  rounded-md transition-colors" href="{{ path('app_home') }}">
+                    <img src="{{ asset('images/aside/ticket.svg') }}" alt="home" class="w-6 h-6 inline-block">
+                    Tickets
+                </a>
+            </aside>
+            <main class="w-5/6 h-full p-8">
+                {% block body %}{% endblock %}
+            </main>
+        </section>
     </body>
 </html>

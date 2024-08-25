@@ -16,6 +16,7 @@ module.exports = {
         },
         'primary': '#333333',
         'outline': '#1bd2c6',
+        'hover-light': "#E0E0E0",
       },
       fontFamily: {
         'inter': ['Inter', 'sans-serif'],
