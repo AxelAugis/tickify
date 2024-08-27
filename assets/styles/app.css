@@ -3,3 +3,10 @@
 @tailwind utilities;
 
 
+#dropdown {
+    display: none;
+}
+
+#dropdown.active {
+    display: block;
+}

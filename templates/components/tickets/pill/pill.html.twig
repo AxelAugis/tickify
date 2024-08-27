@@ -1,0 +1,25 @@
+{% set colors %}
+    {% if status == 'todo' %}
+        bg-blue-100 border border-blue-500 text-blue-500
+    {% elseif status == 'in_progress' %}
+        bg-yellow-100 border border-yellow-300 text-yellow-500
+    {% elseif status == 'done' %}
+        bg-green-100 border border-green-300 text-green-500
+    {% else %}
+        bg-red-100 border border-red-300 text-red-500
+    {% endif %}
+{% endset %}
+
+{% set status_label %}
+    {% if status == 'todo' %}
+        A faire
+    {% elseif status == 'in_progress' %}
+        En cours
+    {% elseif status == 'done' %}
+        Terminé
+    {% else %}
+        Fermé
+    {% endif %}
+{% endset %}
+
+<span class=" {{ colors }} rounded-md px-3 py-1 text-sm">{{ status_label }}</span>
