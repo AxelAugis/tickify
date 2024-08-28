@@ -9,7 +9,11 @@ const Modal = ({ ticket, onClick, isVisible, modalStyle, handleModal, refreshDat
                             modalStyle ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'
                           }
                         `}>
-            <Details handleModal={handleModal} ticket={ticket} refreshData={refreshData} />
+            {
+                ticket && (
+                    <Details handleModal={handleModal} ticket={ticket} refreshData={refreshData} />
+                )
+            }
 
         </div>
     )

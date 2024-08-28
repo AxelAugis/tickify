@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { apiUrl } from "@/app/api";
 import { useEffect, useState } from "react";
+import Description from "./Description/Description";
 
 const Details = ({ ticket, handleModal, refreshData }) => {
 
@@ -11,10 +12,28 @@ const Details = ({ ticket, handleModal, refreshData }) => {
         { value: 'closed', label: 'Fermé' }
     ]
 
+    const [formDatas, setFormDatas] = useState({
+        status: ticket ? ticket[0].status : '',
+        description: ticket ? ticket[0].description : '',
+        title: ticket ? ticket[0].title : ''
+    });
+
     const [status, setStatus] = useState(ticket ? ticket[0].status : '');
+    const [isDescriptionEditing, setIsDescriptionEditing] = useState(false);
+
+    const handleInputChange = (event) => {
+        setFormDatas({
+            ...formDatas,
+            [event.target.name]: event.target.value
+        });
+    };
 
     useEffect(() => {
-        setStatus(ticket ? ticket[0].status : '');
+        setFormDatas({
+            status: ticket ? ticket[0].status : '',
+            description: ticket ? ticket[0].description : '',
+            title: ticket ? ticket[0].title : ''
+        });
     }, [ticket])
 
 
@@ -25,7 +44,7 @@ const Details = ({ ticket, handleModal, refreshData }) => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ status })
+            body: JSON.stringify(formDatas)
         })
 
         if(response.ok) {
@@ -43,9 +62,9 @@ const Details = ({ ticket, handleModal, refreshData }) => {
             onSubmit={handleSubmit}
             className={`w-1/2 h-1/2 rounded-lg bg-white py-4 px-6 flex flex-col gap-y-6 text-primary-light-text`}>
                 <div className={`w-full flex justify-between items-center`}>
-                    <h3 className={`text-lg font-medium`}>{ticket[0].title}</h3>
+                    <input type="text" value={formDatas.title} onChange={handleInputChange} name="title" className={`text-lg font-medium w-full rounded-md focus:outline-none`} />
                     <button
-                    className={`w-8 h-8 p-2 rounded-full border border-black`}
+                    className={`w-10 h-10 p-2 rounded-full border border-black`}
                         onClick={handleModal}
                     >
                         <Image
@@ -56,16 +75,17 @@ const Details = ({ ticket, handleModal, refreshData }) => {
                             />
                     </button>
                 </div>
-                <div className={`w-full grid grid-cols-3 `}>
-                    <div className={`w-full col-span-2 text-justify`}>
-                        <p>{ticket[0].description}</p>
-                    </div>
+                <div className={`w-full h-full grid grid-cols-3 gap-x-8  `}>
+                    <Description description={formDatas.description} handleInputChange={handleInputChange} />
                     <fieldset className={`w-full flex flex-col gap-y-2 col-span-1`}>
                         <label className={`text-sm font-medium`}>Statut</label>
                         <select 
-                        value={status}
-                        onChange={(e) => setStatus(e.target.value)}
-                        className={`w-full h-8 rounded-md bg-trasnparent text-primary-light-text border border-neutral/20 px-2`} name="status" id="status">
+                            value={formDatas.status}
+                            onChange={handleInputChange}
+                            className={`w-full h-8 rounded-md bg-trasnparent text-primary-light-text border border-neutral/20 px-2`} 
+                            name="status" 
+                            id="status"
+                        >
                             {options.map(option => (
                                 <option 
                                     value={option.value} 
@@ -78,7 +98,7 @@ const Details = ({ ticket, handleModal, refreshData }) => {
                     </fieldset>
                    
                 </div>
-                <button className={`w-fit h-8 self-end text-sm  px-4 text-primary font-medium border border-black/50 hover:bg-black hover:text-white backdrop-blur-md rounded-md transition-colors`}>Enregistrer</button>
+                <button className={`w-fit py-1 self-end text-sm  px-4 text-primary font-medium border border-black/50 hover:bg-black hover:text-white backdrop-blur-md rounded-md transition-colors`}>Enregistrer</button>
                 
             </form>
         )

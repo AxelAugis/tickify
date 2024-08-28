@@ -24,7 +24,7 @@ const Status = ({ status }) => {
     }
 
     return (
-        <h3 className={`w-full py-1.5 rounded-lg px-4 text-base font-medium ${statusLabel[status].bgColor} ${statusLabel[status].color}`}>
+        <h3 className={`w-full py-1.5 rounded-md px-4 text-base font-medium ${statusLabel[status].bgColor} ${statusLabel[status].color}`}>
             {statusLabel[status].label}
         </h3>
     )
