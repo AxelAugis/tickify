@@ -7,7 +7,7 @@
     width: 170%;
     max-height: 0px;
     opacity: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.95);
     backdrop-filter: blur(10px);
     border-radius: 8px;
     visibility: hidden;

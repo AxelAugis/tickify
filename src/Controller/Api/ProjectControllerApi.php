@@ -38,8 +38,9 @@ class ProjectControllerApi extends AbstractController
             if (array_key_exists($status, $groupedTickets)) {
                 $groupedTickets[$status][] = [
                     'id' => $ticket->getId(),
-                    'name' => $ticket->getTitle(),
+                    'title' => $ticket->getTitle(),
                     'description' => $ticket->getDescription(),
+                    'status' => $ticket->getStatus()->value,
                 ];
             }
         }
