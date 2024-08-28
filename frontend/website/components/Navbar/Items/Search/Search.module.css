@@ -1,21 +1,20 @@
 .dropdownMenu {
     display: flex;
     flex-direction: column;
-    gap: 10px;
     position: absolute;
-    top: 160%;
-    left: 0;
+    top: 180%;
+    right: 0;
     width: 170%;
     max-height: 0px;
     opacity: 0;
     background-color: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(10px);
-    border: 1px solid #fff;
     border-radius: 8px;
     visibility: hidden;
     overflow: hidden;
     transition:  visibility 0.3s, max-height 0.3s, opacity 0.3s;
 }
+
 
 .dropdownMenu.open {
     max-height: 500px;

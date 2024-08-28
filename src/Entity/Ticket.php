@@ -6,6 +6,7 @@ use App\Config\TicketStatus;
 use App\Repository\TicketRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: TicketRepository::class)]
 class Ticket
@@ -13,12 +14,15 @@ class Ticket
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['project:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['project:read'])]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['project:read'])]
     private ?string $description = null;
 
     #[ORM\ManyToOne(inversedBy: 'tickets')]
@@ -26,12 +30,15 @@ class Ticket
     private ?Project $project = null;
 
     #[ORM\Column(enumType: TicketStatus::class)]
+    #[Groups(['project:read'])]
     private ?TicketStatus $status = null;
 
     #[ORM\Column]
+    #[Groups(['project:read'])]
     private ?\DateTime $createdAt = null;
 
     #[ORM\Column]
+    #[Groups(['project:read'])]
     private ?\DateTime $updatedAt = null;
 
     public function getId(): ?int

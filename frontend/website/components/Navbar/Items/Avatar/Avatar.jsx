@@ -24,7 +24,7 @@ const Avatar = ({ avatar }) => {
             <div ref={dropdownRef} className={`${styles.dropdownMenu}`}>
                 {
                     avatar.dropdownItems.map((item, index) => {
-                        return <Item key={index} item={item} onClick={handleDropdown} />
+                        return <Item key={index} item={item} onClick={handleDropdown} isFirst={index === 0} />
                     })
                 }
             </div>

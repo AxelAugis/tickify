@@ -20,7 +20,7 @@ const DropdownMenu = ({ items, label }) => {
             <div ref={dropdownRef} className={`${styles.dropdownMenu}`}>
                 {
                     items.map((item, index) => {
-                        return <Item key={index} item={item} onClick={handleDropdown} />
+                        return <Item key={index} item={item} onClick={handleDropdown} isFirst={index === 0} />
                     })
                 }
             </div>

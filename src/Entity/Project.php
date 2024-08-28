@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
 class Project
@@ -14,12 +15,15 @@ class Project
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['all-project:read', 'project:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['all-project:read', 'project:read'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['project:read'])]
     private ?string $description = null;
 
     #[ORM\ManyToOne(inversedBy: 'projects')]
@@ -27,15 +31,18 @@ class Project
     private ?User $owner = null;
 
     #[ORM\Column]
+    #[Groups(['project:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
+    #[Groups(['project:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     /**
      * @var Collection<int, Ticket>
      */
     #[ORM\OneToMany(targetEntity: Ticket::class, mappedBy: 'project')]
+    #[Groups(['project:read'])]
     private Collection $tickets;
 
     public function __construct()

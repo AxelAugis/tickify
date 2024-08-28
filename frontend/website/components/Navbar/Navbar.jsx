@@ -32,14 +32,14 @@ const Navbar = ({ items }) => {
         })
     }
     return (
-        <navbar className={`w-full flex items-center justify-between bg-white/20 backdrop-blur-md px-8 py-3.5 text-primary-light-text rounded-b-xl text-white`}>
+        <nav className={`w-full flex items-center justify-between bg-black/20 backdrop-blur-md px-8 py-3.5 text-primary-light-text  text-white`}>
             <div className={`flex gap-x-8`}>
                 {renderleftItems()}
             </div>
             <div className={`flex items-center gap-x-4`}>
                 {renderRightItems()}
             </div>
-        </navbar>
+        </nav>
     )
 }
 
