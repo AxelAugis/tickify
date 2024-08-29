@@ -2,7 +2,7 @@ import Empty from "./Empty/Empty";
 import Resume from "./Resume/Resume";
 import Status from "./Status/Status";
 
-const Wrapper = ({ tickets, status, handleModal }) => {
+const Wrapper = ({ tickets, status, handleModal, refreshData }) => {
     return (
         <>
             <div className={`w-full h-fit py-4 flex flex-col items-center gap-y-4 px-2 bg-white/20 backdrop-blur-md rounded-md`}>
@@ -12,7 +12,12 @@ const Wrapper = ({ tickets, status, handleModal }) => {
                 {
                     tickets.length > 0 ? (
                         tickets.map(ticket => (
-                            <Resume ticket={ticket} key={ticket.id} handleModal={handleModal} />
+                            <Resume 
+                                ticket={ticket} 
+                                key={ticket.id} 
+                                handleModal={handleModal} 
+                                refreshData={refreshData}
+                            />
                         ))
                     ) : (
                         <Empty />

@@ -1,11 +1,43 @@
-const Resume = ({ ticket, handleModal }) => {
+import ToolsButton from "@/components/Buttons/ToolsButton/ToolsButton";
+import styles from './ToolsBar/ToolsBar.module.css';
+import ToolsBar from "./ToolsBar/ToolsBar";
+import { useRef, useState } from "react";
+import Title from "./Title/Title";
+
+const Resume = ({ ticket, handleModal, refreshData }) => {
+
+    const [ticketId, setTicketId] = useState(null);
+
+    const handleToolsBar = (e) => {
+        e.stopPropagation();
+        const id = e.currentTarget.getAttribute('data-id');
+        setTicketId(id);
+        if (toolsBarRef.current) {
+            toolsBarRef.current.classList.toggle(`${styles.open}`);
+        }
+    } 
+
+    const toolsBarRef = useRef(null);
+
     return (
-        <button
-            onClick={() => handleModal(ticket.id)}
-            className="w-full h-fit max-w-full overflow-hidden bg-white/20 backdrop-blur-md rounded-md p-4 flex flex-col  gap-y-2" key={ticket.id}>
-            <h3 className="text-sm font-medium max-h-full whitespace-nowrap overflow-hidden">{ticket.title}</h3>
-            <p className="text-sm text-start">{ticket.description}</p>
-        </button>
+        ticket && (
+            <button
+                onClick={() => handleModal(ticket.id)}
+                className="relative w-full h-fit max-w-full  bg-white/20 backdrop-blur-md rounded-md py-2.5 px-4 flex flex-col  gap-y-2" key={ticket.id}>
+                    <div className={`w-full flex justify-between items-center gap-x-2`}>
+                        <Title title={ticket.title} />
+                        <div className={`relative w-fit`}>
+                            <ToolsButton 
+                                onClick={handleToolsBar} 
+                                ticket={ticket} 
+                            />
+                            <ToolsBar toolsBarRef={toolsBarRef} styles={styles} ticketId={ticketId} refreshData={refreshData}  />
+                        </div>
+                    </div>
+                <p className="text-sm text-start max-h-12 overflow-scroll">{ticket.description}</p>
+            </button>
+        )
+        
     )
 }
 

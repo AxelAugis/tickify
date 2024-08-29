@@ -71,4 +71,13 @@ class TicketControllerApi extends AbstractController
 
         return new Response('', Response::HTTP_OK);
     }
+
+    #[Route('/api/ticket/{id}/delete', name: 'api_ticket_delete', methods: ['DELETE'])]
+    public function delete(Ticket $ticket, EntityManagerInterface $entityManager)
+    {
+        $entityManager->remove($ticket);
+        $entityManager->flush();
+
+        return new Response('', Response::HTTP_OK);
+    }
 }

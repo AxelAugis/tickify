@@ -1,0 +1,25 @@
+.toolsBar {
+    display: flex;
+    flex-direction: column;
+    width: 400%;
+    max-height: 0px;
+    position: absolute;
+    top: 105%;
+    right: 0;
+    z-index: 1;
+    font-size: 12px;
+    background: #fff;
+    opacity: 0;
+    box-shadow: 10px 24px 24px rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    visibility: hidden;
+    overflow: hidden;
+    transition:  visibility 0.3s, max-height 0.3s, opacity 0.3s;
+}
+
+.toolsBar.open {
+    max-height: 500px;
+    opacity: 1;
+    visibility: visible;
+    transition:  visibility 0.3s, max-height 0.3s, opacity 0.3s;
+}

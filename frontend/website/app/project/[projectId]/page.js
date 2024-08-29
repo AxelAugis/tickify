@@ -75,7 +75,8 @@ const ProjectPage = () => {
                                     tickets={datas.tickets[status]} 
                                     status={status} 
                                     key={status} 
-                                    handleModal={handleModal} 
+                                    handleModal={handleModal}
+                                    refreshData={() => getProjectData(projectId).then(data => setDatas(data))}
                                 />
                             ))
                         )
