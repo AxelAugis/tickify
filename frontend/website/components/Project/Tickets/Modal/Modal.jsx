@@ -14,7 +14,6 @@ const Modal = ({ ticket, modalStyle, handleModal, refreshData }) => {
                     <Details handleModal={handleModal} ticket={ticket} refreshData={refreshData} />
                 )
             }
-
         </div>
     )
 }

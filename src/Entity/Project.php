@@ -45,9 +45,16 @@ class Project
     #[Groups(['project:read'])]
     private Collection $tickets;
 
+    /**
+     * @var Collection<int, Context>
+     */
+    #[ORM\OneToMany(targetEntity: Context::class, mappedBy: 'project')]
+    private Collection $contexts;
+
     public function __construct()
     {
         $this->tickets = new ArrayCollection();
+        $this->contexts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -139,6 +146,36 @@ class Project
             // set the owning side to null (unless already changed)
             if ($ticket->getProject() === $this) {
                 $ticket->setProject(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Context>
+     */
+    public function getContexts(): Collection
+    {
+        return $this->contexts;
+    }
+
+    public function addContext(Context $context): static
+    {
+        if (!$this->contexts->contains($context)) {
+            $this->contexts->add($context);
+            $context->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContext(Context $context): static
+    {
+        if ($this->contexts->removeElement($context)) {
+            // set the owning side to null (unless already changed)
+            if ($context->getProject() === $this) {
+                $context->setProject(null);
             }
         }
 
