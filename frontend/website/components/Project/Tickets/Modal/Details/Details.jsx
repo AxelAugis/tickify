@@ -2,11 +2,11 @@ import Image from "next/image";
 import { apiUrl } from "@/app/api";
 import { useEffect, useState } from "react";
 import Description from "./Description/Description";
-import SubmitButton from "@/components/Form/Buttons/SubmitButton/SubmitButton";
+import SubmitButton from "@/components/Buttons/SubmitButton/SubmitButton";
+import CloseButton from "@/components/Buttons/CloseButton/CloseButton";
 
 const Details = ({ ticket, handleModal, refreshData }) => {
-    console.log(ticket);
-
+    
     const options = [
         { value: 'todo', label: 'A faire' },
         { value: 'in_progress', label: 'En cours' },
@@ -65,17 +65,7 @@ const Details = ({ ticket, handleModal, refreshData }) => {
             className={`w-1/2 h-1/2 rounded-lg bg-white py-4 px-6 flex flex-col gap-y-6 text-primary-light-text`}>
                 <div className={`w-full flex justify-between items-center`}>
                     <input type="text" value={formDatas.title} onChange={handleInputChange} name="title" className={`text-lg font-medium w-full rounded-md focus:outline-none`} />
-                    <button
-                    className={`w-10 h-10 p-2 rounded-full border border-black`}
-                        onClick={handleModal}
-                    >
-                        <Image
-                                src={'/images/icons/cross.svg'}
-                                alt='close'
-                                width={24}
-                                height={24}
-                            />
-                    </button>
+                    <CloseButton onClick={handleModal} />
                 </div>
                 <div className={`w-full h-full grid grid-cols-3 gap-x-8  `}>
                     <Description description={formDatas.description} handleInputChange={handleInputChange} />

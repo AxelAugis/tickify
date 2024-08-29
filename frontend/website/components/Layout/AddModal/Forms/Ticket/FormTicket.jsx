@@ -1,10 +1,11 @@
-import SubmitButton from "@/components/Form/Buttons/SubmitButton/SubmitButton";
+import SubmitButton from "@/components/Buttons/SubmitButton/SubmitButton";
 import { useState } from "react";
 import { apiUrl } from '@/app/api';
+import InputWrapper from "../Items/InputWrapper";
+import Image from "next/image";
+import CloseButton from "@/components/Buttons/CloseButton/CloseButton";
 
 const FormTicket = ({ handleModal, projects, refreshTickets }) => {
-
-    console.log(projects);
 
     const [formDatas, setFormDatas] = useState({
         title: '',
@@ -22,6 +23,7 @@ const FormTicket = ({ handleModal, projects, refreshTickets }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         const response = await fetch(`${apiUrl}/api/ticket/create`, {
             method: 'POST',
             headers: {
@@ -39,32 +41,56 @@ const FormTicket = ({ handleModal, projects, refreshTickets }) => {
         }
     }
 
+    const inputs = [
+        {
+            type: 'text',
+            name: 'title',
+            label: {
+                for: 'title',
+                content: 'Titre du ticket'
+            },
+            value: formDatas.name,
+            onChange: handleInputChange
+        },
+        {
+            type: 'textarea',
+            name: 'description',
+            label: {
+                for: 'description',
+                content: 'Description du ticket'
+            },
+            value: formDatas.description,
+            onChange: handleInputChange
+        },
+        {
+            type: 'select',
+            name: 'project',
+            label: {
+                for: 'project',
+                content: 'Projet'
+            },
+            value: formDatas.project,
+            options: projects,
+            onChange: handleInputChange,
+        }
+    ]
+
+    const renderInputs = (inputs) => {
+        return inputs.map(input => {
+            return <InputWrapper key={input.name} input={input} />
+        })
+    }
+
     return (
         <form  
             onSubmit={handleSubmit}
             className={`w-1/3 h-fit rounded-lg bg-white py-4 px-6 flex flex-col gap-y-6 text-primary-light-text`}
         >
-            <div className={`w-1/2 flex flex-col gap-y-1`}>
-                <label htmlFor="tile" className={` font-medium`}>Titre du ticket</label>
-                <input type="text" value={formDatas.name} onChange={handleInputChange} name="title" className={`text-sm font-medium w-full rounded-md focus:outline-none border`} />
+            <div className={`w-full flex justify-between items-center`}>
+                <p className={`text-lg font-medium`}>Créer un ticket</p>
+                <CloseButton onClick={handleModal} />
             </div>
-            <div className={`w-full flex flex-col gap-y-1`}>
-                <label htmlFor="description" className={` font-medium`}>Description du ticket</label>
-                <textarea value={formDatas.description} onChange={handleInputChange} name="description" className={`min-h-44 text-sm font-medium w-full rounded-md focus:outline-none border`} />
-            </div>
-            <select
-                value={formDatas.project}
-                onChange={handleInputChange}
-                name="project" 
-                id="project" 
-                className={` font-medium w-full rounded-md focus:outline-none border`}>
-                    <option value="" disabled selected>Sélectionnez un projet</option>
-                {
-                    projects.map(project => (
-                        <option key={project.id} value={project.id}>{project.name}</option>
-                    ))
-                }
-            </select>
+            {renderInputs(inputs)}
             <SubmitButton label={'Valider'} />
         </form>
     )

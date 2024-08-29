@@ -24,7 +24,7 @@ class TicketControllerApi extends AbstractController
         return $this->json($tickets, 200, [], ['groups' => 'ticket:read']);
     }
 
-    #[Route('/api/ticket/create', name: 'api_ticket_new', methods: ['POST'])]
+    #[Route('/api/ticket/create', name: 'api_ticket_create', methods: ['POST'])]
     public function create(Request $request, EntityManagerInterface $entityManager, LoggerInterface $logger): JsonResponse
     {
         $data = json_decode($request->getContent(), true);

@@ -1,6 +1,9 @@
-import SubmitButton from "@/components/Form/Buttons/SubmitButton/SubmitButton";
+import SubmitButton from "@/components/Buttons/SubmitButton/SubmitButton";
 import { useState } from "react";
 import { apiUrl } from '@/app/api';
+import InputWrapper from "../Items/InputWrapper";
+import Image from "next/image";
+import CloseButton from "@/components/Buttons/CloseButton/CloseButton";
 
 const FormProject = ({ handleModal, refreshProjects }) => {
 
@@ -35,19 +38,67 @@ const FormProject = ({ handleModal, refreshProjects }) => {
         }
     }
 
+    const inputs = [
+        {
+            type: 'text',
+            name: 'name',
+            label: {
+                for: 'name',
+                content: 'Nom du projet'
+            },
+            value: formDatas.name,
+            onChange: handleInputChange
+        },
+        {
+            type: 'textarea',
+            name: 'description',
+            label: {
+                for: 'description',
+                content: 'Description du projet'
+            },
+            value: formDatas.description,
+            onChange: handleInputChange
+        }
+    ]
+
+    const renderInputs = (inputs) => {
+        // return inputs.map(input => {
+        //     switch(input.type) {
+        //         case 'text':
+        //             return( 
+        //                 <>
+        //                     <Label key={input.name} label={input.label} />
+        //                     <TextInput key={input.name} input={input} />
+        //                 </>
+        //             )
+                    
+        //         case 'textarea':
+        //             return (
+        //                 <>
+        //                     <Label key={input.name} label={input.label} />
+        //                     <TextArea key={input.name} input={input} />
+        //                 </>
+        //             )
+        //         default:
+        //             return null
+        //     }
+        // })
+        return inputs.map(input => {
+            return <InputWrapper key={input.name} input={input} />
+        })
+    }
+
     return (
         <form  
             onSubmit={handleSubmit}
             className={`w-1/3 h-fit rounded-lg bg-white py-4 px-6 flex flex-col gap-y-6 text-primary-light-text`}
         >
-            <div className={`w-1/2 flex flex-col gap-y-1`}>
-                <label htmlFor="name" className={` font-medium`}>Nom du projet</label>
-                <input type="text" value={formDatas.name} onChange={handleInputChange} name="name" className={`text-lg font-medium w-full rounded-md focus:outline-none border`} />
+            <div className={`w-full flex justify-between items-center`}>
+                <p className={`text-lg font-medium`}>Créer un projet</p>
+
+                <CloseButton onClick={handleModal} />
             </div>
-            <div className={`w-full flex flex-col gap-y-1`}>
-                <label htmlFor="description" className={` font-medium`}>Description du projet</label>
-                <textarea value={formDatas.description} onChange={handleInputChange} name="description" className={`min-h-44 text-lg font-medium w-full rounded-md focus:outline-none border`} />
-            </div>
+            {renderInputs(inputs)}
             <SubmitButton label={'Valider'} />
         </form>
     )
