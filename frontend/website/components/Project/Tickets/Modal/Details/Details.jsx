@@ -2,8 +2,10 @@ import Image from "next/image";
 import { apiUrl } from "@/app/api";
 import { useEffect, useState } from "react";
 import Description from "./Description/Description";
+import SubmitButton from "@/components/Form/Buttons/SubmitButton/SubmitButton";
 
 const Details = ({ ticket, handleModal, refreshData }) => {
+    console.log(ticket);
 
     const options = [
         { value: 'todo', label: 'A faire' },
@@ -13,12 +15,12 @@ const Details = ({ ticket, handleModal, refreshData }) => {
     ]
 
     const [formDatas, setFormDatas] = useState({
-        status: ticket ? ticket[0].status : '',
-        description: ticket ? ticket[0].description : '',
-        title: ticket ? ticket[0].title : ''
+        status: ticket ? ticket.status : '',
+        description: ticket ? ticket.description : '',
+        title: ticket ? ticket.title : ''
     });
 
-    const [status, setStatus] = useState(ticket ? ticket[0].status : '');
+    const [status, setStatus] = useState(ticket ? ticket.status : '');
     const [isDescriptionEditing, setIsDescriptionEditing] = useState(false);
 
     const handleInputChange = (event) => {
@@ -30,16 +32,16 @@ const Details = ({ ticket, handleModal, refreshData }) => {
 
     useEffect(() => {
         setFormDatas({
-            status: ticket ? ticket[0].status : '',
-            description: ticket ? ticket[0].description : '',
-            title: ticket ? ticket[0].title : ''
+            status: ticket ? ticket.status : '',
+            description: ticket ? ticket.description : '',
+            title: ticket ? ticket.title : ''
         });
     }, [ticket])
 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const response = await fetch(`${apiUrl}/api/ticket/${ticket[0].id}/edit`, {
+        const response = await fetch(`${apiUrl}/api/ticket/${ticket.id}/edit`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -98,7 +100,7 @@ const Details = ({ ticket, handleModal, refreshData }) => {
                     </fieldset>
                    
                 </div>
-                <button className={`w-fit py-1 self-end text-sm  px-4 text-primary font-medium border border-black/50 hover:bg-black hover:text-white backdrop-blur-md rounded-md transition-colors`}>Enregistrer</button>
+                <SubmitButton label={'Enregistrer'} />
                 
             </form>
         )

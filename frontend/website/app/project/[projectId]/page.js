@@ -39,7 +39,8 @@ const ProjectPage = () => {
             if (!datas) {
                 return;
             } else {
-                const ticket = datas.tickets[order.find(status => datas.tickets[status].find(ticket => ticket.id === id))];
+                const allTickets = Object.values(datas.tickets).flat();
+                const ticket = allTickets.find(ticket => ticket.id === id);                
                 setModalTicket(ticket);
     
                 if (!isModalCalled) {

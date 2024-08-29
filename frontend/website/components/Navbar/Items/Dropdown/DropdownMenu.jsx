@@ -11,10 +11,10 @@ const DropdownMenu = ({ items, label }) => {
 
     const dropdownRef = useRef(null);
     return (
-        <div className={`relative text-base rounded-lg `}>
+        <div className={`relative  rounded-lg `}>
             <button 
                 onClick={handleDropdown}
-                className={` text-center py-1.5 px-8 bg-white/10 hover:bg-white/20 border border-white transition-all rounded-lg`}>
+                className={` text-center py-1 px-8 bg-white/10 hover:bg-white/20 border border-white transition-all rounded-lg`}>
                 {label}
             </button>
             <div ref={dropdownRef} className={`${styles.dropdownMenu}`}>

@@ -3,9 +3,11 @@
 namespace App\Controller\Api;
 
 use App\Config\TicketStatus;
+use App\Entity\Project;
 use App\Entity\Ticket;
 use App\Repository\TicketRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,16 +24,23 @@ class TicketControllerApi extends AbstractController
         return $this->json($tickets, 200, [], ['groups' => 'ticket:read']);
     }
 
-    #[Route('/api/ticket', name: 'api_ticket_new', methods: ['POST'])]
-    public function create(Request $request, EntityManagerInterface $entityManager): JsonResponse
+    #[Route('/api/ticket/create', name: 'api_ticket_new', methods: ['POST'])]
+    public function create(Request $request, EntityManagerInterface $entityManager, LoggerInterface $logger): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
+
+        $logger->info('Creating a new ticket', $data);
+
+        $project = $entityManager->getRepository(Project::class)->find($data['project']);
+        $status = TicketStatus::from($data['status']);
 
         $ticket = new Ticket();
         $ticket->setTitle($data['title']);
         $ticket->setDescription($data['description']);
-        $ticket->setProject($data['project']);
-        $ticket->setStatus($data['status']);
+        $ticket->setProject($project);
+        $ticket->setStatus($status);
+        $ticket->setCreatedAt(new \DateTime());
+        $ticket->setUpdatedAt(new \DateTime());
 
         $entityManager->persist($ticket);
         $entityManager->flush();

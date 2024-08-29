@@ -3,7 +3,7 @@ import Navbar from "../Navbar/Navbar"
 import { useEffect, useState } from 'react';
 import { apiUrl } from '@/app/api';
 import { usePathname } from "next/navigation";
-import Sidebar from "../Sidebar/Sidebar";
+import AddModal from "./AddModal/AddModal";
 
 async function getData() {
   try {
@@ -25,13 +25,16 @@ const Layout = ({ children }) => {
     const [projects, setProjects] = useState([]);
     const [navItems, setNavItems] = useState(null);
     const [isHome, setIsHome] = useState(false);
+    const [context, setContext] = useState(null);
+    const [isModalCalled, setIsModalCalled] = useState(false);
+    const [modalStyle, setModalStyle] = useState(false);
 
     useEffect(() => {
         getData().then(data => setProjects(data));
     }, []);
 
     useEffect(() => {
-        const newNavItems = {
+        const currentNavItems = {
             leftItems: [
                 {
                     type: 'logo',
@@ -47,7 +50,14 @@ const Layout = ({ children }) => {
                     }))
                 },
                 {
-                    label: 'Créer'
+                    type: 'create',
+                    label: 'Créer un projet',
+                    onclick: () => handleModal('project')
+                },
+                {
+                    type: 'create',
+                    label: 'Créer un ticket',
+                    onclick: () => handleModal('ticket')
                 }
             ],
             rightItems : [
@@ -86,7 +96,7 @@ const Layout = ({ children }) => {
                 }
             ]
         }
-        setNavItems(newNavItems);
+        setNavItems(currentNavItems);
     }, [projects]);
 
     useEffect(() => {
@@ -94,18 +104,43 @@ const Layout = ({ children }) => {
     }
     , [pathname]);
 
+    const handleModal = (context) => {
+        setContext(context);
+        if (!isModalCalled) {
+            setIsModalCalled(true);
+            setTimeout(() => {
+                setModalStyle(true);
+            }, 10);
+        } else {
+            setModalStyle(false);
+            setTimeout(() => {
+                setIsModalCalled(false);
+            }, 500); 
+        }        
+    }
+
+    const refreshProjects = async() => {
+        const data = await getData();
+        setProjects(data);
+    }
+
     return (
       <>
         <div className={`w-screen h-screen fixed top-0 left-0 bg-linear-gradient `}></div>
-        <section className="w-screen h-screen backdrop-blur-lg ">
+        <section className="w-screen h-screen backdrop-blur-lg relative ">
             <div className="flex flex-col h-full w-full">
                 {navItems && 
-                        <Navbar items={navItems} />
+                        <Navbar items={navItems} context={context}/>
                 } 
                 <main className={`h-full w-full`}>
                     {children}
                 </main>
             </div>
+            {
+                isModalCalled && (
+                    <AddModal modalStyle={modalStyle} handleModal={handleModal} context={context} refreshProjects={refreshProjects} projects={projects} />
+                )
+            }
         </section>
       </>
     )
