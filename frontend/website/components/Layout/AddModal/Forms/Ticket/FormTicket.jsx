@@ -1,5 +1,5 @@
 import SubmitButton from "@/components/Buttons/SubmitButton/SubmitButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { apiUrl } from '@/app/api';
 import InputWrapper from "../Items/InputWrapper";
 import Image from "next/image";
@@ -11,15 +11,31 @@ const FormTicket = ({ handleModal, projects, refreshTickets }) => {
         title: '',
         description: '',
         project: null,
+        context: null,
         status: 'todo'
     });
+
+    const [contexts, setContexts] = useState(null);
 
     const handleInputChange = (event) => {
         setFormDatas({
             ...formDatas,
             [event.target.name]: event.target.value
         });
+        if(event.target.name === 'project') {
+             getProjectContexts(event.target.value)
+        }
     };
+
+    const getProjectContexts = async (projectId) => {
+        const response = await fetch(`${apiUrl}/api/project/${projectId}/get-contexts`)
+        if(response.ok) {
+            const contexts = await response.json();
+            setContexts(contexts);
+        } else {
+            console.log('Error fetching contexts');
+        }
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -69,9 +85,23 @@ const FormTicket = ({ handleModal, projects, refreshTickets }) => {
                 for: 'project',
                 content: 'Projet'
             },
+            default: 'Choisissez un projet',
             value: formDatas.project,
             options: projects,
             onChange: handleInputChange,
+        },
+        {
+            type: 'select',
+            name: 'context',
+            label: {
+                for: 'context',
+                content: 'Contexte'
+            },
+            default: 'Choisissez un contexte',
+            disabled: !contexts,
+            value: formDatas.context,
+            options: contexts ? contexts : [],
+            onChange: handleInputChange
         }
     ]
 

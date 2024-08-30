@@ -6,7 +6,7 @@ const Description = ({ description, handleInputChange }) => {
                 name="description"
                 value={description} 
                 onChange={handleInputChange} 
-                className="text-sm w-full min-h-64 max-h-64  border border-transparent focus:border-black/10 p-1 rounded-md focus:outline-none"
+                className="text-sm w-full min-h-64 max-h-80  border border-transparent focus:border-black/10 p-1 rounded-md focus:outline-none"
                 autoFocus
             />
         </div>

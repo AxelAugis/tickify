@@ -6,7 +6,7 @@ const ToolsActions = ({ button, onClick }) => {
     return (
         <button 
         onClick={(e) => onClick(e)}
-        className={`w-full py-1 px-2 flex items-center bg-transparent ${hoverBgColor} text-primary-light-text hover:text-${hoverTextColor}-500 backdrop-blur-md rounded-sm`}>
+        className={`w-full py-1.5 px-3 flex items-center bg-transparent ${hoverBgColor} text-primary-light-text ${hoverTextColor} backdrop-blur-md rounded-sm transition-colors`}>
             {button.label}
         </button>
     )

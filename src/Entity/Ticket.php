@@ -41,6 +41,10 @@ class Ticket
     #[Groups(['project:read'])]
     private ?\DateTime $updatedAt = null;
 
+    #[ORM\ManyToOne(inversedBy: 'tickets')]
+    #[Groups(['project:read'])]
+    private ?Context $context = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -114,6 +118,18 @@ class Ticket
     public function setUpdatedAt(\DateTime $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getContext(): ?Context
+    {
+        return $this->context;
+    }
+
+    public function setContext(?Context $context): static
+    {
+        $this->context = $context;
 
         return $this;
     }

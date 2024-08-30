@@ -4,12 +4,12 @@
 
 {% block body %}
     {% if tickets is not empty %}
-        <div class="flex items-center justify-between">
+        <div class="flex items-center justify-between ">
             {{ component('title', { content:  content.title }) }}
             {{ component('action', { alert: 'success', route: 'app_ticket_new', content: 'Ajouter' }) }}
         </div>
         {# Tableau #}
-        <div class="w-full text-primary shadow-default bg-transparent border border-neutral-200/80 rounded-t-lg">
+        <div class="w-full text-primary shadow-default bg-transparent border border-neutral-200/80 rounded-t-lg mb-10 ">
             {# Toolbar #}
             <div class="w-full px-4 flex items-center justify-between py-2  border-b border-neutral-200/80 rounded-t-lg">
                 <button class="flex items-center gap-x-3 py-1.5 px-3 text-sm  border border-neutral-200/80 rounded-md">

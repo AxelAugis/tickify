@@ -23,6 +23,10 @@
                 {{ form_label(form.project , 'Projet', {'label_attr': {'class': 'mb-2 font-medium'}}) }}
                 {{ form_widget(form.project, {'attr': {'class': 'w-full bg-white p-2 rounded-md border border-neutral-200/80 focus:outline-none focus:ring focus:ring-outline/20'}}) }}
             </div>
+            <div class="w-full flex flex-col gap-y-0.5 gap-x-3">
+                {{ form_label(form.context, 'Contexte', {'label_attr': {'class': 'mb-2 font-medium'}}) }}
+                {{ form_widget(form.context, {'attr': {'class': 'w-full bg-white p-2 rounded-md border border-neutral-200/80 focus:outline-none focus:ring focus:ring-outline/20'}}) }}
+            </div>
             <div class="w-full flex justify-between items-center">
                 <a href="{{ path('app_ticket') }}" class="text-outline hover:text-outline/80 transition-all hover:underline">Retour</a>
                 <button type="submit" class=" self-end py-1.5 px-10  rounded-md bg-transparent border border-outline text-outline  hover:bg-outline hover:text-white transition-all cursor-pointer">Modifier</button>

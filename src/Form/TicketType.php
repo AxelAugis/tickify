@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Config\TicketStatus;
+use App\Entity\Context;
 use App\Entity\Project;
 use App\Entity\Ticket;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -35,6 +36,10 @@ class TicketType extends AbstractType
             ])
             ->add('project', EntityType::class, [
                 'class' => Project::class,
+                'choice_label' => 'name',
+            ])
+            ->add('context', EntityType::class, [
+                'class' => Context::class,
                 'choice_label' => 'name',
             ])
         ;

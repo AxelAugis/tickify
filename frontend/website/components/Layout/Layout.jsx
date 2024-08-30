@@ -58,6 +58,11 @@ const Layout = ({ children }) => {
                     type: 'create',
                     label: 'Créer un ticket',
                     onclick: () => handleModal('ticket')
+                },
+                {
+                    type: 'create',
+                    label: 'Créer un contexte',
+                    onclick: () => handleModal('context')
                 }
             ],
             rightItems : [
@@ -132,7 +137,7 @@ const Layout = ({ children }) => {
                 {navItems && 
                         <Navbar items={navItems} context={context}/>
                 } 
-                <main className={`h-full w-full`}>
+                <main className={`h-[92%] w-full`}>
                     {children}
                 </main>
             </div>

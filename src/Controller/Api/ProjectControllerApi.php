@@ -39,11 +39,22 @@ class ProjectControllerApi extends AbstractController
             $status = $ticket->getStatus()->value;
         
             if (array_key_exists($status, $groupedTickets)) {
+
+                $context = $ticket->getContext();
+
+                $contextArray = [
+                    'id' => $context->getId(),
+                    'name' => $context->getName(),
+                    'color' => $context->getColor(),
+                ];
+
                 $groupedTickets[$status][] = [
                     'id' => $ticket->getId(),
                     'title' => $ticket->getTitle(),
                     'description' => $ticket->getDescription(),
                     'status' => $ticket->getStatus()->value,
+                    'created_at' => $ticket->getCreatedAt(),
+                    'context' => $contextArray,
                 ];
             }
         }
@@ -77,5 +88,13 @@ class ProjectControllerApi extends AbstractController
 
         return $this->json(['message' => 'Project created!'], 201);
 
+    }
+
+    #[Route('/{id}/get-contexts', name: 'api_project_get_contexts', methods: ['GET'])]
+    public function getContexts(Project $project): JsonResponse
+    {
+        $contexts = $project->getContexts();
+
+        return $this->json($contexts, 200, [], ['groups' => 'context:read']);
     }
 }

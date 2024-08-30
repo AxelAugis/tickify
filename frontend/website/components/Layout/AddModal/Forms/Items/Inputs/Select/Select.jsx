@@ -4,7 +4,7 @@ import styles from "./Select.module.css"
 
 const Select = ({ select }) => {
 
-    const [selectedOption, setSelectedOption] = useState('Choisissez un projet')
+    const [selectedOption, setSelectedOption] = useState(select.default)
     const [optionValue, setOptionValue] = useState(null)
 
     const dropdownRef = useRef(null);
@@ -21,19 +21,6 @@ const Select = ({ select }) => {
     }
 
     return (
-        // <select
-        //     value={select.value}
-        //     onChange={select.onChange}
-        //     name={select.name}
-        //     id={select.name}
-        //     className={`font-medium text-sm w-full rounded-md focus:outline-none border py-1 pl-1`}>
-        //         <option value="" disabled selected>Sélectionnez un projet</option>
-        //     {
-        //         select.options.map(option => (
-        //             <option key={option.id} value={option.id}>{option.name}</option>
-        //         ))
-        //     }
-        // </select>
         <div className={`relative font-medium text-sm w-full rounded-md focus:outline-none border py-1 pl-2`}>
             <button 
                 type="button"

@@ -62,10 +62,10 @@ const ProjectPage = () => {
 
     return (
         datas && (
-            <div className='w-full h-full flex gap-x-3 '>
+            <div className='relative w-full h-full flex gap-x-3 '>
                 <Sidebar project={datas.project} onClick={handleProjectDetails} isProjectDetails={isProjectDetails} />
-                <div className={`w-11/12 h-full flex flex-col  py-4 pr-3 `}>
-                    <div className={`w-full h-full ${displayShape}  gap-x-8  bg-white/10 backdrop-blur-md rounded-l-md`}>
+                <div className={` w-11/12 min-h-full max-h-full overflow-scroll flex flex-col  py-4 pr-3 `}>
+                    <div className={`w-full h-fit ${displayShape}  gap-x-8  bg-white/10 backdrop-blur-md rounded-l-md`}>
                     {
                         isProjectDetails ? (
                             <ProjectDetails project={datas.project} />

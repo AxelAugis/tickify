@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import FormProject from "./Forms/Project/FormProject";
 import FormTicket from "./Forms/Ticket/FormTicket";
+import FormContext from "./Forms/Context/FormContext";
 
 const AddModal = ({ context, modalStyle, handleModal, refreshProjects, projects }) => {
 
@@ -11,6 +12,8 @@ const AddModal = ({ context, modalStyle, handleModal, refreshProjects, projects 
               return <FormProject handleModal={handleModal} refreshProjects={refreshProjects} />;  
             case 'ticket':
                 return <FormTicket handleModal={handleModal}  projects={projects} />;
+            case 'context':
+                return <FormContext handleModal={handleModal} projects={projects} />;
         }
     }
 

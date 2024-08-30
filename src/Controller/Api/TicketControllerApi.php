@@ -3,6 +3,7 @@
 namespace App\Controller\Api;
 
 use App\Config\TicketStatus;
+use App\Entity\Context;
 use App\Entity\Project;
 use App\Entity\Ticket;
 use App\Repository\TicketRepository;
@@ -32,12 +33,14 @@ class TicketControllerApi extends AbstractController
         $logger->info('Creating a new ticket', $data);
 
         $project = $entityManager->getRepository(Project::class)->find($data['project']);
+        $context = $entityManager->getRepository(Context::class)->find($data['context']);
         $status = TicketStatus::from($data['status']);
 
         $ticket = new Ticket();
         $ticket->setTitle($data['title']);
         $ticket->setDescription($data['description']);
         $ticket->setProject($project);
+        $ticket->setContext($context);
         $ticket->setStatus($status);
         $ticket->setCreatedAt(new \DateTime());
         $ticket->setUpdatedAt(new \DateTime());

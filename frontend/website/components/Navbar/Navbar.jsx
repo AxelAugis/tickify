@@ -35,7 +35,7 @@ const Navbar = ({ items }) => {
         })
     }
     return (
-        <nav className={`w-full flex items-center justify-between sticky top-0 left-0 z-50 bg-black/20 backdrop-blur-md px-8 py-3.5 text-primary-light-text text-white`}>
+        <nav className={`w-full min-h-[8%] max-h-[8%] flex items-center justify-between sticky top-0 left-0 z-50 bg-black/20 backdrop-blur-md px-8 py-3.5 text-primary-light-text text-white`}>
             <div className={`flex items-center gap-x-8 text-sm`}>
                 {renderleftItems()}
             </div>
