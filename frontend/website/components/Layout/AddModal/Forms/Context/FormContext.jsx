@@ -84,8 +84,8 @@ const FormContext = ({ handleModal, projects }) => {
     ]
 
     const renderInputs = (inputs) => {
-        return inputs.map(input => {
-            return <InputWrapper key={input.name} input={input} />
+        return inputs.map((input, index) => {
+            return <InputWrapper key={index} input={input} index={index} />
         })
     }
 

@@ -4,14 +4,14 @@ import TextInput from "./Inputs/TextInput"
 import Label from "./Label/Label"
 import { MuiColorInput } from 'mui-color-input'
 
-const InputWrapper = ({ input }) => {
+const InputWrapper = ({ input, index }) => {
 
     const renderInputs = (input) => {
             switch(input.type) {
                 case 'text':
                     return( 
                         <>
-                            <Label key={input.name} label={input.label} />
+                            <Label key={input.name + '-label'} label={input.label} />
                             <TextInput key={input.name} input={input} />
                         </>
                     )
@@ -19,7 +19,7 @@ const InputWrapper = ({ input }) => {
                 case 'textarea':
                     return (
                         <>
-                            <Label key={input.name} label={input.label} />
+                            <Label key={input.name + '-label'} label={input.label} />
                             <TextArea key={input.name} input={input} />
                         </>
                     )
@@ -27,14 +27,14 @@ const InputWrapper = ({ input }) => {
                     return (
                         input.disabled && (input.disabled === true || input.options.length === 0) ? null :
                         <>
-                            <Label key={input.name} label={input.label} />
+                            <Label key={input.name + '-label'} label={input.label} />
                             <Select key={input.name} select={input} />
                         </>
                     )
                 case 'color':
                     return (
                         <>
-                            <Label key={input.name} label={input.label} />
+                            <Label key={input.name + '-label'} label={input.label} />
                             <MuiColorInput format="hex" value={input.value} name={input.name} onChange={input.onChange} />
                         </>
                     )

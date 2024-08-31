@@ -62,27 +62,6 @@ const FormProject = ({ handleModal, refreshProjects }) => {
     ]
 
     const renderInputs = (inputs) => {
-        // return inputs.map(input => {
-        //     switch(input.type) {
-        //         case 'text':
-        //             return( 
-        //                 <>
-        //                     <Label key={input.name} label={input.label} />
-        //                     <TextInput key={input.name} input={input} />
-        //                 </>
-        //             )
-                    
-        //         case 'textarea':
-        //             return (
-        //                 <>
-        //                     <Label key={input.name} label={input.label} />
-        //                     <TextArea key={input.name} input={input} />
-        //                 </>
-        //             )
-        //         default:
-        //             return null
-        //     }
-        // })
         return inputs.map(input => {
             return <InputWrapper key={input.name} input={input} />
         })

@@ -4,11 +4,11 @@ const ToolsActions = ({ button, onClick }) => {
     const hoverTextColor = button.color === 'orange' ? 'hover:text-orange-500' : 'hover:text-red-500';
 
     return (
-        <button 
+        <span 
         onClick={(e) => onClick(e)}
         className={`w-full py-1.5 px-3 flex items-center bg-transparent ${hoverBgColor} text-primary-light-text ${hoverTextColor} backdrop-blur-md rounded-sm transition-colors`}>
             {button.label}
-        </button>
+        </span>
     )
 } 
 
