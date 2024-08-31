@@ -33,7 +33,7 @@ class ProjectControllerApi extends AbstractController
         }
 
         $tickets = $project->getTickets();
-        $groupedTickets = ['todo' => [], 'in_progress' => [], 'done' => [], 'closed' => []];
+        $groupedTickets = ['todo' => [], 'in_progress' => [], 'done' => []];
 
         foreach ($tickets as $ticket) {
             $status = $ticket->getStatus()->value;

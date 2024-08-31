@@ -1,13 +1,14 @@
 import ToolsButton from "@/components/Buttons/ToolsButton/ToolsButton";
-import styles from './ToolsBar/ToolsBar.module.css';
 import ToolsBar from "./ToolsBar/ToolsBar";
 import { useRef, useState } from "react";
 import Title from "./Title/Title";
 import Context from "./Context/Context";
+import styles from './Resume.module.css';
 
 const Resume = ({ ticket, handleModal, refreshData }) => {
 
     const [ticketId, setTicketId] = useState(null);
+    const [isHovered, setIsHovered] = useState(false);
 
     const handleToolsBar = (e) => {
         e.stopPropagation();
@@ -18,32 +19,50 @@ const Resume = ({ ticket, handleModal, refreshData }) => {
         }
     } 
 
+    const handleHover = () => {
+        setIsHovered(!isHovered);
+    }
+
     const toolsBarRef = useRef(null);
 
     return (
         ticket && (
             <button
+                onMouseEnter={handleHover}
+                onMouseLeave={handleHover}
                 onClick={() => handleModal(ticket.id)}
-                className="relative w-full h-fit max-w-full  bg-white/20 backdrop-blur-md rounded-md py-2.5 px-4 flex flex-col  gap-y-2" key={ticket.id}>
+                className={`relative w-full  max-w-full  bg-white/20 backdrop-blur-md rounded-md py-2.5 px-4 flex flex-col  gap-y-2 ${styles.resume}`} key={ticket.id}>
                     {
-                        ticket.context && ticket.context.length > 0 && (
-                            <Context context={ticket.context} />
+                        ticket.context && (
+                            <div className="w-full h-8 flex justify-between items-center gap-x-2">
+                                <Context context={ticket.context} />
+                                <div className={`relative w-fit`}>
+                                    <ToolsButton 
+                                        onClick={handleToolsBar} 
+                                        ticket={ticket} 
+                                    />
+                                    <ToolsBar toolsBarRef={toolsBarRef} styles={styles} ticketId={ticketId} refreshData={refreshData}  />
+                                </div>
+                            </div>
                         )
                     }
                     <div className={`w-full flex justify-between items-center gap-x-2`}>
                         <Title title={ticket.title} />
-                        <div className={`relative w-fit`}>
-                            <ToolsButton 
-                                onClick={handleToolsBar} 
-                                ticket={ticket} 
-                            />
-                            <ToolsBar toolsBarRef={toolsBarRef} styles={styles} ticketId={ticketId} refreshData={refreshData}  />
-                        </div>
+                        {
+                            !ticket.context && (
+                                <div className={`relative w-fit`}>
+                                    <ToolsButton 
+                                        onClick={handleToolsBar} 
+                                        ticket={ticket} 
+                                    />
+                                    <ToolsBar toolsBarRef={toolsBarRef} styles={styles} ticketId={ticketId} refreshData={refreshData}  />
+                                </div>
+                            )
+                        }
                     </div>
-                <p className="text-sm text-start max-h-12 overflow-scroll">{ticket.description}</p>
+                <p className={`text-sm text-start `}>{ticket.description}</p>
             </button>
-        )
-        
+        )   
     )
 }
 

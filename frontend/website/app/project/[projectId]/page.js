@@ -58,7 +58,7 @@ const ProjectPage = () => {
         }
     }
 
-    const displayShape = !isProjectDetails ? 'grid grid-cols-4' : '';
+    const displayShape = !isProjectDetails ? 'grid grid-cols-3' : '';
 
     return (
         datas && (
