@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { apiUrl } from "@/app/api";
+import { apiUrl } from "@/app/utils/api";
 import Link from "next/link";
 import styles from "./Search.module.css";
 import Title from "./Title/Title";

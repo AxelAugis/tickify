@@ -1,6 +1,7 @@
 import SubmitButton from "@/components/Buttons/SubmitButton/SubmitButton";
 import { useState } from "react";
-import { apiUrl } from '@/app/api';
+import { apiUrl } from '@/app/utils/api';
+import { displayAlert } from "@/app/utils/alert";
 import InputWrapper from "../Items/InputWrapper";
 import Image from "next/image";
 import CloseButton from "@/components/Buttons/CloseButton/CloseButton";
@@ -30,11 +31,11 @@ const FormProject = ({ handleModal, refreshProjects }) => {
         })
 
         if(response.ok) {
-            console.log('Project updated');
             handleModal();
             refreshProjects();
+            displayAlert(true, 'project', 'create');
         } else {
-            console.log('Error updating project');
+            displayAlert(false, 'project', 'create');
         }
     }
 

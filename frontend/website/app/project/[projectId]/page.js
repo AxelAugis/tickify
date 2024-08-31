@@ -1,5 +1,5 @@
 'use client';
-import { apiUrl, getProjectData } from '@/app/api';
+import { apiUrl, getProjectData } from '@/app/utils/api';
 import ProjectDetails from '@/components/Project/ProjectDetails/ProjectDetails';
 import Modal from '@/components/Project/Tickets/Modal/Modal';
 import Wrapper from '@/components/Project/Tickets/Wrapper';

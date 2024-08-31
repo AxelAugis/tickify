@@ -1,8 +1,10 @@
 import { useState } from "react";
-import { apiUrl } from "@/app/api";
+import { apiUrl} from "@/app/utils/api";
+import { displayAlert } from "@/app/utils/alert";
 import CloseButton from "@/components/Buttons/CloseButton/CloseButton";
 import InputWrapper from "../Items/InputWrapper";
 import SubmitButton from "@/components/Buttons/SubmitButton/SubmitButton";
+import { toast } from "react-toastify";
 
 
 const FormContext = ({ handleModal, projects }) => {
@@ -41,10 +43,10 @@ const FormContext = ({ handleModal, projects }) => {
         })
 
         if(response.ok) {
-            console.log('Project updated');
             handleModal();
+            displayAlert(true, 'context', 'create');
         } else {
-            console.log('Error updating project');
+            displayAlert(false, 'context', 'create');
         }
     }
 

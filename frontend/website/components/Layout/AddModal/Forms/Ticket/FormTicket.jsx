@@ -1,8 +1,8 @@
 import SubmitButton from "@/components/Buttons/SubmitButton/SubmitButton";
 import { useEffect, useState } from "react";
-import { apiUrl } from '@/app/api';
+import { apiUrl } from '@/app/utils/api';
+import { displayAlert } from "@/app/utils/alert";
 import InputWrapper from "../Items/InputWrapper";
-import Image from "next/image";
 import CloseButton from "@/components/Buttons/CloseButton/CloseButton";
 
 const FormTicket = ({ handleModal, projects, refreshTickets }) => {
@@ -52,8 +52,9 @@ const FormTicket = ({ handleModal, projects, refreshTickets }) => {
             console.log('Ticket updated');
             handleModal();
             window.location.reload();
+            displayAlert(true, 'ticket', 'create');
         } else {
-            console.log('Error updating ticket');
+            displayAlert(false, 'ticket', 'create');
         }
     }
 

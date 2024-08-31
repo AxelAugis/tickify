@@ -1,9 +1,11 @@
 import Image from "next/image";
-import { apiUrl } from "@/app/api";
+import { apiUrl } from "@/app/utils/api";
 import { useEffect, useState } from "react";
 import Description from "./Description/Description";
 import SubmitButton from "@/components/Buttons/SubmitButton/SubmitButton";
 import CloseButton from "@/components/Buttons/CloseButton/CloseButton";
+import { displayAlert } from "@/app/utils/alert";
+import { toast } from "react-toastify";
 
 const Details = ({ ticket, handleModal, refreshData }) => {
     
@@ -53,6 +55,7 @@ const Details = ({ ticket, handleModal, refreshData }) => {
             console.log('Ticket updated');
             handleModal();
             refreshData();
+            displayAlert(true, 'ticket', 'update');
         } else {
             console.log('Error updating ticket');
         }

@@ -1,5 +1,5 @@
 import ToolsAction from "./ToolsAction/ToolsAction"
-import { apiUrl } from "@/app/api"
+import { apiUrl } from "@/app/utils/api"
 const ToolsBar = ({ toolsBarRef, styles, ticketId, refreshData }) => {
 
     const deleteTicket = async (ticketId, e) => {
