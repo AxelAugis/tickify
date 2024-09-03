@@ -1,10 +1,10 @@
 import Image from "next/image";
-import { apiUrl } from "@/app/utils/api";
+import { apiUrl } from "@/utils/api";
 import { useEffect, useState } from "react";
 import Description from "./Description/Description";
 import SubmitButton from "@/components/Buttons/SubmitButton/SubmitButton";
 import CloseButton from "@/components/Buttons/CloseButton/CloseButton";
-import { displayAlert } from "@/app/utils/alert";
+import { displayAlert } from "@/utils/alert";
 import { toast } from "react-toastify";
 
 const Details = ({ ticket, handleModal, refreshData }) => {
@@ -43,10 +43,12 @@ const Details = ({ ticket, handleModal, refreshData }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const token = localStorage.getItem('token');
         const response = await fetch(`${apiUrl}/api/ticket/${ticket.id}/edit`, {
             method: 'PUT',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
             },
             body: JSON.stringify(formDatas)
         })

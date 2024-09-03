@@ -1,7 +1,7 @@
 import SubmitButton from "@/components/Buttons/SubmitButton/SubmitButton";
 import { useEffect, useState } from "react";
-import { apiUrl } from '@/app/utils/api';
-import { displayAlert } from "@/app/utils/alert";
+import { apiUrl } from '@/utils/api';
+import { displayAlert } from "@/utils/alert";
 import InputWrapper from "../Items/InputWrapper";
 import CloseButton from "@/components/Buttons/CloseButton/CloseButton";
 
@@ -28,7 +28,13 @@ const FormTicket = ({ handleModal, projects, refreshTickets }) => {
     };
 
     const getProjectContexts = async (projectId) => {
-        const response = await fetch(`${apiUrl}/api/project/${projectId}/get-contexts`)
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${apiUrl}/api/project/${projectId}/get-contexts`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            }
+        });
         if(response.ok) {
             const contexts = await response.json();
             setContexts(contexts);

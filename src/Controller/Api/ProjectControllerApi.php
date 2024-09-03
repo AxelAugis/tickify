@@ -9,17 +9,16 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 #[Route('/api/project')]
 class ProjectControllerApi extends AbstractController
 {
 
-    #[Route('/all', name: 'api_project_all', methods: ['GET'])]
-    public function getAll(ProjectRepository $projectRepository): JsonResponse
+    #[Route('/user/{id}/all', name: 'api_project_all', methods: ['GET'])]
+    public function getAll(User $user): JsonResponse
     {
-        $projects = $projectRepository->findAll();
+        $projects = $user->getProjects();
 
         return $this->json($projects, 200, [], ['groups' => 'all-project:read']);
     }
@@ -74,7 +73,7 @@ class ProjectControllerApi extends AbstractController
 
         $data = json_decode($request->getContent(), true);
 
-        $user = $entityManager->getRepository(User::class)->find(2);
+        $user = $entityManager->getRepository(User::class)->find($data['id']);
 
 
         $project->setName($data['name']);
@@ -87,7 +86,6 @@ class ProjectControllerApi extends AbstractController
         $entityManager->flush();
 
         return $this->json(['message' => 'Project created!'], 201);
-
     }
 
     #[Route('/{id}/get-contexts', name: 'api_project_get_contexts', methods: ['GET'])]

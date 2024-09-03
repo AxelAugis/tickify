@@ -1,8 +1,8 @@
-
-
 export default function Home() {
 
   return (
-   null
+   <main className={`relative w-screen h-screen`}>
+      <p>Coucou</p>
+   </main>
   );
 }

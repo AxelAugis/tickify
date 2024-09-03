@@ -10,7 +10,7 @@ module.exports = {
       colors: {
         primary: {
           light: {
-            text: '#33333'
+            text: '#333333'
           }
         }
       },

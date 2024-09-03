@@ -25,9 +25,8 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${inter.className} ${poppins.className}`}>
-        <Layout>
+        <div className={`w-screen h-screen fixed top-0 left-0 bg-linear-gradient `}></div>
           {children}
-        </Layout>
       </body>
     </html>
   );

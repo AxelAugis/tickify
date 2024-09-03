@@ -3,13 +3,13 @@ import FormProject from "./Forms/Project/FormProject";
 import FormTicket from "./Forms/Ticket/FormTicket";
 import FormContext from "./Forms/Context/FormContext";
 
-const AddModal = ({ context, modalStyle, handleModal, refreshProjects, projects }) => {
+const AddModal = ({ context, modalStyle, handleModal, refreshProjects, projects, user }) => {
 
 
     const renderForm = () => {
         switch(context) {
             case 'project': 
-              return <FormProject handleModal={handleModal} refreshProjects={refreshProjects} />;  
+              return <FormProject handleModal={handleModal} refreshProjects={refreshProjects} user={user}  />;  
             case 'ticket':
                 return <FormTicket handleModal={handleModal}  projects={projects} />;
             case 'context':

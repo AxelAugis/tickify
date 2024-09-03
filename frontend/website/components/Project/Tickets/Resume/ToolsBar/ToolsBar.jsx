@@ -1,13 +1,15 @@
 import ToolsAction from "./ToolsAction/ToolsAction"
-import { apiUrl } from "@/app/utils/api"
+import { apiUrl } from "@/utils/api"
 const ToolsBar = ({ toolsBarRef, styles, ticketId, refreshData }) => {
 
     const deleteTicket = async (ticketId, e) => {
         e.stopPropagation();
+        const token = localStorage.getItem('token');
         const response = await fetch(`${apiUrl}/api/ticket/${ticketId}/delete`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
             },
         });
 

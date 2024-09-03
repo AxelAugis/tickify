@@ -1,16 +1,17 @@
 import SubmitButton from "@/components/Buttons/SubmitButton/SubmitButton";
-import { useState } from "react";
-import { apiUrl } from '@/app/utils/api';
-import { displayAlert } from "@/app/utils/alert";
+import { useEffect, useState } from "react";
+import { apiUrl } from '@/utils/api';
+import { displayAlert } from "@/utils/alert";
 import InputWrapper from "../Items/InputWrapper";
 import Image from "next/image";
 import CloseButton from "@/components/Buttons/CloseButton/CloseButton";
 
-const FormProject = ({ handleModal, refreshProjects }) => {
+const FormProject = ({ handleModal, refreshProjects, user }) => {
 
     const [formDatas, setFormDatas] = useState({
         name: '',
-        description: ''
+        description: '', 
+        id: ''
     });
 
     const handleInputChange = (event) => {
@@ -22,10 +23,12 @@ const FormProject = ({ handleModal, refreshProjects }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const token = localStorage.getItem('token');
         const response = await fetch(`${apiUrl}/api/project/create`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
             },
             body: JSON.stringify(formDatas)
         })
@@ -67,6 +70,15 @@ const FormProject = ({ handleModal, refreshProjects }) => {
             return <InputWrapper key={input.name} input={input} />
         })
     }
+
+    useEffect(() => {
+       if(user) {
+        setFormDatas({
+            ...formDatas,
+            id: user.id
+        });
+        }
+    }, [user]);
 
     return (
         <form  

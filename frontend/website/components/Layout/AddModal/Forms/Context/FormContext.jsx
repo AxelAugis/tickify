@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { apiUrl} from "@/app/utils/api";
-import { displayAlert } from "@/app/utils/alert";
+import { apiUrl} from "@/utils/api";
+import { displayAlert } from "@/utils/alert";
 import CloseButton from "@/components/Buttons/CloseButton/CloseButton";
 import InputWrapper from "../Items/InputWrapper";
 import SubmitButton from "@/components/Buttons/SubmitButton/SubmitButton";
@@ -34,10 +34,12 @@ const FormContext = ({ handleModal, projects }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const token = localStorage.getItem('token');
         const response = await fetch(`${apiUrl}/api/context/create`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
             },
             body: JSON.stringify(formDatas)
         })

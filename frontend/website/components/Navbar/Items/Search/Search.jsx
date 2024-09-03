@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { apiUrl } from "@/app/utils/api";
+import { apiUrl } from "@/utils/api";
 import Link from "next/link";
 import styles from "./Search.module.css";
 import Title from "./Title/Title";
@@ -12,8 +12,14 @@ const Search = ({ item }) => {
 
     const handleResearch = (e) => {
         const searchTerm = e.target.value;
-
-        fetch(`${apiUrl}/api/search/get-all?term=${encodeURIComponent(searchTerm)}`)
+        const token = localStorage.getItem('token');
+        fetch(`${apiUrl}/api/search/get-all?term=${encodeURIComponent(searchTerm)}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            }
+        })
             .then(response => response.json())
             .then(data => {
                 setSearchResults(data);
