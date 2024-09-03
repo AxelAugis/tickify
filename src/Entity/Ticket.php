@@ -45,6 +45,9 @@ class Ticket
     #[Groups(['project:read'])]
     private ?Context $context = null;
 
+    #[ORM\ManyToOne(inversedBy: 'tickets')]
+    private ?Master $master = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -130,6 +133,18 @@ class Ticket
     public function setContext(?Context $context): static
     {
         $this->context = $context;
+
+        return $this;
+    }
+
+    public function getMaster(): ?Master
+    {
+        return $this->master;
+    }
+
+    public function setMaster(?Master $master): static
+    {
+        $this->master = $master;
 
         return $this;
     }

@@ -54,7 +54,6 @@ const Details = ({ ticket, handleModal, refreshData }) => {
         })
 
         if(response.ok) {
-            console.log('Ticket updated');
             handleModal();
             refreshData();
             displayAlert(true, 'ticket', 'update');

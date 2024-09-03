@@ -51,10 +51,17 @@ class Project
     #[ORM\OneToMany(targetEntity: Context::class, mappedBy: 'project')]
     private Collection $contexts;
 
+    /**
+     * @var Collection<int, Master>
+     */
+    #[ORM\OneToMany(targetEntity: Master::class, mappedBy: 'project', orphanRemoval: true)]
+    private Collection $masters;
+
     public function __construct()
     {
         $this->tickets = new ArrayCollection();
         $this->contexts = new ArrayCollection();
+        $this->masters = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -176,6 +183,36 @@ class Project
             // set the owning side to null (unless already changed)
             if ($context->getProject() === $this) {
                 $context->setProject(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Master>
+     */
+    public function getMasters(): Collection
+    {
+        return $this->masters;
+    }
+
+    public function addMaster(Master $master): static
+    {
+        if (!$this->masters->contains($master)) {
+            $this->masters->add($master);
+            $master->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMaster(Master $master): static
+    {
+        if ($this->masters->removeElement($master)) {
+            // set the owning side to null (unless already changed)
+            if ($master->getProject() === $this) {
+                $master->setProject(null);
             }
         }
 

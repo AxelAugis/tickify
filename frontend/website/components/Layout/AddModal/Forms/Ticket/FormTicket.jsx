@@ -44,12 +44,14 @@ const FormTicket = ({ handleModal, projects, refreshTickets }) => {
     }
 
     const handleSubmit = async (e) => {
+        const token = localStorage.getItem('token');
         e.preventDefault();
 
         const response = await fetch(`${apiUrl}/api/ticket/create`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
             },
             body: JSON.stringify(formDatas)
         })
