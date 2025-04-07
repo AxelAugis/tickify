@@ -26,9 +26,20 @@ class ProjectControllerApi extends AbstractController
     #[Route('/{id}/get-infos', name: 'api_project_get_infos', methods: ['GET'])]
     public function getInfos(Project $project): JsonResponse
     {
+        $connectedUser = $this->getUser();
+
+        if (!$connectedUser) {
+            return $this->json(['message' => 'User not found'], 404);
+        }
 
         if (!$project) {
             return $this->json(['message' => 'Project not found'], 404);
+        }
+
+        $projectOwner = $project->getOwner();
+        
+        if($connectedUser !== $projectOwner) {
+            return $this->json(['message' => 'You are not the owner of this project'], 403);
         }
 
         $tickets = $project->getTickets();

@@ -17,6 +17,6 @@ export async function getProjectData(projectId) {
 
         return project;
     } catch (error) {
-        console.error('Erreur:', error);
+        return error;
     }
 }
