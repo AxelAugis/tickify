@@ -1,11 +1,10 @@
 'use client';
 
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 
-// Enregistrer le plugin ScrollTrigger avec GSAP
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
@@ -16,7 +15,6 @@ export default function Home() {
   useGSAP(() => {
     gsap.to('.main-title', { y: -20, duration: 0.5, opacity: 1, ease: "power2.out" });
     
-    // Animation du déploiement avec ScrollTrigger et pin
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: containerRef.current,
@@ -25,18 +23,18 @@ export default function Home() {
         pin: true,
         pinSpacing: true,
         scrub: 0.5,
-        immediateRender: false, // Empêche le rendu immédiat de l'animation
+        immediateRender: false,
       }
     });
     
-    // S'assurer que la div commence avec une taille de 0 et des bords arrondis
     gsap.set(heroScrollRef.current, { 
       width: 0, 
       height: 0,
       borderRadius: "16px"
     });
     
-    // Animer la taille et le border-radius en même temps
+    gsap.set('.hero-h2', { opacity: 0 });
+    
     tl.to(heroScrollRef.current, { 
       width: '100%', 
       height: '100vh', 
@@ -44,6 +42,20 @@ export default function Home() {
       duration: 1, 
       ease: "power2.out" 
     });
+
+    tl.fromTo('.main-title', 
+      { y: -20, opacity: 1 }, 
+      { opacity: 0, y: -100, duration: 0.5, ease: "power2.out" }, 
+      0
+    );
+    
+    tl.to('.hero-h2', { 
+      opacity: 1, 
+      y: -50,
+      fontSize: "2.5rem",
+      duration: 0.5, 
+      ease: "power2.out" 
+    }, 0.2);
     
   }, [heroRef, containerRef]);
 
@@ -56,7 +68,11 @@ export default function Home() {
               Repensez la gestion de projet
             </h1>
           </div>
-          <div ref={heroScrollRef} className={`bg-white origin-center fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 rounded-xl`}></div>
+          <div ref={heroScrollRef} className={`bg-white origin-center fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 rounded-xl overflow-hidden`}>
+            <div className="w-full h-full bg-white rounded-xl flex items-center justify-center">
+              <h2 className="text-xl font-bold text-center text-black opacity-0 hero-h2">Gérer vos projets n&apos;a jamais été aussi simple</h2>
+            </div>
+          </div>
         </main>
       </div>
       <div className={`w-full min-h-screen bg-black`}>
