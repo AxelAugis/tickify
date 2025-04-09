@@ -326,7 +326,7 @@ export default function Home() {
       </div>
       <Link
           href={"/"}
-          className={`rounded-full py-8 text-5xl text-center w-2/5 italic bg-accent-dark-green text-accent-green font-cabin hover:bg-accent-green/50 hover:text-accent-dark transition duration-300 ease-in-out cursor-pointer my-24 mx-auto`}>
+          className={`rounded-full py-6 text-4xl text-center w-1/3 italic bg-accent-dark-green text-accent-green font-cabin hover:-translate-y-4 hover:shadow-2xl transition duration-300 ease-in-out cursor-pointer my-24 mx-auto`}>
             Je me lance !
         </Link>
     </div>
