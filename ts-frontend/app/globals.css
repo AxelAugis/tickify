@@ -6,9 +6,11 @@
   /* colors */
   --color-light : #F9FAFB;
   --color-dark: #050315;
-  --color-accent-full : #433bff;
+  --color-accent-blue : #433bff;
   --color-accent-dark : #093A3E;
   --color-accent-green : #52DB63;
+  --color-accent-dark-green : #2E4B3A;
+  --color-accent-salmon: #FF6666;
   /* font families */
   --font-ubuntu : 'Ubuntu', sans-serif;
   --font-cabin : 'Cabin', sans-serif;
