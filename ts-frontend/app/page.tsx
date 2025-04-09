@@ -272,7 +272,7 @@ export default function Home() {
             }
           </div>
         </div>
-        <div className={`w-screen absolute top-2/3 -translate-y-2/3 py-12 bg-accent-dark-green font-cabin italic text-accent-green text-8xl  overflow-hidden whitespace-nowrap`}>
+        <div className={`w-screen absolute top-2/3 -translate-y-2/3 py-12 bg-accent-dark-green font-cabin italic text-accent-green text-8xl  overflow-hidden  whitespace-nowrap`}>
           <div className={`w-full h-full flex justify-center items-center gap-x-8 px-8 marquee-container`}>
             {
               Array.from({ length: 10 }, (_, index) => (
@@ -322,8 +322,13 @@ export default function Home() {
             </div>
           </div>
         </div>
-        {/* Contenu qui apparaît après l'animation */}
+       
       </div>
+      <Link
+          href={"/"}
+          className={`rounded-full py-8 text-5xl text-center w-2/5 italic bg-accent-dark-green text-accent-green font-cabin hover:bg-accent-green/50 hover:text-accent-dark transition duration-300 ease-in-out cursor-pointer my-24 mx-auto`}>
+            Je me lance !
+        </Link>
     </div>
   );
 }
