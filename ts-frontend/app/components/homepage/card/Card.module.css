@@ -1,0 +1,17 @@
+
+.title::after {
+    content: "";
+    position: absolute;
+    bottom: 0px;
+    display: block;
+    z-index: -1;
+    width: 100%;
+    height: 5px;
+    background-color: hsl(127, 66%, 59%);
+    transition: height 0.15s ease-in-out;
+}
+
+.card:hover .title::after {
+    height: 15px;
+    transition: height 0.15s ease-in-out;
+}

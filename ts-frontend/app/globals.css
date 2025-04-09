@@ -3,7 +3,16 @@
 
 
 @theme {
+  /* colors */
+  --color-light : #F9FAFB;
+  --color-dark: #050315;
+  --color-accent-full : #433bff;
+  --color-accent-dark : #093A3E;
+  --color-accent-green : #52DB63;
+  /* font families */
+  --font-ubuntu : 'Ubuntu', sans-serif;
+  --font-cabin : 'Cabin', sans-serif;
+  /* max-width */
   --max-width-2xl : 1536px;
-  --color-accent-full : #5F8D69;
-  --color-accent-light : #52DB63;
+
 }
