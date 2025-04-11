@@ -104,6 +104,7 @@ export default function Home() {
     heroTl.to(heroParagraphRef.current, {
       y: 0,
       opacity: 1,
+      fontSize: "1.33rem",
       duration: 0.3,
       ease: "power2.out",
     }, "-=0.7");
@@ -171,7 +172,7 @@ export default function Home() {
 
   return (
     <div className={`min-h-screen bg-light flex flex-col`}>
-      <nav ref={navbarRef} className="w-full max-w-screen-2xl flex items-center justify-between py-5 left-1/2 -translate-x-1/2 fixed top-0 z-20">
+      <nav ref={navbarRef} className="w-full max-w-screen-xl 2xl:max-w-screen-2xl flex items-center justify-between py-5 left-1/2 -translate-x-1/2 fixed top-0 z-20">
           <Link
             href="/"
             className="text-2xl font-bold text-accent-dark font-ubuntu"
@@ -201,7 +202,7 @@ export default function Home() {
       </nav>
       <div ref={containerRef} className="h-screen w-full relative">
         <main className="flex flex-col  w-full h-full">
-          <div ref={heroRef} className={`w-full grid grid-cols-2 h-4/5 items-center max-w-screen-2xl mx-auto`}>
+          <div ref={heroRef} className={`w-full grid grid-cols-2 h-full 2xl:h-4/5 items-center max-w-screen-xl 2xl:max-w-screen-2xl mx-auto`}>
             <div className={`w-full flex flex-col gap-y-6`}>
              <div className={`w-full`}>
               <h1 className="text-9xl font-bold  text-accent-dark main-title translate-y-5 opacity-0 font-ubuntu  flex flex-col ">
@@ -244,16 +245,16 @@ export default function Home() {
             </div>
           </div>
           <div ref={heroScrollRef} className={` origin-center bg-accent-dark h-0 w-0   fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 rounded-xl overflow-hidden`}>
-            <div className="w-full h-full  flex flex-col gap-y-12  p-24">
+            <div className="w-full h-full  flex flex-col gap-y-12 lg:p-12  2xl:p-24">
               <div className={`w-full flex flex-col gap-y-6`}>
                 <h2 className="text-xl font-bold text-center text-accent-green opacity-0 hero-h2 translate-y-44 font-ubuntu">Gérer vos projets n&apos;a jamais été aussi simple</h2>
-                <p ref={heroParagraphRef} className="text-2xl  text-center text-light  font-cabin  flex flex-col opacity-0 translate-y-44">Chez Tickame, nous croyons que la gestion de projet devrait être accessible à tous. 
+                <p ref={heroParagraphRef} className="text-xl  text-center text-light  font-cabin  flex flex-col opacity-0 translate-y-44">Chez Tickame, nous croyons que la gestion de projet devrait être accessible à tous. 
                   <span>C&apos;est pourquoi nous avons créé une plateforme intuitive qui vous permet de gérer vos projets tranquillement.</span>
                 </p>
               </div>
-              <div ref={heroCardsRef} className={`w-full flex-1 flex items-center justify-center gap-x-8 font-cabin px-24 translate-y-20`}>
+              <div ref={heroCardsRef} className={`w-full flex-1 flex items-center justify-center gap-x-8 font-cabin px-24 translate-y-20 h-`}>
                 <Card title="Simple" />
-                <Card title="Rapide" height="h-4/5" />
+                <Card title="Rapide" height="h-11/12 2xl:h-4/5" />
                 <Card title="Gratuit" />
               </div>
             </div>
@@ -261,7 +262,7 @@ export default function Home() {
         </main>
       </div>
       <div className={`relative w-screen min-h-[80vh] flex justify-center items-center bg-light font-cabin`}>
-        <div className={`w-screen absolute top-1/3 -translate-y-1/3 py-12 bg-accent-dark-green font-cabin italic text-accent-green text-8xl overflow-hidden whitespace-nowrap`}>
+        <div className={`w-screen absolute top-1/3 -translate-y-1/3 py-8 2xl:py-12 bg-accent-dark-green font-cabin italic text-accent-green text-6xl 2xl:text-8xl overflow-hidden whitespace-nowrap`}>
           <div className={`min-w-full h-full flex justify-center items-center gap-x-8 px-8 marquee-container`}>
             {
               Array.from({ length: 10 }, (_, index) => (
@@ -272,7 +273,7 @@ export default function Home() {
             }
           </div>
         </div>
-        <div className={`w-screen absolute top-2/3 -translate-y-2/3 py-12 bg-accent-dark-green font-cabin italic text-accent-green text-8xl  overflow-hidden  whitespace-nowrap`}>
+        <div className={`w-screen absolute top-2/3 -translate-y-2/3 py-8 2xl:py-12 bg-accent-dark-green font-cabin italic text-accent-green text-6xl 2xl:text-8xl  overflow-hidden  whitespace-nowrap`}>
           <div className={`w-full h-full flex justify-center items-center gap-x-8 px-8 marquee-container`}>
             {
               Array.from({ length: 10 }, (_, index) => (
@@ -283,34 +284,34 @@ export default function Home() {
             }
           </div>
         </div>
-        <div ref={howSectionRef} className={` w-full z-10 bg-accent-green h-screen mx-auto py-20 px-24 flex  gap-y-24`}>
+        <div ref={howSectionRef} className={` w-full z-10 bg-accent-green h-screen mx-auto py-12 2xl:py-20 px-16 2xl:px-24 flex  gap-y-24`}>
           <div className={`w-4/5 flex flex-col gap-y-24`}>
             <div className={`w-full flex flex-col gap-y-8 text-accent-dark-green `}>
-              <h2 className={`text-5xl font-bold   w-fit font-ubuntu`}>Comment ça fonctionne ?</h2>
-              <p className={`text-2xl `}>Démarrer un projet rapidement et facilement avec Tickame. </p>
+              <h2 className={`text-3xl 2xl:text-5xl font-bold   w-fit font-ubuntu`}>Comment ça fonctionne ?</h2>
+              <p className={`text-xl 2xl:text-2xl `}>Démarrer un projet rapidement et facilement avec Tickame. </p>
             </div>
-            <div className={`w-4/5 grid grid-cols-2 text-accent-dark-green font-cabin`}>
-              <div className={`w-full flex items-end gap-x-6`}>
+            <div className={`w-5/6 2xl:w-4/5 grid grid-cols-2 gap-x-12 2xl:gap-x-0 text-accent-dark-green font-cabin`}>
+              <div className={`w-full flex items-center 2xl:items-end gap-x-6`}>
                 <p className={`font-bold text-2xl`}>1.</p>
                 <p className={`text-xl`}>Commencez par créer un projet sur Tickame.</p>
               </div>
-              <div className="w-full flex items-end gap-x-6">
+              <div className="w-full flex items-center 2xl:items-end gap-x-6">
                 <p className={`font-bold text-2xl`}>2.</p>
                 <p className={`text-xl`}>Créer des epics et ajouter des tickets.</p>
               </div>
             </div>
-            <div className={`w-4/5 grid grid-cols-2 text-accent-dark-green font-cabin`}>
-              <div className={`w-full flex items-end gap-x-6`}>
+            <div className={`w-5/6 2xl:w-4/5 grid grid-cols-2 gap-x-12 2xl:gap-x-0 text-accent-dark-green font-cabin`}>
+              <div className={`w-full flex items-center 2xl:items-end gap-x-6`}>
                 <p className={`font-bold text-2xl`}>3.</p>
                 <p className={`text-xl`}>Inviter vos collaborateurs à rejoindre le projet.</p>
               </div>
-              <div className="w-full flex items-end gap-x-6">
+              <div className="w-full flex items-center 2xl:items-end gap-x-6">
                 <p className={`font-bold text-2xl`}>4.</p>
                 <p className={`text-xl`}>Partager, collaborer et innover ensemble.</p>
               </div>
             </div>
           </div>
-          <div className={`w-1/5 mx-auto h-full flex justify-center gap-x-1`}>
+          <div className={`w-1/5 mx-auto h-full flex justify-end 2xl:justify-center gap-x-1`}>
             <div className={`w-1/6 flex flex-col  gap-y-0.5`}>
               <div className={`w-full h-2/6 bg-accent-dark-green rounded-full bar-item`}></div>
               <div className={`w-full h-4/6 bg-accent-blue rounded-full bar-item`}></div>
@@ -326,7 +327,7 @@ export default function Home() {
       </div>
       <Link
           href={"/"}
-          className={`rounded-full py-6 text-4xl text-center w-1/3 italic bg-accent-dark-green text-accent-green font-cabin hover:-translate-y-4 hover:shadow-2xl transition duration-300 ease-in-out cursor-pointer my-24 mx-auto`}>
+          className={`rounded-full py-6 text-4xl text-center w-1/3 italic bg-accent-dark-green text-accent-green font-cabin hover:-translate-y-4 hover:shadow-2xl transition duration-300 ease-in-out cursor-pointer my-6 2xl:my-24 mx-auto`}>
             Je me lance !
         </Link>
     </div>
