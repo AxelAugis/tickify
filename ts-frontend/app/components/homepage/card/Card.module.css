@@ -6,7 +6,7 @@
     display: block;
     z-index: -1;
     width: 100%;
-    height: 5px;
+    height: 8px;
     background-color: hsl(127, 66%, 59%);
     transition: height 0.15s ease-in-out;
 }
