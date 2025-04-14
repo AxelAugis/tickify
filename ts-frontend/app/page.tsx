@@ -7,6 +7,9 @@ import { useGSAP } from "@gsap/react";
 import Card from "./components/homepage/card/Card";
 import Navbar from "./components/homepage/navbar/Navbar";
 import Header from "./components/homepage/header/Header";
+import FAQBox from "./components/faq/FAQBox";
+import FAQStyles from '@/app/components/faq/FAQ.module.css';
+import Link from "next/link";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -158,30 +161,44 @@ export default function Home() {
         }, 0);
       });
 
-      const barItems = gsap.utils.toArray('.bar-item');
+      // const barItems = gsap.utils.toArray('.bar-item');
       
-      barItems.forEach((item) => {
-        gsap.set((item as HTMLElement), {
-          height: (item as HTMLElement).clientHeight, 
-        });
-      });
+      // barItems.forEach((item) => {
+      //   gsap.set((item as HTMLElement), {
+      //     height: (item as HTMLElement).clientHeight, 
+      //   });
+      // });
       
-      gsap.delayedCall(0.1, () => {
-        barItems.forEach((item, index) => {
-          const randomHeight = gsap.utils.random(40, 90); 
+      // gsap.delayedCall(0.1, () => {
+      //   barItems.forEach((item, index) => {
+      //     const randomHeight = gsap.utils.random(40, 90); 
           
-          gsap.to((item as HTMLElement), {
-            height: `${randomHeight}%`,
-            duration: gsap.utils.random(1.2, 2),
-            repeat: -1,
-            yoyo: true,
-            ease: "sine.inOut",
-            delay: index * 0.2,
-          });
-        });
-      });
+      //     gsap.to((item as HTMLElement), {
+      //       height: `${randomHeight}%`,
+      //       duration: gsap.utils.random(1.2, 2),
+      //       repeat: -1,
+      //       yoyo: true,
+      //       ease: "sine.inOut",
+      //       delay: index * 0.2,
+      //     });
+      //   });
+      // });
     }
   }, [headerRef, containerRef]);
+
+  const handleFAQDisplay = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const target = e.currentTarget;
+    const image: HTMLImageElement = target.querySelector('img') as HTMLImageElement;
+    const content: HTMLDivElement = target.nextElementSibling as HTMLDivElement;
+    if(image.classList.contains('rotate-45')) {
+      content.classList.add(`${FAQStyles.open}`);
+      image.classList.remove('rotate-45');
+    } else {
+      image.classList.add('rotate-45');
+      content.classList.remove(`${FAQStyles.open}`);
+    }
+  }
+
 
   const pageContent = {
     navbar: {
@@ -274,7 +291,44 @@ export default function Home() {
           },
         ],
       }
-    }
+    },
+    faq: [
+      {
+        title: "Dois-je être inscrit pour utiliser Tickame ?",
+        onClick: handleFAQDisplay,
+        styles: FAQStyles,
+        contents: [
+          "Oui,il est nécessaire d'être inscrit chez Tickame pour pouvoir utiliser l'application.",
+          "C'est essentiel pour que vous puissiez suivre vos projets et leur évolution."
+        ]
+      },
+      {
+        title: "Tickame est-il gratuit ?",
+        onClick: handleFAQDisplay,
+        styles: FAQStyles,
+        contents: [
+          "Oui, Tickame est entièrement gratuit. Vous pouvez l'utiliser sans aucune limitation.",
+        ]
+      },
+      {
+        title: "Je peux inviter autant de collaborateurs que je veux ?",
+        onClick: handleFAQDisplay,
+        styles: FAQStyles,
+        contents: [
+          "Oui, vous pouvez inviter autant de collaborateurs que vous le souhaitez.",
+          "Attention tout de même à ce que ce ne soit pas le bazar..."
+        ]
+      },
+      {
+        title: "Comment gérer mes projets ?",
+        onClick: handleFAQDisplay,
+        styles: FAQStyles,
+        contents: [
+          "Vous pouvez gérer vos projets en créant des epics et des tickets.",
+          "Vous avez la possibilité de découper vos projets en unité de travail pour mieux segmenter vôtre projet (design, développement, tests, etc.).",
+        ]
+      }
+    ]
   }
 
   return (
@@ -356,7 +410,57 @@ export default function Home() {
             </div>
           </div> 
         </div>
+        <div className={`w-4/5 mx-auto grid grid-cols-3 py-12 font-cabin`}>
+              <div className={`flex flex-col gap-y-4`}>
+                  <h2 className={`text-3xl 2xl:text-5xl font-bold text-dark w-fit font-ubuntu`}>FAQ</h2>
+                  <h5 className={`text-lg 2xl:text-2xl text-dark`}>Les réponses à vos questions (peut-être)</h5>
+              </div>
+              <div className={`col-span-2 flex flex-col gap-y-6`}>
+                  {
+                    pageContent.faq.map((item, index) => (
+                      <FAQBox key={index} item={item} />
+                    ))
+                  }
+              </div>
+        </div>
       </main>
+      <footer className={`w-4/5 py-72 flex flex-col justify-center items-center mx-auto gap-y-24 `}>
+        <div className={`w-full flex flex-col items-center justify-center gap-y-8`}>
+          <h2 className={`text-5xl 2xl:text-7xl font-bold text-dark w-fit font-ubuntu`}>
+                  Libérez tout votre {""}
+                  <span className={` text-accent-green`}>
+                     potentiel
+                  </span>
+          </h2>
+          <p className={`text-2xl 2xl:text-3xl text-dark font-cabin`}>
+            Gérez vos projets dès maintenant.
+          </p>
+          <Link
+            href="/"
+            className={`text-xl font-bold text-accent-dark-green bg-accent-green font-cabin py-2 px-4 hover:bg-accent-dark hover:text-accent-green rounded-lg transition duration-300 ease-in-out`}
+          >
+            Inscription
+          </Link>
+        </div>
+        <div className={`w-full flex flex-col gap-y-10 p-10 rounded-xl bg-accent-dark-green text-accent-green font-cabin`}>
+            <div className={`w-full flex items-center justify-between border-b border-accent-green/30 pb-2`}>
+                <p className={`text-2xl font-medium  font-ubuntu`}>Tickame</p>
+            </div>
+            <div className={`w-full flex flex-col gap-y-4`}>
+              <div className={``}>
+                  <p className={`text-lg font-medium`}>Tickame est une application de gestion de projet gratuite et libre d&apos;accès. 
+                    Elle vous permet de gérer vos projets facilement et rapidement tout en échangeant avec vos collaborateurs.</p>
+              </div>
+              <div className={`w-full flex items-center justify-between pt-2`}>
+                  <p className={`text-lg font-medium`}>© 2023 Tickame. Tous droits réservés.</p>
+                  <div className={`flex gap-x-4`}>
+                      <Link href="/" className={`text-lg font-medium`}>Mentions légales</Link>
+                      <Link href="/" className={`text-lg font-medium`}>Politique de confidentialité</Link>
+                  </div>
+              </div>
+            </div>
+        </div>
+      </footer>
     </div>
   );
 }
