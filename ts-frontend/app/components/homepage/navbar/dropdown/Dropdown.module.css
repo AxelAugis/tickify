@@ -1,0 +1,14 @@
+.dropdown {
+    transform: translateY(150%);
+    height: calc(100vh - 88px);
+    opacity: 0;
+    top: 88px;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out 0.15s;
+    z-index: 40;
+}
+
+.dropdown.active {
+    transform: translateY(0);
+    opacity: 1;
+    transition: transform 0.3s ease-in-out 0.15s, opacity 0.3s ease-in-out 0.15s;
+}

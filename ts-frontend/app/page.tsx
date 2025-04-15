@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -10,6 +10,7 @@ import Header from "./components/homepage/header/Header";
 import FAQBox from "./components/faq/FAQBox";
 import FAQStyles from '@/app/components/faq/FAQ.module.css';
 import BurgerStyles from '@/app/components/homepage/navbar/burger/Burger.module.css';
+import DropdownStyles from '@/app/components/homepage/navbar/dropdown/Dropdown.module.css';
 import Link from "next/link";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -22,8 +23,21 @@ export default function Home() {
   const heroParagraphRef = useRef<HTMLParagraphElement>(null);
   const heroCardsRef = useRef<HTMLDivElement>(null);
   const howSectionRef = useRef<HTMLDivElement>(null);
+  const [isLargeScreen, setIsLargeScreen] = useState<boolean>(false);
 
-  const isLargeScreen = typeof window !== "undefined" && window.innerWidth > 1024;
+  useEffect(() => {
+    if(typeof window !== "undefined") {
+      const handleResize = () => {
+        setIsLargeScreen(window.innerWidth >= 1024);
+      }
+      handleResize();
+      window.addEventListener("resize", handleResize);
+
+      return () => {
+        window.removeEventListener("resize", handleResize);
+      }
+    }
+  }, []);
 
   const [isBurgerOpen, setIsBurgerOpen] = useState(false);
 
@@ -187,9 +201,11 @@ export default function Home() {
       //   });
       // });
     }
-  }, [headerRef, containerRef]);
+  }, [headerRef, containerRef, isLargeScreen]);
 
   const handleBurgerClick = () => {
+    // document.body.classList.toggle("max-h-screen");
+    // document.body.classList.toggle("overflow-hidden");
     setIsBurgerOpen(!isBurgerOpen);
   }
 
@@ -210,6 +226,7 @@ export default function Home() {
   const pageContent = {
     navbar: {
       ref: navbarRef,
+      isDropdownActive: isBurgerOpen,
       authLinks: [
         {
           url: "/",
@@ -227,6 +244,13 @@ export default function Home() {
         styles: {
           burger: BurgerStyles.burger,
           active: BurgerStyles.active,
+        },
+      },
+      dropdown: {
+        isActive: isBurgerOpen,
+        styles: {
+          dropdown: DropdownStyles.dropdown,
+          active: DropdownStyles.active,
         },
       }
     },
