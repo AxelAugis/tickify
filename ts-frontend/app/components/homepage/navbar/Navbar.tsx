@@ -2,17 +2,20 @@ import Image from "next/image";
 import Link from "next/link";
 import AuthLink from "../../authLink/AuthLink";
 import type { AuthLinkProps } from "../../authLink/AuthLink";
+import Burger, { BurgerProps } from "./burger/Burger";
 
 interface NavbarProps {
   item: {
     ref: React.RefObject<HTMLDivElement | null>;
     authLinks: AuthLinkProps["item"][];
+    isLgScreen: boolean;
+    burger: BurgerProps["item"];
   };
 }
 
 const Navbar: React.FC<NavbarProps> = ({ item }) => {
     return (
-        <nav ref={item.ref} className="w-full max-w-screen-xl 2xl:max-w-screen-2xl flex items-center justify-between py-5 left-1/2 -translate-x-1/2 fixed top-0 z-20">
+        <nav ref={item.ref} className="w-screen lg:w-full max-w-screen-xl 2xl:max-w-screen-2xl flex items-center justify-between px-4 lg:px-0 py-5 lg:left-1/2 lg:-translate-x-1/2 fixed top-0 z-20">
           <Link
             href="/"
             className="text-2xl font-bold text-accent-dark font-ubuntu"
@@ -22,16 +25,20 @@ const Navbar: React.FC<NavbarProps> = ({ item }) => {
               alt="Logo"
               width={100}
               height={50}
-              className="cursor-pointer w-16 h-auto"
+              className="cursor-pointer w-12 lg:w-16 h-auto"
             />
           </Link>
-          <div className={`flex items-center gap-x-8`}>
-            {
-                item.authLinks.map((link, index) => (
-                    <AuthLink key={index} item={link} />
-                ))
-            }
-          </div>
+          {
+            item.isLgScreen ? (
+            <div className={`flex items-center gap-x-8`}>
+              {
+                  item.authLinks.map((link, index) => (
+                      <AuthLink key={index} item={link} />
+                  ))
+              }
+            </div>
+            ) : <Burger item={item.burger} />
+          }
       </nav>
     );
 ;}

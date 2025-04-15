@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -9,6 +9,7 @@ import Navbar from "./components/homepage/navbar/Navbar";
 import Header from "./components/homepage/header/Header";
 import FAQBox from "./components/faq/FAQBox";
 import FAQStyles from '@/app/components/faq/FAQ.module.css';
+import BurgerStyles from '@/app/components/homepage/navbar/burger/Burger.module.css';
 import Link from "next/link";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -23,6 +24,8 @@ export default function Home() {
   const howSectionRef = useRef<HTMLDivElement>(null);
 
   const isLargeScreen = typeof window !== "undefined" && window.innerWidth > 1024;
+
+  const [isBurgerOpen, setIsBurgerOpen] = useState(false);
 
   useGSAP(() => {
     if(isLargeScreen) {
@@ -186,6 +189,10 @@ export default function Home() {
     }
   }, [headerRef, containerRef]);
 
+  const handleBurgerClick = () => {
+    setIsBurgerOpen(!isBurgerOpen);
+  }
+
   const handleFAQDisplay = (e: React.MouseEvent<HTMLButtonElement>) => {
     const target = e.currentTarget;
     const image: HTMLImageElement = target.querySelector('img') as HTMLImageElement;
@@ -213,6 +220,15 @@ export default function Home() {
           label: "Inscription",
         },
       ],
+      isLgScreen: isLargeScreen,
+      burger: {
+        isOpen: isBurgerOpen,
+        onclick: handleBurgerClick,
+        styles: {
+          burger: BurgerStyles.burger,
+          active: BurgerStyles.active,
+        },
+      }
     },
     header: {
       ref: headerRef,
@@ -298,7 +314,7 @@ export default function Home() {
         onClick: handleFAQDisplay,
         styles: FAQStyles,
         contents: [
-          "Oui,il est nécessaire d'être inscrit chez Tickame pour pouvoir utiliser l'application.",
+          "Oui, il est nécessaire d'être inscrit chez Tickame pour pouvoir utiliser l'application.",
           "C'est essentiel pour que vous puissiez suivre vos projets et leur évolution."
         ]
       },
@@ -334,8 +350,8 @@ export default function Home() {
   return (
     <div className={`min-h-screen bg-light flex flex-col`}>
       <Navbar item={pageContent.navbar} />
-      <main className="flex flex-col  w-full h-full">
-        <div ref={containerRef} className="h-screen w-full relative">
+      <main className="flex flex-col w-full h-full">
+        <div ref={containerRef} className="h-screen w-full relative items-center xl:items-start ">
             <Header item={pageContent.header} />
             <div ref={heroScrollRef} className={` origin-center bg-accent-dark h-0 w-0   fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 rounded-xl overflow-hidden`}>
               <div className="w-full h-full  flex flex-col gap-y-12 lg:p-12  2xl:p-24">
@@ -410,7 +426,7 @@ export default function Home() {
             </div>
           </div> 
         </div>
-        <div className={`w-4/5 mx-auto grid grid-cols-3 py-12 font-cabin`}>
+        <div className={`w-4/5  justify-center mx-auto grid grid-cols-3 py-60 font-cabin`}>
               <div className={`flex flex-col gap-y-4`}>
                   <h2 className={`text-3xl 2xl:text-5xl font-bold text-dark w-fit font-ubuntu`}>FAQ</h2>
                   <h5 className={`text-lg 2xl:text-2xl text-dark`}>Les réponses à vos questions (peut-être)</h5>
@@ -424,7 +440,7 @@ export default function Home() {
               </div>
         </div>
       </main>
-      <footer className={`w-4/5 py-72 flex flex-col justify-center items-center mx-auto gap-y-24 `}>
+      <footer className={`h-screen w-4/5 pt-40 pb-10 flex flex-col justify-between items-center mx-auto gap-y-24 `}>
         <div className={`w-full flex flex-col items-center justify-center gap-y-8`}>
           <h2 className={`text-5xl 2xl:text-7xl font-bold text-dark w-fit font-ubuntu`}>
                   Libérez tout votre {""}
