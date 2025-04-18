@@ -8,7 +8,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ item }) => {
     return (
-         <div ref={item.ref} className={`w-full lg:grid lg:grid-cols-2 h-full lg:h-4/5 lg:items-center max-w-screen-xl 2xl:max-w-screen-2xl mx-auto px-4 lg:px-0`}>
+         <div ref={item.ref} className={`w-full lg:grid lg:grid-cols-2 h-screen lg:h-4/5 lg:items-center max-w-screen-xl 2xl:max-w-screen-2xl mx-auto px-4 lg:px-0`}>
             <div className={`w-full h-full lg:h-fit flex flex-col gap-y-6`}>
             <div className={`w-full`}>
                 <h1 className="text-9xl font-bold  text-accent-dark main-title translate-y-5 opacity-0 font-ubuntu  flex flex-col ">

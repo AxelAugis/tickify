@@ -266,7 +266,7 @@ export default function Home() {
         {
           title: "Rapide",
           content: "Créez des tickets en quelques clics. Instantanément.",
-          height: "h-11/12 2xl:h-4/5",
+          height: "h-fit lg:h-11/12 2xl:h-4/5",
         },
         {
           title: "Gratuit",
@@ -375,17 +375,17 @@ export default function Home() {
     <div className={`min-h-screen bg-light flex flex-col`}>
       <Navbar item={pageContent.navbar} />
       <main className="flex flex-col w-full h-full">
-        <div ref={containerRef} className="h-screen w-full relative items-center xl:items-start ">
+        <div ref={containerRef} className="min-h-screen lg:h-screen w-full relative items-center xl:items-start ">
             <Header item={pageContent.header} />
-            <div ref={heroScrollRef} className={` origin-center bg-accent-dark h-0 w-0   fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 rounded-xl overflow-hidden`}>
+            <div ref={heroScrollRef} className={` origin-center bg-accent-dark w-full min-h-screen lg:h-0 lg:w-0   lg:fixed lg:top-1/2 lg:left-1/2 transform lg:-translate-x-1/2 lg:-translate-y-1/2 z-10 rounded-xl overflow-hidden`}>
               <div className="w-full h-full  flex flex-col gap-y-12 lg:p-12  2xl:p-24">
                 <div className={`w-full flex flex-col gap-y-6`}>
-                  <h2 className="text-xl font-bold text-center text-accent-green opacity-0 hero-h2 translate-y-44 font-ubuntu">Gérer vos projets n&apos;a jamais été aussi simple</h2>
-                  <p ref={heroParagraphRef} className="text-xl  text-center text-light  font-cabin  flex flex-col opacity-0 translate-y-44">Chez Tickame, nous croyons que la gestion de projet devrait être accessible à tous. 
+                  <h2 className="text-xl font-bold text-center text-accent-green lg:opacity-0 hero-h2 lg:translate-y-44 font-ubuntu">Gérer vos projets n&apos;a jamais été aussi simple</h2>
+                  <p ref={heroParagraphRef} className="text-xl  text-center text-light  font-cabin  flex flex-col lg:opacity-0 lg:translate-y-44">Chez Tickame, nous croyons que la gestion de projet devrait être accessible à tous. 
                     <span>C&apos;est pourquoi nous avons créé une plateforme intuitive qui vous permet de gérer vos projets tranquillement.</span>
                   </p>
                 </div>
-                <div ref={heroCardsRef} className={`w-full flex-1 flex items-center justify-center gap-x-8 font-cabin px-24 translate-y-20 h-`}>
+                <div ref={heroCardsRef} className={`w-full lg:flex-1 grid lg:flex lg:items-center lg:justify-center gap-x-8 font-cabin px-4 lg:px-24 lg:translate-y-20`}>
                   {
                     pageContent.whySection.cards.map((card, index) => (
                       <Card key={index} title={card.title} height={card.height ?? undefined} content={card.content} />
@@ -432,7 +432,7 @@ export default function Home() {
                 ))
               }
             </div>
-            <div className={`w-1/5 mx-auto h-full flex justify-end 2xl:justify-center gap-x-1`}>
+            <div className={`w-1/5 mx-auto h-full hidden lg:flex justify-end 2xl:justify-center gap-x-1`}>
               <div className={`w-1/6 flex flex-col  gap-y-0.5`}>
                 {
                   pageContent.howSection.bars.left.map((bar, index) => (
@@ -482,7 +482,7 @@ export default function Home() {
             Inscription
           </Link>
         </div>
-        <div className={`w-full flex flex-col gap-y-10 p-10 rounded-xl bg-accent-dark-green text-accent-green font-cabin`}>
+        <div className={`w-full flex flex-col gap-y-10 pt-10 px-10 pb-4 rounded-xl bg-accent-dark-green text-accent-green font-cabin`}>
             <div className={`w-full flex items-center justify-between border-b border-accent-green/30 pb-2`}>
                 <p className={`text-2xl font-medium  font-ubuntu`}>Tickame</p>
             </div>
