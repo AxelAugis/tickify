@@ -377,7 +377,7 @@ export default function Home() {
       <main className="flex flex-col w-full h-full">
         <div ref={containerRef} className="min-h-screen lg:h-screen w-full relative items-center xl:items-start ">
             <Header item={pageContent.header} />
-            <div ref={heroScrollRef} className={` origin-center bg-accent-dark w-full min-h-screen lg:h-0 lg:w-0   lg:fixed lg:top-1/2 lg:left-1/2 transform lg:-translate-x-1/2 lg:-translate-y-1/2 z-10 rounded-xl overflow-hidden`}>
+            <div ref={heroScrollRef} className={`origin-center bg-accent-dark w-full min-h-screen lg:min-h-0 lg:h-0 lg:w-0 lg:fixed lg:top-1/2 lg:left-1/2 transform lg:-translate-x-1/2 lg:-translate-y-1/2 z-10 rounded-xl overflow-hidden`}>
               <div className="w-full h-full  flex flex-col gap-y-12 lg:p-12  2xl:p-24">
                 <div className={`w-full flex flex-col gap-y-6`}>
                   <h2 className="text-xl font-bold text-center text-accent-green lg:opacity-0 hero-h2 lg:translate-y-44 font-ubuntu">Gérer vos projets n&apos;a jamais été aussi simple</h2>

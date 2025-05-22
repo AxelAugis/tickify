@@ -25,15 +25,15 @@ class Context
     #[Groups(['ticket:read', 'context:read'])]
     private ?string $color = null;
 
-    #[ORM\ManyToOne(inversedBy: 'contexts')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Project $project = null;
-
     /**
      * @var Collection<int, Ticket>
      */
     #[ORM\OneToMany(targetEntity: Ticket::class, mappedBy: 'context')]
     private Collection $tickets;
+
+    #[ORM\ManyToOne(inversedBy: 'contexts')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Team $team = null;
 
     public function __construct()
     {
@@ -69,18 +69,6 @@ class Context
         return $this;
     }
 
-    public function getProject(): ?Project
-    {
-        return $this->project;
-    }
-
-    public function setProject(?Project $project): static
-    {
-        $this->project = $project;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Ticket>
      */
@@ -107,6 +95,18 @@ class Context
                 $ticket->setContext(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTeam(): ?Team
+    {
+        return $this->team;
+    }
+
+    public function setTeam(?Team $team): static
+    {
+        $this->team = $team;
 
         return $this;
     }

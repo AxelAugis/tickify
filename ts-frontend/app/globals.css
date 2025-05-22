@@ -17,4 +17,6 @@
   /* max-width */
   --max-width-2xl : 1536px;
 
+  --gradient-light-green : linear-gradient(135deg, var(--color-light) 0%, var(--color-accent-dark-green) 100%);
+
 }
