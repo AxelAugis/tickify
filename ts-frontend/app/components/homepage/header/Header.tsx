@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 interface HeaderProps {
     item: {
         ref: React.RefObject<HTMLDivElement | null>;
@@ -19,17 +17,6 @@ const Header: React.FC<HeaderProps> = ({ item }) => {
                 <span> Une nouvelle façon de gérer vos projets en équipe.</span>
                 </p>
 
-            </div>
-            <div className={`flex items-center gap-x-8 font-cabin`}>
-                <button className={`ctaHero opacity-0 translate-y-5 bg-accent-green/50 text-accent-dark font-bold py-3 px-8 rounded-lg  hover:-translate-y-1 transition duration-75 ease-in-out cursor-pointer`}>
-                Commencer
-                </button>
-                <Link
-                href="/"
-                className={`ctaHero opacity-0 translate-y-5 bg-accent-dark text-light font-bold py-3 px-7 rounded-lg  hover:-translate-y-1 hover:shadow-2xl transition duration-75 ease-in-out cursor-pointer`}
-                >
-                S&apos;inscrire
-                </Link>
             </div>
             </div>
             <div className={`hidden w-full lg:grid grid-cols-6 gap-2 text-2xl font-medium `}>

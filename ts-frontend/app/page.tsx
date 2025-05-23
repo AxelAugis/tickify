@@ -229,7 +229,7 @@ export default function Home() {
       isDropdownActive: isBurgerOpen,
       authLinks: [
         {
-          url: "/",
+          url: "/login",
           label: "Se connecter",
         },
         {
