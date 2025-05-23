@@ -187,7 +187,7 @@ export default function LoginPage() {
         action={onSubmit}
         className={` bg-light/20 rounded-xl shadow-lg ring-1 ring-black/5 backdrop-blur-3xl flex flex-col items-center text-light gap-y-12 p-4 md:p-8 font-cabin w-11/12 sm:w-3/4 lg:max-w-xl`}
       >
-        <h2 className={`text-4xl  font-medium`}>Connexion</h2>
+        <h2 className={`text-3xl md:text-4xl  font-medium`}>Connexion</h2>
         <div className={`w-full flex flex-col gap-y-6`}>
           <div className={`w-full flex flex-col gap-y-4`}>
             {
