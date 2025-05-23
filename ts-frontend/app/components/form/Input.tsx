@@ -27,7 +27,7 @@ const Input: React.FC<InputProps> = ({ item }) => {
     const borderStyle = item.error ? "border-1.5 border-red-700" : "border-light/50";
 
     return (
-        <div className={`flex flex-col gap-y-1.5 text-light`}>
+        <div className={`w-full flex flex-col gap-y-1.5 text-light`}>
             <label htmlFor={item.label.htmlFor} className={`text-lg font-medium`}>{item.label.text}</label>
             {
                 item.input.type == "password" ? (
