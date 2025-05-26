@@ -7,7 +7,7 @@ interface CardTitleProps {
 
 const CardTitle: React.FC<CardTitleProps> = ({ text }) => {
     return (
-        <h3 className={`relative z-10 text-2xl 2xl:text-3xl font-medium text-dark font-ubuntu ${styles.title}`}>
+        <h3 className={`relative z-10 text-2xl 2xl:text-3xl font-medium text-dark font-ubuntu ${styles.title} w-fit`}>
             {text}
         </h3>
     )

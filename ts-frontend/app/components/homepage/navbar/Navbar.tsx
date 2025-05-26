@@ -18,7 +18,7 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ item }) => {
     return (
-        <nav ref={item.ref} className={`w-screen lg:w-full max-w-screen-xl 2xl:max-w-screen-2xl flex items-center justify-between px-4 lg:px-0 py-5 lg:left-1/2 lg:-translate-x-1/2 fixed top-0 z-50 transition-colors duration-300 ${item.isDropdownActive ? "bg-accent-green/50" : "bg-transparent"} `}>
+        <nav ref={item.ref} className={`w-screen lg:w-full max-w-screen-xl 2xl:max-w-screen-2xl flex items-center justify-between px-4 lg:px-0 py-5 lg:left-1/2 lg:-translate-x-1/2 fixed top-0 z-50 transition-colors duration-300 ${item.isDropdownActive ? "bg-accent-green/50" : "bg-transparent"} backdrop-blur-md`}>
           <Link
             href="/"
             className="text-2xl font-bold text-accent-dark font-ubuntu"

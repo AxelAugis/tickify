@@ -374,18 +374,18 @@ export default function Home() {
   return (
     <div className={`min-h-screen bg-light flex flex-col`}>
       <Navbar item={pageContent.navbar} />
-      <main className="flex flex-col w-full h-full">
+      <main className="flex flex-col w-full h-full gap-y-24 lg:gap-y-0">
         <div ref={containerRef} className="min-h-screen lg:h-screen w-full relative items-center xl:items-start ">
             <Header item={pageContent.header} />
-            <div ref={heroScrollRef} className={`origin-center bg-accent-dark w-full min-h-screen lg:min-h-0 lg:h-0 lg:w-0 lg:fixed lg:top-1/2 lg:left-1/2 transform lg:-translate-x-1/2 lg:-translate-y-1/2 z-10 rounded-xl overflow-hidden`}>
-              <div className="w-full h-full  flex flex-col gap-y-12 lg:p-12  2xl:p-24">
+            <div ref={heroScrollRef} className={`py-6 px-4 lg:p-0 origin-center bg-accent-dark w-11/12 mx-auto min-h-fit lg:min-h-0 lg:h-0 lg:w-0 lg:fixed lg:top-1/2 lg:left-1/2 transform lg:-translate-x-1/2 lg:-translate-y-1/2 z-10 rounded-xl overflow-hidden`}>
+              <div className="w-full min-h-fit lg:min-h-full lg:h-full  flex flex-col gap-y-6 lg:gap-y-12 lg:p-12  2xl:p-24">
                 <div className={`w-full flex flex-col gap-y-6`}>
-                  <h2 className="text-xl font-bold text-center text-accent-green lg:opacity-0 hero-h2 lg:translate-y-44 font-ubuntu">Gérer vos projets n&apos;a jamais été aussi simple</h2>
+                  <h2 className="text-3xl lg:text-xl font-bold text-center text-accent-green lg:opacity-0 hero-h2 lg:translate-y-44 font-ubuntu">Gérer vos projets n&apos;a jamais été aussi simple</h2>
                   <p ref={heroParagraphRef} className="text-xl  text-center text-light  font-cabin  flex flex-col lg:opacity-0 lg:translate-y-44">Chez Tickame, nous croyons que la gestion de projet devrait être accessible à tous. 
                     <span>C&apos;est pourquoi nous avons créé une plateforme intuitive qui vous permet de gérer vos projets tranquillement.</span>
                   </p>
                 </div>
-                <div ref={heroCardsRef} className={`w-full lg:flex-1 grid lg:flex lg:items-center lg:justify-center gap-x-8 font-cabin px-4 lg:px-24 lg:translate-y-20`}>
+                <div ref={heroCardsRef} className={`w-full lg:flex-1 grid lg:flex lg:items-center lg:justify-center gap-x-8 gap-y-4 font-cabin  lg:px-24 lg:translate-y-20`}>
                   {
                     pageContent.whySection.cards.map((card, index) => (
                       <Card key={index} title={card.title} height={card.height ?? undefined} content={card.content} />
@@ -395,34 +395,36 @@ export default function Home() {
               </div>
             </div>
         </div>
-        <div className={`relative w-screen min-h-[80vh] flex justify-center items-center bg-light font-cabin`}>
+        <div className={`relative w-screen lg:min-h-[80vh] flex justify-center items-center bg-light font-cabin`}>
           {
-            pageContent.howSection.marquees.map((marquee, index) => (
-              <div key={index} className={`w-screen absolute ${marquee.position} py-8 2xl:py-12 bg-accent-dark-green font-cabin italic text-accent-green text-6xl 2xl:text-8xl overflow-hidden whitespace-nowrap`}>
-                <div className={`w-full h-full flex justify-center items-center gap-x-8 px-8 marquee-container`}>
-                  {
-                    Array.from({ length: 10 }, (_, index) => (
-                      <div key={index} className={`marquee`}>
-                        <p>Tickame</p>
-                      </div>
-                    ))
-                  }
+            isLargeScreen && (
+              pageContent.howSection.marquees.map((marquee, index) => (
+                <div key={index} className={`w-screen absolute ${marquee.position} py-8 2xl:py-12 bg-accent-dark-green font-cabin italic text-accent-green text-6xl 2xl:text-8xl overflow-hidden whitespace-nowrap`}>
+                  <div className={`w-full h-full flex justify-center items-center gap-x-8 px-8 marquee-container`}>
+                    {
+                      Array.from({ length: 10 }, (_, index) => (
+                        <div key={index} className={`marquee`}>
+                          <p>Tickame</p>
+                        </div>
+                      ))
+                    }
+                  </div>
                 </div>
-              </div>
-            ))
+              ))
+            )
           }
-          <div ref={howSectionRef} className={` w-full z-10 bg-accent-green h-screen mx-auto py-12 2xl:py-20 px-16 2xl:px-24 flex  gap-y-24`}>
-            <div className={`w-4/5 flex flex-col gap-y-24`}>
-              <div className={`w-full flex flex-col gap-y-8 text-accent-dark-green `}>
-                <h2 className={`text-3xl 2xl:text-5xl font-bold   w-fit font-ubuntu`}>Comment ça fonctionne ?</h2>
+          <div ref={howSectionRef} className={`w-11/12 rounded-lg lg:rounded-none lg:w-full z-10 bg-accent-green lg:h-screen mx-auto py-6 lg:py-12 2xl:py-20 px-4 lg:px-16 2xl:px-24 flex  gap-y-24`}>
+            <div className={`w-full lg:w-4/5 flex flex-col gap-y-8 lg:gap-y-24`}>
+              <div className={`w-full flex flex-col gap-y-4 lg:gap-y-8 text-accent-dark-green text-center lg:text-start `}>
+                <h2 className={`text-2xl lg:text-3xl 2xl:text-5xl font-bold lg:w-fit font-ubuntu`}>Comment ça fonctionne ?</h2>
                 <p className={`text-xl 2xl:text-2xl `}>Démarrer un projet rapidement et facilement avec Tickame. </p>
               </div>
               {
                 Array.from({ length: 2 }, (_, index) => (
-                  <div key={index} className={`w-5/6 2xl:w-4/5 grid grid-cols-2 gap-x-12 2xl:gap-x-0 text-accent-dark-green font-cabin`}>
+                  <div key={index} className={`w-full lg:w-5/6 2xl:w-4/5 flex flex-col lg:grid lg:grid-cols-2 gap-y-6 lg:gap-y-0 lg:gap-x-12 2xl:gap-x-0 text-accent-dark-green font-cabin`}>
                     {
                       pageContent.howSection.explanations[index === 0 ? "top" : "bottom"].map((explanation, index) => (
-                        <div key={index} className={`w-full flex items-center 2xl:items-end gap-x-6`}>
+                        <div key={index} className={`w-full flex items-start lg:items-center 2xl:items-end gap-x-3 lg:gap-x-6`}>
                           <p className={`font-bold text-2xl`}>{explanation.number}.</p>
                           <p className={`text-xl`}>{explanation.content}</p>
                         </div>
@@ -450,8 +452,8 @@ export default function Home() {
             </div>
           </div> 
         </div>
-        <div className={`w-4/5  justify-center mx-auto grid grid-cols-3 py-60 font-cabin`}>
-              <div className={`flex flex-col gap-y-4`}>
+        <div className={`w-11/12  lg:px-0 lg:w-4/5  justify-center mx-auto flex flex-col items-center lg:grid lg:grid-cols-3 gap-y-4 lg:py-60 font-cabin`}>
+              <div className={`w-full lg:w-fit flex flex-col gap-y-4`}>
                   <h2 className={`text-3xl 2xl:text-5xl font-bold text-dark w-fit font-ubuntu`}>FAQ</h2>
                   <h5 className={`text-lg 2xl:text-2xl text-dark`}>Les réponses à vos questions (peut-être)</h5>
               </div>
@@ -464,9 +466,9 @@ export default function Home() {
               </div>
         </div>
       </main>
-      <footer className={`h-screen w-4/5 pt-40 pb-10 flex flex-col justify-between items-center mx-auto gap-y-24 `}>
-        <div className={`w-full flex flex-col items-center justify-center gap-y-8`}>
-          <h2 className={`text-5xl 2xl:text-7xl font-bold text-dark w-fit font-ubuntu`}>
+      <footer className={`lg:h-screen w-full px-4 lg:px-0 lg:w-4/5 pt-20 lg:pt-40 pb-10 flex flex-col justify-between items-center mx-auto gap-y-12 lg:gap-y-24 `}>
+        <div className={`w-full flex flex-col items-center justify-center gap-y-6 lg:gap-y-8`}>
+          <h2 className={`text-4xl lg:text-5xl 2xl:text-7xl font-bold text-dark w-fit font-ubuntu text-center lg:text-start`}>
                   Libérez tout votre {""}
                   <span className={` text-accent-green`}>
                      potentiel
@@ -476,13 +478,13 @@ export default function Home() {
             Gérez vos projets dès maintenant.
           </p>
           <Link
-            href="/"
+            href="/register"
             className={`text-xl font-bold text-accent-dark-green bg-accent-green font-cabin py-2 px-4 hover:bg-accent-dark hover:text-accent-green rounded-lg transition duration-300 ease-in-out`}
           >
             Inscription
           </Link>
         </div>
-        <div className={`w-full flex flex-col gap-y-10 pt-10 px-10 pb-4 rounded-xl bg-accent-dark-green text-accent-green font-cabin`}>
+        <div className={`w-full flex flex-col gap-y-6 lg:gap-y-10 pt-6 lg:pt-10 px-4 lg:px-10 pb-4 rounded-xl bg-accent-dark-green text-accent-green font-cabin`}>
             <div className={`w-full flex items-center justify-between border-b border-accent-green/30 pb-2`}>
                 <p className={`text-2xl font-medium  font-ubuntu`}>Tickame</p>
             </div>
@@ -491,12 +493,14 @@ export default function Home() {
                   <p className={`text-lg font-medium`}>Tickame est une application de gestion de projet gratuite et libre d&apos;accès. 
                     Elle vous permet de gérer vos projets facilement et rapidement tout en échangeant avec vos collaborateurs.</p>
               </div>
-              <div className={`w-full flex items-center justify-between pt-2`}>
-                  <p className={`text-lg font-medium`}>© 2023 Tickame. Tous droits réservés.</p>
-                  <div className={`flex gap-x-4`}>
+              <div className={`w-full flex flex-col lg:flex-row lg:items-center justify-between pt-6 lg:pt-2`}>
+                  <p className={`hidden lg:block text-lg font-medium`}>© 2023 Tickame. Tous droits réservés.</p>
+                  <div className={`flex flex-col lg:flex-row gap-x-4`}>
                       <Link href="/" className={`text-lg font-medium`}>Mentions légales</Link>
                       <Link href="/" className={`text-lg font-medium`}>Politique de confidentialité</Link>
                   </div>
+                  <p className={`block lg:hidden text-center pt-6 text-lg font-medium`}>© 2023 Tickame. Tous droits réservés.</p>
+
               </div>
             </div>
         </div>

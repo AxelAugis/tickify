@@ -14,7 +14,7 @@ const FAQBox: React.FC<FAQBoxProps> = ({ item }) => {
         <div className={`w-full rounded-lg bg-accent-green/20 text-accent-dark `}>
             <button
                 onClick={item.onClick} 
-                className={`text-xl w-full flex items-center justify-between cursor-pointer p-5 font-semibold`}
+                className={`text-xl w-full flex items-center justify-between cursor-pointer p-5 font-semibold text-start lg:text-center`}
             >
                 {item.title}
                 <Image 
@@ -22,7 +22,7 @@ const FAQBox: React.FC<FAQBoxProps> = ({ item }) => {
                     alt="Une croix verte"
                     width={80}
                     height={80}
-                    className={`w-10 h-auto rotate-45 transition-transform`}
+                    className={`min-w-10 max-w-10 h-auto rotate-45 transition-transform`}
                 />
             </button>
             <div className={`w-full ${item.styles.content}`}>
