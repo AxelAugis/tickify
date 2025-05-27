@@ -20,7 +20,7 @@ const NavbarDropdown: React.FC<NavbarDropdownProps> = ({ item }) => {
                 Connexion
             </Link>
             <Link
-                href="/"
+                href="/register"
                 className="text-2xl font-bold text-accent-dark font-ubuntu"
             >
                 Inscription

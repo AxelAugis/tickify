@@ -176,15 +176,15 @@ export default function RegisterPage() {
     }
 
     return (
-    <div className="flex flex-col gap-y-12 xl:grid xl:grid-cols-2 items-center justify-center w-full h-full 2xl:max-w-5/6   gap-x-8 lg:px-24">
+    <div className="flex flex-col pt-10 sm:pt-14 md:pt-20 lg:pt-0   gap-y-12 lg:grid lg:grid-cols-2 items-center justify-center w-full h-full 2xl:max-w-5/6   gap-x-8 lg:px-24">
         <div className={`flex flex-col items-center gap-y-4`}>
-            <h1 className={`text-5xl sm:text-7xl  text-white font-medium`}>Tickame</h1>
+            <h1 className={`text-5xl sm:text-7xl  text-white font-medium `}>Tickame</h1>
             <p className={`text-xl sm:text-2xl 3xl:text-3xl text-white font-medium font-cabin`}>
             Réjoignez la communauté Tickame !
             </p>
         </div>
         <form 
-            className={` bg-light/20 rounded-xl shadow-lg ring-1 ring-black/5 backdrop-blur-3xl flex flex-col items-center text-light gap-y-10 p-4 md:p-8 font-cabin w-11/12 sm:w-3/4 lg:max-w-xl`}
+            className={` bg-light/20 rounded-xl shadow-lg ring-1 ring-black/5 backdrop-blur-3xl flex flex-col items-center text-light gap-y-10 p-4 md:p-8 font-cabin w-11/12 sm:w-3/4 lg:w-full lg:max-w-xl`}
         >
             <h2 className={`text-3xl md:text-4xl  font-medium`}>Inscription</h2>
             <div className={`w-full flex flex-col gap-y-6`}>

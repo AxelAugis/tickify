@@ -233,7 +233,7 @@ export default function Home() {
           label: "Se connecter",
         },
         {
-          url: "/",
+          url: "/register",
           label: "Inscription",
         },
       ],
