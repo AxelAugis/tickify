@@ -7,8 +7,12 @@ import Checkbox from "@/app/components/checkbox/Checkbox";
 import Button from "@/app/components/buttons/Button";
 import axios from "@/utils/axios";
 import { isAxiosError } from "axios";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
+
+  const router = useRouter();
+
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const [requestError, setRequestError] = useState("");
@@ -90,6 +94,7 @@ export default function LoginPage() {
           sessionStorage.setItem("token", token);
         }
       }
+      router.push("/dashboard");
     } catch (error: object | unknown) {
       if (isAxiosError(error) && error.response) {
         if (error.response.status === 401) {

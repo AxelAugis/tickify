@@ -26,14 +26,18 @@ const useUserStore = create<UserState>((set) => ({
   fetchCurrentUser: async () => {
     try {
       set({ loading: true, error: null });
-      
-      // Récupérer les informations de l'utilisateur depuis l'API
-      const response = await axios.get('/api/user/me');
-      
-      if (response.data && response.data.user) {
-        set({ user: response.data.user, loading: false });
-      } else {
-        set({ user: null, loading: false, error: 'Utilisateur non trouvé' });
+
+      const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+      if (!token) {
+        set({ user: null, loading: false, error: 'Aucun token trouvé' });
+      } else { 
+          const response = await axios.get('/auth/user');
+          const data = response.data;
+          if(data) {
+            set({ user: data, loading: false });
+          } else {
+            set({ user: null, loading: false, error: 'Utilisateur non trouvé' });
+          }
       }
     } catch (error) {
       set({ 
