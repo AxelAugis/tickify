@@ -3,6 +3,7 @@
 
 
 @theme {
+
   /* colors */
   --color-light : #F9FAFB;
   --color-dark: #050315;
@@ -11,9 +12,11 @@
   --color-accent-green : #52DB63;
   --color-accent-dark-green : #2E4B3A;
   --color-accent-salmon: #FF6666;
+
   /* font families */
   --font-ubuntu : 'Ubuntu', sans-serif;
   --font-cabin : 'Cabin', sans-serif;
+
   /* max-width */
   --max-width-2xl : 1536px;
 
@@ -22,6 +25,10 @@
   --breakpoint-4xl: 128rem;
 
   --gradient-light-green : linear-gradient(135deg, var(--color-light) 0%, var(--color-accent-dark-green) 100%);
+
+  /* shadows */
+  --shadow-default : 10px 24px 24px #0000000F;
+
 
 }
 

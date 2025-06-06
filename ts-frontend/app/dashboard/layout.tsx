@@ -4,10 +4,10 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import useUserStore from "@/store/useUserStore";
 import ScreenLoader from "../components/screenLoader/ScreenLoader";
-import BurgerStyles from '@/app/components/homepage/navbar/burger/Burger.module.css';
-import DropdownStyles from '@/app/components/homepage/navbar/dropdown/Dropdown.module.css';
-import Navbar from "../components/homepage/navbar/Navbar";
-import ProfileDropdownStyle from "@/app/components/homepage/navbar/profile/dropdown/ProfileDropdown.module.css";
+import BurgerStyles from '@/app/components/navbar/burger/Burger.module.css';
+import DropdownStyles from '@/app/components/navbar/dropdown/Dropdown.module.css';
+import Navbar from "../components/navbar/Navbar";
+import ProfileDropdownStyle from "@/app/components/navbar/profile/dropdown/ProfileDropdown.module.css";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
     const router = useRouter();
@@ -78,7 +78,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
                 active: DropdownStyles.active,
             },
         },
-        padding: 'lg:px-24 xl:px-0',
+        padding: 'lg:px-24 ',
         profile: {
             isOpen: isProfileOpen,
             onclick: () => setIsProfileOpen(!isProfileOpen),
@@ -89,6 +89,29 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
                     dropdown: ProfileDropdownStyle.dropdown,
                     active: ProfileDropdownStyle.active,
                 },
+                elements: [
+                    {
+                        isLink: true,
+                        url: "/profile",
+                        label: "Mon Profil",
+                        image: {
+                            src: "/images/icons/profile.svg",
+                            alt: "Profile",
+                            width: 24,
+                            height: 24,
+                        }
+                    },
+                    {
+                        isLink: false,
+                        label: "Se déconnecter",
+                        image: {
+                            src: "/images/icons/logout.svg",
+                            alt: "Logout",
+                            width: 24,
+                            height: 24,
+                        }
+                    }
+                ]
             }
         }
     }

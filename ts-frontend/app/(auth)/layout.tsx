@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import BurgerStyles from '@/app/components/homepage/navbar/burger/Burger.module.css';
-import DropdownStyles from '@/app/components/homepage/navbar/dropdown/Dropdown.module.css';
-import Navbar from '../components/homepage/navbar/Navbar';
+import BurgerStyles from '@/app/components/navbar/burger/Burger.module.css';
+import DropdownStyles from '@/app/components/navbar/dropdown/Dropdown.module.css';
+import Navbar from '../components/navbar/Navbar';
 
 export default function AuthLayout({
     children,

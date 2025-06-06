@@ -4,26 +4,26 @@ const Status = ({ status }) => {
         "todo": {
             label: "A faire",
             bgColor: "bg-blue-100",
-            color: "text-blue-500",
-            borderColor: "border-blue-500"
+            color: "text-blue-300",
+            borderColor: "border-blue-300"
         },
         "in_progress": {
             label: "En cours",
             bgColor: "bg-yellow-100",
-            color: "text-yellow-500",
-            borderColor: "border-yellow-500"
+            color: "text-yellow-300",
+            borderColor: "border-yellow-300"
         },
         "done": {
             label: "Terminé",
             bgColor: "bg-green-100",
-            color: "text-green-500",
-            borderColor: "border-green-500"
+            color: "text-green-300",
+            borderColor: "border-green-300"
         },
         "closed": {
             label: "Fermé",
             bgColor: "bg-red-100",
-            color: "text-red-500",
-            borderColor: "border-red-500"
+            color: "text-red-300",
+            borderColor: "border-red-300"
         }
     }
 

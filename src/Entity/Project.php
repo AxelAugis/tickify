@@ -15,15 +15,15 @@ class Project
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['all-project:read', 'project:read'])]
+    #[Groups(['all-project:read', 'project:read', 'dashboard:project:read'])]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    #[Groups(['all-project:read', 'project:read'])]
+    #[ORM\Column(length: 255, unique: true)]
+    #[Groups(['all-project:read', 'project:read', 'dashboard:project:read'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['project:read'])]
+    #[Groups(['project:read', 'dashboard:project:read'])]
     private ?string $description = null;
 
     #[ORM\ManyToOne(inversedBy: 'projects')]
@@ -31,18 +31,18 @@ class Project
     private ?User $owner = null;
 
     #[ORM\Column]
-    #[Groups(['project:read'])]
+    #[Groups(['project:read', 'dashboard:project:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
-    #[Groups(['project:read'])]
+    #[Groups(['project:read', 'dashboard:project:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     /**
      * @var Collection<int, Ticket>
      */
     #[ORM\OneToMany(targetEntity: Ticket::class, mappedBy: 'project')]
-    #[Groups(['project:read'])]
+    #[Groups(['project:read', 'dashboard:project:read'])]
     private Collection $tickets;
 
     /**
@@ -61,6 +61,7 @@ class Project
      * @var Collection<int, Team>
      */
     #[ORM\OneToMany(targetEntity: Team::class, mappedBy: 'project', orphanRemoval: true)]
+    #[Groups(['project:read', 'dashboard:project:read'])]
     private Collection $teams;
 
     public function __construct()

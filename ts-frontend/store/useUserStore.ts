@@ -15,7 +15,7 @@ interface UserState {
 
 const useUserStore = create<UserState>((set) => ({
   user: null,
-  loading: false,
+  loading: true,
   error: null,
   
   setUser: (user) => set({ user }),

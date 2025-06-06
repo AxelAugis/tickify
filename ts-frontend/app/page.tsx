@@ -5,12 +5,12 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import Card from "./components/homepage/card/Card";
-import Navbar from "./components/homepage/navbar/Navbar";
+import Navbar from "./components/navbar/Navbar";
 import Header from "./components/homepage/header/Header";
 import FAQBox from "./components/faq/FAQBox";
 import FAQStyles from '@/app/components/faq/FAQ.module.css';
-import BurgerStyles from '@/app/components/homepage/navbar/burger/Burger.module.css';
-import DropdownStyles from '@/app/components/homepage/navbar/dropdown/Dropdown.module.css';
+import BurgerStyles from '@/app/components/navbar/burger/Burger.module.css';
+import DropdownStyles from '@/app/components/navbar/dropdown/Dropdown.module.css';
 import Link from "next/link";
 
 gsap.registerPlugin(ScrollTrigger);
