@@ -32,6 +32,15 @@
 
 }
 
+@layer utilities {
+  .fhwn {
+    height: calc(100vh - 88px);
+  }
+  .maxhwn {
+    max-height: calc(100vh - 88px);
+  }
+}
+
 /* Custom checkbox */
 .custom-checkbox {
   min-width: 22px;

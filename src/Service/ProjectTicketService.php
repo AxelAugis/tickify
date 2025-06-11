@@ -59,6 +59,7 @@ class ProjectTicketService
                         'color' => $team->getColor(),
                     ];
                 })->toArray(),
+                'uuid' => $project->getUuid(),
                 'tickets_count' => $this->countTicketsByStatus($project),
             ];
             

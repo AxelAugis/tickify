@@ -23,7 +23,7 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ item }) => {
     return (
         item.isDashboard ? (
-          <nav ref={item.ref} className={`w-screen lg:w-full  3xl:max-w-screen  flex items-center justify-between px-4  py-5 mx-auto transition-colors duration-300 ${item.isDropdownActive ? "bg-accent-green/50" : "bg-transparent"} backdrop-blur-md ${item.padding}`}>
+          <nav ref={item.ref} className={`w-screen lg:w-full  3xl:max-w-screen  flex items-center justify-between px-4  py-5 mx-auto transition-colors duration-300 ${item.isDropdownActive ? "bg-accent-green/50" : "bg-transparent relative z-10"} backdrop-blur-md ${item.padding}`}>
             <Link
               href="/"
               className="text-2xl font-bold text-accent-dark font-ubuntu"

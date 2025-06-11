@@ -10,6 +10,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Psr\Log\LoggerInterface;
+
 
 #[Route('/api/project')]
 class ProjectControllerApi extends AbstractController
@@ -105,5 +107,42 @@ class ProjectControllerApi extends AbstractController
         $contexts = $project->getContexts();
 
         return $this->json($contexts, 200, [], ['groups' => 'context:read']);
+    }
+
+    #[Route('/check-duplicate', name: 'api_project_check_duplicate', methods: ['POST'])]
+    public function checkDuplicate(Request $request, ProjectRepository $projectRepository, LoggerInterface $logger): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $name = $data['params']['projectName'] ?? null;
+        $id = $data['params']['projectId'] ?? null;
+        $userId = $data['params']['userId'] ?? null;
+
+        if (!$name || !$userId) {
+            return $this->json(['status' => 400, 'message' => 'Missing required parameters'], 400);
+        }
+
+        $existingProject = null;
+
+        if (empty($id)) {
+            // Création d'un nouveau projet : vérifier si un projet avec ce nom existe déjà pour cet utilisateur
+            $existingProject = $projectRepository->findOneBy(['name' => $name, 'owner' => $userId]);
+        } else {
+            $queryBuilder = $projectRepository->createQueryBuilder('p');
+            $existingProject = $queryBuilder
+                ->where('p.name = :name')
+                ->andWhere('p.owner = :userId')
+                ->andWhere('p.id != :id')
+                ->setParameter('name', $name)
+                ->setParameter('userId', $userId)
+                ->setParameter('id', $id)
+                ->getQuery()
+                ->getOneOrNullResult();
+        }
+
+        if ($existingProject) {
+            return $this->json(['status' => 400, 'duplicate' => true], 400);
+        }
+        
+        return $this->json(['status' => 200, 'duplicate' => false], 200);
     }
 }

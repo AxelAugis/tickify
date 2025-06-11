@@ -14,7 +14,7 @@ export interface ProfileDropdownProps {
 
 const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ item }) => {
     return (
-        <div className={`min-w-3xs shadow-md absolute right-0 top-[110%] bg-light rounded-lg  transition-all duration-300 ease-in-out cursor-pointer ${item.styles.dropdown} ${item.isOpen ? item.styles.active : ""}`}>
+        <div className={`min-w-3xs shadow-md absolute right-0 top-[110%] bg-light rounded-lg  transition-all duration-300 ease-in-out ${item.styles.dropdown} ${item.isOpen ? item.styles.active : ""}`}>
             {
                 item.elements.map((element, index) => (
                    <ProfileDropdownElement key={index} item={element} lastIndex={index === item.elements.length - 1} firstIndex={index === 0} />

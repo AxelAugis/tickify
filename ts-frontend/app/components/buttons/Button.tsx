@@ -12,6 +12,7 @@ interface ButtonProps {
             size: string;
         } ;
         isDisabled?: boolean;
+        onClick?: () => void;
     }
 }
 const Button: React.FC<ButtonProps> = ({ item }) => {
@@ -24,6 +25,7 @@ const Button: React.FC<ButtonProps> = ({ item }) => {
         <button 
             type={item.type} 
             disabled={pending}
+            onClick={item.onClick}
             className={`${width} h-12 ${bgColors} text-white rounded-lg font-medium transition duration-200 ${pending ? "cursor-not-allowed" : "cursor-pointer"}`}
         >
             {

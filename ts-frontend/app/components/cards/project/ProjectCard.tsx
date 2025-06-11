@@ -16,16 +16,21 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ item }) => {
                 <div className={`flex flex-col gap-y-2`}>
                     <h2 className="text-xl font-semibold font-ubuntu">{item.name}</h2>
                     <p className="text-accent-dark-green font-cabin">{item.description}</p>
+                    
                     <div className={`flex flex-wrap gap-2`}>
-                        {item.teams?.map((team, index) => (
-                            <span
-                                key={index}
-                                style={{ backgroundColor: team.color }}
-                                className={`text-sm font-cabin font-medium bg-accent-light-green text-light min-w-16 text-center pt-0.5 pb-1 rounded-full`}
-                            >
-                                {team.name}
-                            </span>
-                        ))}
+                        {
+                            item.teams != undefined && item.teams.length > 0 ? item.teams.map((team, index) =>
+                                <span
+                                    key={index}
+                                    style={{ backgroundColor: team.color }}
+                                    className={`text-sm font-cabin font-medium bg-accent-light-green text-light min-w-16 text-center pt-0.5 pb-1 rounded-full`}
+                                >
+                                    {team.name}
+                                </span>
+                            ) : (
+                                <span className={`text-sm font-cabin font-medium text-gray-800 h-[26px]`}>Aucune équipe assignée</span>
+                            )
+                        }
                     </div>
                 </div>
                 <div className={`flex flex-col gap-y-4`}>

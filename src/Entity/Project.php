@@ -18,7 +18,7 @@ class Project
     #[Groups(['all-project:read', 'project:read', 'dashboard:project:read'])]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255, unique: true)]
+    #[ORM\Column(length: 255)]
     #[Groups(['all-project:read', 'project:read', 'dashboard:project:read'])]
     private ?string $name = null;
 
@@ -63,6 +63,10 @@ class Project
     #[ORM\OneToMany(targetEntity: Team::class, mappedBy: 'project', orphanRemoval: true)]
     #[Groups(['project:read', 'dashboard:project:read'])]
     private Collection $teams;
+
+    #[ORM\Column(type: Types::GUID)]
+    #[Groups(['all-project:read', 'project:read', 'dashboard:project:read'])]
+    private ?string $uuid = null;
 
     public function __construct()
     {
@@ -253,6 +257,18 @@ class Project
                 $team->setProject(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUuid(): ?string
+    {
+        return $this->uuid;
+    }
+
+    public function setUuid(string $uuid): static
+    {
+        $this->uuid = $uuid;
 
         return $this;
     }

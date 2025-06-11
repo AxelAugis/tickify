@@ -6,12 +6,13 @@ import { useEffect, useState } from "react";
 import ScreenLoader from "../components/screenLoader/ScreenLoader";
 import Link from "next/link";
 import ProjectCard from "../components/cards/project/ProjectCard";
+import Image from "next/image";
 
 const DashboardHomepage = () => {
 
     const { user, loading } = useUserStore();
-    const [displayProjectSentence, setDisplayProjectSentences] = useState('');
     const [projects, setProjects] = useState([]);
+    const [displayProjectSentences, setDisplayProjectSentences] = useState("");
 
     useEffect(() => {
         // wait for user to be loaded
@@ -25,8 +26,6 @@ const DashboardHomepage = () => {
                     if (data.length > 0) {
                         setProjects(data);
                         setDisplayProjectSentences(`Vos projets`);
-                    } else {
-                        setDisplayProjectSentences(`Vous n'avez pas de projets pour le moment.`);
                     }
                 }
             } catch {
@@ -45,17 +44,32 @@ const DashboardHomepage = () => {
                 {
                     projects.length == 0 ? (
                        <div className={`w-full flex flex-col gap-y-4 items-center justify-center`}>
-                            <p className="text-lg w-full text-center">{displayProjectSentence}</p>
+                            <p className="text-lg w-full text-center">{displayProjectSentences}</p>
                             <Link
-                                href="/register"
+                                href="/dashboard/create/project"
                                 className={`text-xl font-bold text-accent-green bg-accent-dark-green font-cabin py-2 px-4 hover:bg-accent-dark hover:text-accent-green rounded-lg transition duration-300 ease-in-out`}
                             >
                                 Ajouter un projet
                             </Link>
                         </div>
                     ) : (
-                        <div className={`w-full flex flex-col gap-y-4 `}>
-                            <p className="text-2xl font-semibold ">{displayProjectSentence}</p>
+                        <div className={`w-full flex flex-col gap-y-6 `}>
+                            <div className={`flex items-center gap-x-6 justify-between`}>
+                            <p className="text-2xl font-semibold ">{displayProjectSentences}</p>
+                                <Link
+                                    href="/dashboard/create/project"
+                                    className={` font-bold text-accent-green bg-accent-dark-green font-cabin py-2 px-2 hover:bg-accent-dark hover:text-accent-green rounded-lg transition duration-300 ease-in-out flex items-center gap-x-2 pl-2 pr-4`}
+                                >
+                                    <Image
+                                        src="/images/icons/crosses/green-cross.svg"
+                                        alt="Ajouter un projet"
+                                        width={20}
+                                        height={20}
+                                        className="inline-block  rotate-45 "
+                                    />
+                                    Ajouter un projet
+                                </Link>
+                            </div>
                             <div className={`w-full grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4`}>
                                 {
                                     projects.map((project, index) => (
