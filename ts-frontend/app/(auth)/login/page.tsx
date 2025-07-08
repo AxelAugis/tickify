@@ -86,12 +86,13 @@ export default function LoginPage() {
 
       const response = await axios.post("/login_check", datas);
       
+      
       if(response.status === 200) {
         const token = response.data.token;
         if(isChecked) {
-          localStorage.setItem("token", token);
+          document.cookie = `token=${token}; path=/; max-age=2592000;`;
         } else {
-          sessionStorage.setItem("token", token);
+          document.cookie = `token=${token}; path=/; max-age=3600;`;
         }
       }
       router.push("/dashboard");

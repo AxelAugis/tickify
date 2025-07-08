@@ -9,7 +9,7 @@ const axios = Axios.create({
 });
 
 axios.interceptors.request.use((config) => {
-    const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+  const token = document.cookie.split('; ').find(row => row.startsWith('token='));
     if (token && token !== null) {
       config.headers['Authorization'] = `Bearer ${token}`;
     }
