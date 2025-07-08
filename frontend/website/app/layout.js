@@ -16,8 +16,8 @@ const poppins = Poppins({
 });
 
 export const metadata = {
-  title: "Tickify | Gérer vos projets",
-  description: "Tickify est une application de gestion de projets",
+  title: "Tickame | Gérer vos projets",
+  description: "Tickame est une application de gestion de projets",
 };
 
 export default function RootLayout({ children }) {
