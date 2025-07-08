@@ -31,7 +31,7 @@ const LoginForm = () => {
     return (
         
         <main className={`w-screen h-screen flex flex-col gap-y-8  items-center text-primary-light-text`}>
-            <h1 className={`text-4xl`}>Tickify</h1>
+            <h1 className={`text-4xl`}>Tickame</h1>
             <form onSubmit={handleSubmit} className={`w-2/5 py-8 px-16 flex flex-col gap-y-6  justify-center items-center bg-white/30 backdrop-blur-md rounded-lg`}>
                 <h2 className={`text-3xl`}>Connexion à mon compte</h2>
                 <div className={`flex flex-col gap-y-2 w-full`}>

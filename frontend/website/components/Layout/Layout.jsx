@@ -60,7 +60,7 @@ const Layout = ({ children }) => {
             leftItems: [
                 {
                     type: 'logo',
-                    label: 'Tickify',
+                    label: 'Tickame',
                     url: '/'
                 },
                 {

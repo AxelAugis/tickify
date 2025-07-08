@@ -1,0 +1,54 @@
+nelmio_api_doc:
+    documentation:
+        info:
+            title: Tickame API
+            description: |
+                API documentation for Tickame application.
+                
+                This API provides endpoints for:
+                - User authentication and management
+                - Project management
+                - Ticket management
+                - Dashboard data
+                
+                Authentication is required for most endpoints using JWT Bearer tokens.
+            version: 1.0.0
+            contact:
+                name: Tickame Support
+                email: support@tickame.com
+        servers:
+            - url: http://localhost:8000
+              description: Local development server
+            - url: http://backend:8000
+              description: Docker internal network
+            - url: https://api.tickame.com
+              description: Production server
+        components:
+            securitySchemes:
+                bearerAuth:
+                    type: http
+                    scheme: bearer
+                    bearerFormat: JWT
+                    description: "JWT Authorization header using the Bearer scheme. Example: 'Authorization: Bearer {token}'"
+        security:
+            - bearerAuth: []
+        tags:
+            - name: Authentication
+              description: User authentication endpoints
+            - name: Users
+              description: User management endpoints
+            - name: Projects
+              description: Project management endpoints
+            - name: Dashboard
+              description: Dashboard and analytics endpoints
+    areas:
+        default:
+            path_patterns:
+                - ^/api(?!/doc$)
+            host_patterns: []
+            disable_default_routes: false
+    models:
+        names:
+            - { alias: User, type: App\Entity\User, groups: [user:read] }
+            - { alias: Project, type: App\Entity\Project, groups: [project:read] }
+    use_validation_groups: true

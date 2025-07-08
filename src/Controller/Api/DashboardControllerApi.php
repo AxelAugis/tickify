@@ -11,8 +11,11 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use OpenApi\Attributes as OA;
+use Nelmio\ApiDocBundle\Annotation\Model;
 
 #[Route('/api/dashboard')]
+#[OA\Tag(name: 'Dashboard')]
 class DashboardControllerApi extends AbstractController
 {
     private $entityManager;
@@ -33,6 +36,46 @@ class DashboardControllerApi extends AbstractController
     }
 
     #[Route('/projects/{userId}', methods: ['GET'])]
+    #[OA\Get(
+        path: '/api/dashboard/projects/{userId}',
+        summary: 'Récupère les projets d\'un utilisateur avec le nombre de tickets',
+        tags: ['Dashboard']
+    )]
+    #[OA\Parameter(
+        name: 'userId',
+        description: 'ID de l\'utilisateur',
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(type: 'integer')
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Projets avec statistiques des tickets',
+        content: new OA\JsonContent(
+            type: 'array',
+            items: new OA\Items(
+                type: 'object',
+                properties: [
+                    new OA\Property(property: 'id', type: 'integer'),
+                    new OA\Property(property: 'name', type: 'string'),
+                    new OA\Property(property: 'description', type: 'string'),
+                    new OA\Property(property: 'ticketCounts', type: 'object', properties: [
+                        new OA\Property(property: 'todo', type: 'integer'),
+                        new OA\Property(property: 'in_progress', type: 'integer'),
+                        new OA\Property(property: 'done', type: 'integer')
+                    ])
+                ]
+            )
+        )
+    )]
+    #[OA\Response(
+        response: 403,
+        description: 'Accès refusé - non autorisé'
+    )]
+    #[OA\Response(
+        response: 404,
+        description: 'Utilisateur non trouvé'
+    )]
     public function getProjectsByUser(int $userId, ProjectRepository $projectRepository): JsonResponse
     {
         try {
