@@ -143,27 +143,9 @@ export default function CreateProjectPage() {
                     ]
                 },
                 {
-                    title: "Configuration du projet",
-                    description: "Configurez les paramètres de votre projet.",
-                    fields: [
-                        {
-                            label: {
-                                text: "Type de projet",
-                                htmlFor: "projectType"
-                            },
-                            input: {
-                                type: "text",
-                                id: "projectType",
-                                name: "projectType",
-                                placeholder: "Entrez le type de votre projet",
-                                value: "",
-                                onChange: handleInputChange
-                            },
-                            error: formErrors.projectType,
-                            textColor: "text-dark",
-                            borderColor: "border-dark/20"
-                        }
-                    ]
+                    title: "Ajoutez des équipes",
+                    description: "Choisissez les équipes qui travailleront sur ce projet.",
+                    
                 },
             ],
             navigation: [
@@ -195,11 +177,11 @@ export default function CreateProjectPage() {
             <form className={`w-3/5 mx-auto flex flex-col flex-1 justify-between gap-y-4 shadow-default p-6  rounded-lg bg-light`}>
                 <div className={`flex flex-col gap-y-4`}>
                     <div className={`w-full flex flex-col gap-y-2`}>
-                        <h2 className="text-2xl font-semibold mb-4">{pageContent.form.steps[0].title}</h2>
-                        <p className="text-gray-600 mb-6 text-center">{pageContent.form.steps[0].description}</p>
+                        <h2 className="text-2xl font-semibold mb-4">{pageContent.form.steps[step -1].title}</h2>
+                        <p className="text-gray-600 mb-6 text-center">{pageContent.form.steps[step -1].description}</p>
                     </div>
                     {
-                        pageContent.form.steps[step -1].fields.map((field, index) => (
+                        pageContent.form.steps[step -1].fields?.map((field, index) => (
                             <Input key={index} item={field} />
                         ))
                     }

@@ -5,6 +5,31 @@ lexik_jwt_authentication:
     token_ttl: 2592000
 
     token_extractors:
-        cookie: 
+        authorization_header:
+            enabled: false
+        split_cookie:
             enabled: true
-            name: BEARER
+            cookies: 
+                - jwt_hp
+                - jwt_s
+    set_cookies:
+        jwt_hp:
+            lifetime: null
+            samesite: strict
+            path: /
+            domain: null
+            httpOnly: false
+            secure: true
+            split:
+                - header
+                - payload
+        
+        jwt_s:
+            lifetime: 0
+            samesite: strict
+            path: /
+            domain: null
+            httpOnly: true
+            secure: true
+            split:
+                - signature

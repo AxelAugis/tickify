@@ -6,16 +6,8 @@ const axios = Axios.create({
     headers: {
         'Content-Type': 'application/json',
     },
+    withCredentials: true, // Important pour envoyer automatiquement les cookies
 });
 
-axios.interceptors.request.use((config) => {
-  const token = document.cookie.split('; ').find(row => row.startsWith('token='));
-    if (token && token !== null) {
-      config.headers['Authorization'] = `Bearer ${token}`;
-    }
-    return config;
-  }, (error) => {
-    return error;
-});
-
+// Pas besoin d'interceptor pour les cookies JWT - ils sont automatiquement gérés
 export default axios;
