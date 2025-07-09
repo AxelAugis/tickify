@@ -14,15 +14,12 @@ class Ticket
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['project:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['project:read'])]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['project:read'])]
     private ?string $description = null;
 
     #[ORM\ManyToOne(inversedBy: 'tickets')]
@@ -30,19 +27,15 @@ class Ticket
     private ?Project $project = null;
 
     #[ORM\Column(enumType: TicketStatus::class)]
-    #[Groups(['project:read'])]
     private ?TicketStatus $status = null;
 
     #[ORM\Column]
-    #[Groups(['project:read'])]
     private ?\DateTime $createdAt = null;
 
     #[ORM\Column]
-    #[Groups(['project:read'])]
     private ?\DateTime $updatedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'tickets')]
-    #[Groups(['project:read'])]
     private ?Context $context = null;
 
     #[ORM\ManyToOne(inversedBy: 'tickets')]

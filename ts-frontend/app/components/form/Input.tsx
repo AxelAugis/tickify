@@ -67,6 +67,7 @@ const Input: React.FC<InputProps> = ({ item }) => {
                         value={item.input.value}
                         onChange={item.input.onChange}
                         cols={30}
+                        spellCheck="false"
                     />
                 ) : (
                     (

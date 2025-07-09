@@ -2,8 +2,8 @@ import { useFormStatus } from "react-dom";
 import Dots from "../animations/Dots";
 
 interface ButtonProps {
-    item: {
-        type: "submit" | "reset" | "button" | undefined;
+    item?: {
+        type: string | "submit" | "reset" | "button" | undefined;
         label: string;
         width?: string;
         isLoading?: boolean;
@@ -16,16 +16,28 @@ interface ButtonProps {
     }
 }
 const Button: React.FC<ButtonProps> = ({ item }) => {
-    const width = item.width ? item.width : 'w-full';
     const { pending } = useFormStatus();
+    
+    if (!item) return null;
+    
+    const width = item.width ? item.width : 'w-full';
 
     const bgColors = pending ? 'bg-accent-dark/50' : 'bg-accent-dark hover:bg-accent-dark/80';
     
+    const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+        if (item.type !== "submit") {
+            e.preventDefault();
+        }
+        if (item.onClick) {
+            item.onClick();
+        }
+    };
+    
     return (
         <button 
-            type={item.type} 
+            type={item.type === "submit" ? "submit" : "button"} 
             disabled={pending}
-            onClick={item.onClick}
+            onClick={handleClick}
             className={`${width} h-12 ${bgColors} text-white rounded-lg font-medium transition duration-200 ${pending ? "cursor-not-allowed" : "cursor-pointer"}`}
         >
             {

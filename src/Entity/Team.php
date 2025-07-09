@@ -18,11 +18,9 @@ class Team
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['dashboard:project:read', 'team:read'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['dashboard:project:read', 'team:read'])]
     private ?string $color = null;
 
     #[ORM\ManyToOne(inversedBy: 'teams')]

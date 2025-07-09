@@ -14,15 +14,12 @@ class Context
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['ticket:read', 'context:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['ticket:read', 'context:read'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 12)]
-    #[Groups(['ticket:read', 'context:read'])]
     private ?string $color = null;
 
     /**
