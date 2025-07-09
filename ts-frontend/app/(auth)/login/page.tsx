@@ -25,7 +25,7 @@ export default function LoginPage() {
     password: "",
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({
       ...prevState,
@@ -86,15 +86,11 @@ export default function LoginPage() {
 
       const response = await axios.post("/login_check", datas);
       
-      if(response.status === 200) {
-        const token = response.data.token;
-        if(isChecked) {
-          localStorage.setItem("token", token);
-        } else {
-          sessionStorage.setItem("token", token);
-        }
+      // Avec la configuration split_cookie, les cookies jwt_hp et jwt_s sont automatiquement créés
+      // par Symfony/Lexik JWT - pas besoin de gérer manuellement les cookies
+      if(response.status === 204) {
+        router.push("/dashboard");
       }
-      router.push("/dashboard");
     } catch (error: object | unknown) {
       if (isAxiosError(error) && error.response) {
         if (error.response.status === 401) {

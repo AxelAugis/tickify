@@ -27,17 +27,12 @@ const useUserStore = create<UserState>((set) => ({
     try {
       set({ loading: true, error: null });
 
-      const token = localStorage.getItem('token') || sessionStorage.getItem('token');
-      if (!token) {
-        set({ user: null, loading: false, error: 'Aucun token trouvé' });
-      } else { 
-          const response = await axios.get('/auth/user');
-          const data = response.data;
-          if(data) {
-            set({ user: data, loading: false });
-          } else {
-            set({ user: null, loading: false, error: 'Utilisateur non trouvé' });
-          }
+      const response = await axios.get('/auth/user');
+      const data = response.data;
+      if(data) {
+        set({ user: data, loading: false });
+      } else {
+        set({ user: null, loading: false, error: 'Utilisateur non trouvé' });
       }
     } catch (error) {
       set({ 
