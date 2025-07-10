@@ -170,7 +170,27 @@ class ProjectControllerApi extends AbstractController
             properties: [
                 new OA\Property(property: 'name', type: 'string', example: 'Mon nouveau projet'),
                 new OA\Property(property: 'description', type: 'string', example: 'Description du projet'),
-                new OA\Property(property: 'id', type: 'integer', example: 1, description: 'ID du propriétaire')
+                new OA\Property(property: 'id', type: 'integer', example: 1, description: 'ID du propriétaire'),
+                new OA\Property(
+                    property: 'teams',
+                    type: 'array',
+                    items: new OA\Items(
+                        type: 'object',
+                        properties: [
+                            new OA\Property(property: 'name', type: 'string', example: 'Équipe A'),
+                            new OA\Property(property: 'color', type: 'string', example: '#FF5733')
+                        ]
+                    )
+                ),
+                new OA\Property(
+                    property: 'branch',
+                    type: 'object',
+                    properties: [
+                        new OA\Property(property: 'name', type: 'string', example: 'main'),
+                        new OA\Property(property: 'description', type: 'string', example: 'Branche principale du projet')
+                    ],
+                    description: 'Branche principale du projet (optionnelle)'
+                )
             ]
         )
     )]

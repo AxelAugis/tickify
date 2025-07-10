@@ -25,13 +25,12 @@ nelmio_api_doc:
               description: Production server
         components:
             securitySchemes:
-                bearerAuth:
-                    type: http
-                    scheme: bearer
-                    bearerFormat: JWT
-                    description: "JWT Authorization header using the Bearer scheme. Example: 'Authorization: Bearer {token}'"
+                cookieAuth:
+                    type: apiKey
+                    in: cookie
+                    name: jwt_hp
         security:
-            - bearerAuth: []
+            - cookieAuth: []
         tags:
             - name: Authentication
               description: User authentication endpoints
