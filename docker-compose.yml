@@ -4,10 +4,6 @@ services:
   database:
     image: postgres:15
     restart: always
-    env_file:
-      - path: .env.local
-        required: true
-
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -32,11 +28,9 @@ services:
     volumes:
       - .:/var/www/html
       - ./var:/var/www/html/var
-    env_file: 
-      - .env.local
     environment:
       - APP_ENV=dev
-      - DATABASE_URL=postgresql://axel:password@tickame-database-1:5432/tickame?serverVersion=16&charset=utf8
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database:5432/${POSTGRES_DB}?serverVersion=16&charset=utf8
     networks:
       - tickame-network
 

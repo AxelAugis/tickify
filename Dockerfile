@@ -41,9 +41,10 @@ RUN composer install --no-dev --optimize-autoloader --no-scripts
 # Copie du code source
 COPY . .
 
-# Configuration des permissions
-RUN chown -R www-data:www-data /var/www/html/var
-RUN chmod -R 775 /var/www/html/var
+# Création du répertoire var et configuration des permissions
+RUN mkdir -p /var/www/html/var && \
+    chown -R www-data:www-data /var/www/html/var && \
+    chmod -R 775 /var/www/html/var
 
 # Exposition du port
 EXPOSE 8000

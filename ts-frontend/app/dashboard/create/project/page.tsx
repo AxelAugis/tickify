@@ -113,7 +113,8 @@ export default function CreateProjectPage() {
                     teamName: '',
                     teamColor: '',
                     branchName: '',
-                    branchDescription: ''
+                    branchDescription: '',
+                    submitError: ''
                 });
                 if(!checkInputValidity('projectName')) return;
                 if(!user) return;
@@ -133,7 +134,8 @@ export default function CreateProjectPage() {
                             teamName: '',
                             teamColor: '',
                             branchName: '',
-                            branchDescription: ''
+                            branchDescription: '',
+                            submitError: ''
                         });
                     }
                     return;

@@ -1,25 +1,41 @@
 export function testStrength(value: string): number {
     let strength = 0;
 
-    if (value.length >= 8) {
+    // Vérifier la présence des différents types de caractères
+    const hasUppercase = /[A-Z]/.test(value);
+    const hasLowercase = /[a-z]/.test(value);
+    const hasNumber = /[0-9]/.test(value);
+    const hasSpecialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(value);
+    const hasMinLength = value.length >= 8;
+
+    if (value.length >= 1) {
         strength++;
     }
 
-    if (/[A-Z]/.test(value)) {
-        if(/[a-z]/.test(value)) {
-            strength++;
-        }
+    if (hasUppercase) {
+        strength++;
     }
 
-    if (/[a-z]/.test(value)) {
-        if(/[A-Z]/.test(value)) {
-            strength++;
-        }
+    if (hasLowercase) {
+        strength++;
     }
 
-    if (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(value)) {
+    if (hasSpecialChar && hasNumber) {
+        strength++;
+    }
+
+    if (hasMinLength && hasUppercase && hasLowercase && hasNumber && hasSpecialChar) {
         strength++;
     }
 
     return strength;
+}
+
+export const isValidEmail = (email: string): boolean => {
+    const emailRegex = /^((?!\.)[\w-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])/;
+    return emailRegex.test(email);
+};
+
+export function arePasswordsEqual(password: string, confirmPassword: string): boolean {
+    return password === confirmPassword;
 }

@@ -1,6 +1,6 @@
 .progressBar {
     position: relative;
-    height: 12px;
+    height: 8px;
     border: 2px solid rgba(249, 251, 250, 0.2);
 }
 
@@ -14,8 +14,23 @@
     border-radius: 999px;
 }
 
+.progressBar.weak, .progressBar.medium, .progressBar.strong {
+    border-color: transparent;
+}
+
 .progressBar.weak::before {
     background-color: #f44336;
     width: 33%;
+    transition: all 0.3s ease-in-out;
+}
+
+.progressBar.medium::before {
+    background-color: #ff9800;
+    width: 66%;
+    transition: all 0.3s ease-in-out;
+}
+.progressBar.strong::before {
+    background-color: #073ae2;
+    width: 100%;
     transition: all 0.3s ease-in-out;
 }
