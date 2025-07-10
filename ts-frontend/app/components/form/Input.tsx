@@ -67,6 +67,7 @@ const Input: React.FC<InputProps> = ({ item }) => {
                         value={item.input.value}
                         onChange={item.input.onChange}
                         cols={30}
+                        spellCheck="false"
                     />
                 ) : (
                     (
@@ -84,7 +85,7 @@ const Input: React.FC<InputProps> = ({ item }) => {
             }
            {
              item.error && (
-                <p className={`text-dark/50 font-medium`}>{item.error}</p>
+                <p className={`text-red-500 bg-red-100  px-4 py-2 rounded-lg`}>{item.error}</p>
             )
            }
         </div>

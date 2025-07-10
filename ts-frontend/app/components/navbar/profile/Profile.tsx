@@ -12,7 +12,7 @@ export interface ProfileProps {
 const Profile: React.FC<ProfileProps> = ({ item }) => {
     return (
         <div className={`relative`}>
-            <button className={`flex justify-center items-center w-12 h-12 rounded-full bg-accent-dark-green cursor-pointer`} onClick={item.onclick}>
+            <button className={`flex justify-center items-center w-12 h-12 rounded-full bg-accent-dark cursor-pointer`} onClick={item.onclick}>
                 <Image
                     src={"/images/icons/profile.svg"}
                     alt="Profile"

@@ -12,6 +12,7 @@ import FAQStyles from '@/app/components/faq/FAQ.module.css';
 import BurgerStyles from '@/app/components/navbar/burger/Burger.module.css';
 import DropdownStyles from '@/app/components/navbar/dropdown/Dropdown.module.css';
 import Link from "next/link";
+import useScreenStore from "@/store/useScreenStore";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -23,21 +24,13 @@ export default function Home() {
   const heroParagraphRef = useRef<HTMLParagraphElement>(null);
   const heroCardsRef = useRef<HTMLDivElement>(null);
   const howSectionRef = useRef<HTMLDivElement>(null);
-  const [isLargeScreen, setIsLargeScreen] = useState<boolean>(false);
+  const { isLargeScreen, initializeScreenListener } = useScreenStore();
+
 
   useEffect(() => {
-    if(typeof window !== "undefined") {
-      const handleResize = () => {
-        setIsLargeScreen(window.innerWidth >= 1024);
-      }
-      handleResize();
-      window.addEventListener("resize", handleResize);
-
-      return () => {
-        window.removeEventListener("resize", handleResize);
-      }
-    }
-  }, []);
+    const cleanup = initializeScreenListener();
+    return cleanup;
+  }, [initializeScreenListener]);
 
   const [isBurgerOpen, setIsBurgerOpen] = useState(false);
 

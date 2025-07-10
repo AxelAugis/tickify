@@ -2,7 +2,9 @@
 
 namespace App\Controller\Api;
 
+use App\Entity\Master;
 use App\Entity\Project;
+use App\Entity\Team;
 use App\Entity\User;
 use App\Repository\ProjectRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -13,11 +15,19 @@ use Symfony\Component\HttpFoundation\Request;
 use Psr\Log\LoggerInterface;
 use OpenApi\Attributes as OA;
 use Nelmio\ApiDocBundle\Attribute\Model;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Uid\Uuid;
 
 #[Route('/api/project')]
 #[OA\Tag(name: 'Projects')]
 class ProjectControllerApi extends AbstractController
 {
+    private Security $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
 
     #[Route('/user/{id}/all', name: 'api_project_all', methods: ['GET'])]
     #[OA\Get(
@@ -44,7 +54,6 @@ class ProjectControllerApi extends AbstractController
         response: 401,
         description: 'Token d\'authentification manquant ou invalide'
     )]
-    #[OA\Security(name: 'bearerAuth')]
     public function getAll(User $user): JsonResponse
     {
         $projects = $user->getProjects();
@@ -95,7 +104,6 @@ class ProjectControllerApi extends AbstractController
         response: 404,
         description: 'Projet ou utilisateur non trouvé'
     )]
-    #[OA\Security(name: 'bearerAuth')]
     public function getInfos(Project $project): JsonResponse
     {
         $connectedUser = $this->getUser();
@@ -162,7 +170,27 @@ class ProjectControllerApi extends AbstractController
             properties: [
                 new OA\Property(property: 'name', type: 'string', example: 'Mon nouveau projet'),
                 new OA\Property(property: 'description', type: 'string', example: 'Description du projet'),
-                new OA\Property(property: 'id', type: 'integer', example: 1, description: 'ID du propriétaire')
+                new OA\Property(property: 'id', type: 'integer', example: 1, description: 'ID du propriétaire'),
+                new OA\Property(
+                    property: 'teams',
+                    type: 'array',
+                    items: new OA\Items(
+                        type: 'object',
+                        properties: [
+                            new OA\Property(property: 'name', type: 'string', example: 'Équipe A'),
+                            new OA\Property(property: 'color', type: 'string', example: '#FF5733')
+                        ]
+                    )
+                ),
+                new OA\Property(
+                    property: 'branch',
+                    type: 'object',
+                    properties: [
+                        new OA\Property(property: 'name', type: 'string', example: 'main'),
+                        new OA\Property(property: 'description', type: 'string', example: 'Branche principale du projet')
+                    ],
+                    description: 'Branche principale du projet (optionnelle)'
+                )
             ]
         )
     )]
@@ -179,26 +207,66 @@ class ProjectControllerApi extends AbstractController
         response: 401,
         description: 'Token d\'authentification manquant ou invalide'
     )]
-    #[OA\Security(name: 'bearerAuth')]
     public function create(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
-        $project = new Project();
+        // get the connected user
+        $connectedUser = $this->security->getUser();
+        if (!$connectedUser) {
+            return $this->json(['message' => 'User not found'], 404);
+        }
 
-        $data = json_decode($request->getContent(), true);
+        $createdAt = new \DateTimeImmutable();
+        $updatedAt = new \DateTime();
 
-        $user = $entityManager->getRepository(User::class)->find($data['id']);
+        try {
+            $data = json_decode($request->getContent(), true);
 
+            // Create project
+            $project = new Project();
 
-        $project->setName($data['name']);
-        $project->setDescription($data['description']);
-        $project->setOwner($user);
-        $project->setCreatedAt(new \DateTimeImmutable());
-        $project->setUpdatedAt(new \DateTimeImmutable());
+            $project->setName($data['name']);
+            $project->setDescription($data['description']);
+            $project->setOwner($connectedUser);
+            $project->setCreatedAt($createdAt);
+            $project->setUpdatedAt($updatedAt);
+            $project->setUuid(Uuid::v7());
 
-        $entityManager->persist($project);
-        $entityManager->flush();
+            $entityManager->persist($project);
+            $entityManager->flush();
 
-        return $this->json(['message' => 'Project created!'], 201);
+            // Create teams for the projects with teams array
+            $teams = $data['teams'] ?? [];
+            foreach ($teams as $teamData) {
+                $team = new Team();
+                $team->setProject($project);
+                $team->setName($teamData['name']);
+                $team->setColor($teamData['color']);
+                $team->setCreatedAt($createdAt);
+                $team->setUpdatedAt($updatedAt);
+
+                $entityManager->persist($team);
+                $entityManager->flush();
+            }
+
+            // Create master branch if one is provided
+            $branch = $data['branch'] ?? null;
+
+            if ($branch) {
+                $master= new Master();
+                $master->setProject($project);
+                $master->setTitle($branch['name']);
+                $master->setDescription($branch['description'] ?? '');
+                $master->setCreatedAt($createdAt);
+                $master->setUpdatedAt($updatedAt);
+
+                $entityManager->persist($master);
+                $entityManager->flush();
+            }
+
+            return $this->json(['message' => 'Project created!', 'uuid' => $project->getUuid()], 201);
+        } catch (\Exception $e) {
+            return $this->json(['message' => 'Error creating project: ' . $e->getMessage()], 500);
+        }
     }
 
     #[Route('/{id}/get-contexts', name: 'api_project_get_contexts', methods: ['GET'])]
@@ -226,7 +294,6 @@ class ProjectControllerApi extends AbstractController
         response: 401,
         description: 'Token d\'authentification manquant ou invalide'
     )]
-    #[OA\Security(name: 'bearerAuth')]
     public function getContexts(Project $project): JsonResponse
     {
         $contexts = $project->getContexts();
@@ -283,15 +350,15 @@ class ProjectControllerApi extends AbstractController
         response: 401,
         description: 'Token d\'authentification manquant ou invalide'
     )]
-    #[OA\Security(name: 'bearerAuth')]
+
     public function checkDuplicate(Request $request, ProjectRepository $projectRepository, LoggerInterface $logger): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
         $name = $data['params']['projectName'] ?? null;
         $id = $data['params']['projectId'] ?? null;
-        $userId = $data['params']['userId'] ?? null;
+        $connectedUser = $this->security->getUser();
 
-        if (!$name || !$userId) {
+        if (!$name || !$connectedUser) {
             return $this->json(['status' => 400, 'message' => 'Missing required parameters'], 400);
         }
 
@@ -299,7 +366,7 @@ class ProjectControllerApi extends AbstractController
 
         if (empty($id)) {
             // Création d'un nouveau projet : vérifier si un projet avec ce nom existe déjà pour cet utilisateur
-            $existingProject = $projectRepository->findOneBy(['name' => $name, 'owner' => $userId]);
+            $existingProject = $projectRepository->findOneBy(['name' => $name, 'owner' => $connectedUser]);
         } else {
             $queryBuilder = $projectRepository->createQueryBuilder('p');
             $existingProject = $queryBuilder
@@ -307,7 +374,7 @@ class ProjectControllerApi extends AbstractController
                 ->andWhere('p.owner = :userId')
                 ->andWhere('p.id != :id')
                 ->setParameter('name', $name)
-                ->setParameter('userId', $userId)
+                ->setParameter('userId', $connectedUser)
                 ->setParameter('id', $id)
                 ->getQuery()
                 ->getOneOrNullResult();

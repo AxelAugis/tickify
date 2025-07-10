@@ -13,17 +13,14 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class Project
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue(strategy: 'SEQUENCE')]
     #[ORM\Column]
-    #[Groups(['all-project:read', 'project:read', 'dashboard:project:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['all-project:read', 'project:read', 'dashboard:project:read'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['project:read', 'dashboard:project:read'])]
     private ?string $description = null;
 
     #[ORM\ManyToOne(inversedBy: 'projects')]
@@ -31,18 +28,15 @@ class Project
     private ?User $owner = null;
 
     #[ORM\Column]
-    #[Groups(['project:read', 'dashboard:project:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
-    #[Groups(['project:read', 'dashboard:project:read'])]
-    private ?\DateTimeImmutable $updatedAt = null;
+    private ?\DateTime $updatedAt = null;
 
     /**
      * @var Collection<int, Ticket>
      */
     #[ORM\OneToMany(targetEntity: Ticket::class, mappedBy: 'project')]
-    #[Groups(['project:read', 'dashboard:project:read'])]
     private Collection $tickets;
 
     /**
@@ -61,11 +55,9 @@ class Project
      * @var Collection<int, Team>
      */
     #[ORM\OneToMany(targetEntity: Team::class, mappedBy: 'project', orphanRemoval: true)]
-    #[Groups(['project:read', 'dashboard:project:read'])]
     private Collection $teams;
 
     #[ORM\Column(type: Types::GUID)]
-    #[Groups(['all-project:read', 'project:read', 'dashboard:project:read'])]
     private ?string $uuid = null;
 
     public function __construct()
@@ -129,12 +121,12 @@ class Project
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): ?\DateTime
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
+    public function setUpdatedAt(\DateTime $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
 

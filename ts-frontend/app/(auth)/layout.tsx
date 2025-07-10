@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import BurgerStyles from '@/app/components/navbar/burger/Burger.module.css';
 import DropdownStyles from '@/app/components/navbar/dropdown/Dropdown.module.css';
 import Navbar from '../components/navbar/Navbar';
+import useScreenStore from '@/store/useScreenStore';
 
 export default function AuthLayout({
     children,
@@ -13,21 +14,14 @@ export default function AuthLayout({
 
     const navbarRef = useRef<HTMLDivElement | null>(null);
     const [isBurgerOpen, setIsBurgerOpen] = useState(false);
-    const [isLargeScreen, setIsLargeScreen] = useState<boolean>(false);
+    const { isLargeScreen, initializeScreenListener } = useScreenStore();
 
-      useEffect(() => {
-        if(typeof window !== "undefined") {
-          const handleResize = () => {
-            setIsLargeScreen(window.innerWidth >= 1024);
-          }
-          handleResize();
-          window.addEventListener("resize", handleResize);
-    
-          return () => {
-            window.removeEventListener("resize", handleResize);
-          }
-        }
-      }, []);
+
+    useEffect(() => {
+      // Initialize screen listener to handle screen size changes
+      const cleanup = initializeScreenListener();
+      return cleanup;
+    }, [initializeScreenListener]);
 
 
     const handleBurgerClick = () => {

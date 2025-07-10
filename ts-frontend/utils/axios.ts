@@ -6,8 +6,7 @@ const axios = Axios.create({
     headers: {
         'Content-Type': 'application/json',
     },
-    withCredentials: true, // Important pour envoyer automatiquement les cookies
+    withCredentials: true,
 });
 
-// Pas besoin d'interceptor pour les cookies JWT - ils sont automatiquement gérés
 export default axios;
