@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import useUserStore from "@/store/useUserStore";
+import useScreenStore from "@/store/useScreenStore";
 import ScreenLoader from "../components/screenLoader/ScreenLoader";
 import BurgerStyles from '@/app/components/navbar/burger/Burger.module.css';
 import DropdownStyles from '@/app/components/navbar/dropdown/Dropdown.module.css';
@@ -12,9 +13,9 @@ import ProfileDropdownStyle from "@/app/components/navbar/profile/dropdown/Profi
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
     const router = useRouter();
     const { user, loading, error, fetchCurrentUser } = useUserStore();
+    const { isLargeScreen, initializeScreenListener } = useScreenStore();
     const navbarRef = useRef<HTMLDivElement | null>(null);
     const [isBurgerOpen, setIsBurgerOpen] = useState(false);
-    const [isLargeScreen, setIsLargeScreen] = useState<boolean>(false);
     const [isProfileOpen, setIsProfileOpen] = useState(false);
 
     useEffect(() => {
@@ -23,24 +24,14 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
 
     useEffect(() => {
         if (error && !loading && !user) {
-        router.push("/login");
+            router.push("/login");
         }
     }, [error, loading, user, router]);
 
-      useEffect(() => {
-        if(typeof window !== "undefined") {
-          const handleResize = () => {
-            setIsLargeScreen(window.innerWidth >= 1024);
-          }
-          handleResize();
-          window.addEventListener("resize", handleResize);
-    
-          return () => {
-            window.removeEventListener("resize", handleResize);
-          }
-        }
-      }, []);
-
+    useEffect(() => {
+        const cleanup = initializeScreenListener();
+        return cleanup;
+    }, [initializeScreenListener]);
 
     const handleBurgerClick = () => {
       // document.body.classList.toggle("max-h-screen");

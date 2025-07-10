@@ -17,10 +17,10 @@ const DashboardHomepage = () => {
     useEffect(() => {
         // wait for user to be loaded
         if (loading || !user) return;
-        // fetch projects
+        
         const fetchProjects = async () => {
             try {
-                const response = await getProjects(user.id);
+                const response = await getProjects();
                 if(response.status === 200) {
                     const data = response.data;
                     if (data.length > 0) {
@@ -33,7 +33,7 @@ const DashboardHomepage = () => {
             }
         }
         fetchProjects();
-    }, [user?.id, loading]);
+    }, [user, loading]);
 
     return (
         loading ? (

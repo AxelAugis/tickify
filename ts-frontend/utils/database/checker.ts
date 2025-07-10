@@ -1,4 +1,5 @@
 import axios from "@/utils/axios";
+import { isAxiosError } from "axios";
 
 export const checkProjectNameDuplicate = async (projectName: string, userId: number, projectId?: string | null) => {
     try {
@@ -9,27 +10,14 @@ export const checkProjectNameDuplicate = async (projectName: string, userId: num
         }
         const response = await axios.post('/project/check-duplicate', { params: datas });
         if(response.status === 200) {
-            return {
-                status: response.status,
-                message: 'Le nom du projet est disponible.',
-                isDuplicate: false
-            }
-        } else if (response.status === 400) {
-            return {
-                status: response.status,
-                message: 'Le nom du projet est déjà utilisé.',
-                isDuplicate: true
-            }
-        } else {
-            return {
-                status: response.status,
-                message: 'Une erreur s\'est produite lors de la vérification du nom du projet.',
-                isDuplicate: true
-            }
+           return {
+                datas: response.data,
+                status: response.status
+           }
         }
-    } catch (error) {
+    } catch (error: unknown) {
         return {
-            error: `Une erreur s'est produite lors de la vérification du nom du projet: ${error instanceof Error ? error.message : 'Erreur inconnue.'}`
-        };
+            status: isAxiosError(error) ? error.response?.status || 500 : 500,
+        }
     }
 }

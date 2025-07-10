@@ -26,9 +26,9 @@ const ProfileDropdownElement: React.FC<ProfileDropdownElementProps> = ({ item, l
         item.isLink && item.url ? (
             <Link
                 href={item.url}
-                className={`text-dark bg-light hover:bg-accent-dark-green/10 transition-colors duration-300 flex items-center gap-x-6 p-4 ${borderRadius}`}
+                className={`text-dark bg-light hover:bg-accent-dark/10 transition-colors duration-300 flex items-center gap-x-6 p-4 ${borderRadius}`}
             >
-                <div className={`max-w-8 max-h-8 min-w-8 min-h-8 rounded-full bg-accent-dark-green p-1 flex items-center justify-center`}>
+                <div className={`max-w-8 max-h-8 min-w-8 min-h-8 rounded-full bg-accent-dark p-1 flex items-center justify-center`}>
                     <Image
                         src={item.image.src}
                         alt={item.image.alt}
@@ -42,9 +42,9 @@ const ProfileDropdownElement: React.FC<ProfileDropdownElementProps> = ({ item, l
         ) : (
             <button
                 onClick={item.onClick}
-                className={`text-dark bg-light hover:bg-accent-dark-green/10 transition-colors duration-300 flex items-center gap-x-6 p-4  w-full text-left cursor-pointer ${borderRadius}`}
+                className={`text-dark bg-light hover:bg-accent-dark/10 transition-colors duration-300 flex items-center gap-x-6 p-4  w-full text-left cursor-pointer ${borderRadius}`}
             >
-                <div className={`max-w-8 max-h-8 min-w-8 min-h-8 rounded-full bg-accent-dark-green p-1 flex items-center justify-center`}>
+                <div className={`max-w-8 max-h-8 min-w-8 min-h-8 rounded-full bg-accent-dark p-1 flex items-center justify-center`}>
                     <Image
                         src={item.image.src}
                         alt={item.image.alt}

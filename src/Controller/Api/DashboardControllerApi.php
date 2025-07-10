@@ -35,7 +35,7 @@ class DashboardControllerApi extends AbstractController
         $this->projectTicketService = $projectTicketService;
     }
 
-    #[Route('/projects/{userId}', methods: ['GET'])]
+    #[Route('/projects', methods: ['GET'])]
     #[OA\Get(
         path: '/api/dashboard/projects/{userId}',
         summary: 'Récupère les projets d\'un utilisateur avec le nombre de tickets',
@@ -76,7 +76,7 @@ class DashboardControllerApi extends AbstractController
         response: 404,
         description: 'Utilisateur non trouvé'
     )]
-    public function getProjectsByUser(int $userId, ProjectRepository $projectRepository): JsonResponse
+    public function getProjectsByUser(ProjectRepository $projectRepository): JsonResponse
     {
         try {
             $connectedUser = $this->security->getUser();
@@ -88,7 +88,7 @@ class DashboardControllerApi extends AbstractController
             $user = $this->userRepository->findOneBy(['email' => $connectedUser->getUserIdentifier()]);
         }
 
-        if(!$user || $user->getId() !== $userId) {
+        if(!$user) {
             return new JsonResponse(['message' => 'Unauthorized'], 403);
         }
 

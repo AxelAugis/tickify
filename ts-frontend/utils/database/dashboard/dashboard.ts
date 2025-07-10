@@ -1,9 +1,8 @@
-import { User } from "@/types/user";
 import axios from "@/utils/axios";
 
-export const getProjects = async (userId: User['id']) => {
+export const getProjects = async () => {
     try {
-        const response = await axios.get(`/dashboard/projects/${userId}`);
+        const response = await axios.get(`/dashboard/projects`);
         if (response.status === 200) {
             return {
                 data: response.data,
