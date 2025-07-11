@@ -197,8 +197,8 @@ export default function Home() {
   }, [headerRef, containerRef, isLargeScreen]);
 
   const handleBurgerClick = () => {
-    // document.body.classList.toggle("max-h-screen");
-    // document.body.classList.toggle("overflow-hidden");
+    document.body.classList.toggle("max-h-screen");
+    document.body.classList.toggle("overflow-hidden");
     setIsBurgerOpen(!isBurgerOpen);
   }
 

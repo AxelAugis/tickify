@@ -10,6 +10,7 @@ import DropdownStyles from '@/app/components/navbar/dropdown/Dropdown.module.css
 import Navbar from "../components/navbar/Navbar";
 import ProfileDropdownStyle from "@/app/components/navbar/profile/dropdown/ProfileDropdown.module.css";
 import Modal from "../components/modal/Modal";
+import { logout } from "@/utils/auth";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
     const router = useRouter();
@@ -38,6 +39,12 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
       document.body.classList.toggle("max-h-screen");
       document.body.classList.toggle("overflow-hidden");
       setIsBurgerOpen(!isBurgerOpen);
+    }
+
+    const handleLogout = async () => {
+        if (await logout()) {
+            router.push("/login");
+        }
     }
 
     const navbar = {
@@ -101,7 +108,8 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
                             alt: "Logout",
                             width: 24,
                             height: 24,
-                        }
+                        },
+                        onClick: handleLogout,
                     }
                 ]
             }

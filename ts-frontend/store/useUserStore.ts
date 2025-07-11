@@ -34,6 +34,7 @@ const useUserStore = create<UserState>((set) => ({
       } else {
         set({ user: null, loading: false, error: 'Utilisateur non trouvé' });
       }
+
     } catch (error) {
       set({ 
         user: null, 
