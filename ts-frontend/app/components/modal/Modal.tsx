@@ -8,7 +8,7 @@ const Modal: React.FC = () => {
 
   return (
     <div className={`fixed inset-0 flex items-center justify-center bg-black/30 backdrop-blur-md ${isOpen ? 'visible z-[100] opacity-100' : 'invisible -z-10 opacity-0'} transition-all duration-150 ease-in-out`}>
-      <div className={`bg-white rounded-lg shadow-lg p-6 w-1/3 max-w-lg border-l-4 ${borderColor}`}>
+      <div className={`bg-white rounded-lg shadow-lg p-6 w-11/12 sm:w-5/6 md:w-2/3  xl:w-1/3 xl:max-w-lg border-l-4 ${borderColor}`}>
         <h2 className={`text-lg font-bold mb-2 text-dark`}>{title}</h2>
         <p className={`mb-4 text-dark/80`}>{content}</p>
         <div className="flex gap-2 justify-end">
