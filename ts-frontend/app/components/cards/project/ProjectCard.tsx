@@ -127,7 +127,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ item, deleteSelf }) => {
                 </div>
             </div>
             <Link
-                href={`/dashboard/projects/${item.id}`}
+                href={`/dashboard/project/${item.uuid}`}
                 className={`text-accent-green bg-accent-dark-green font-cabin py-2 px-4 hover:bg-accent-dark hover:text-accent-green rounded-lg transition duration-300 ease-in-out text-center w-fit self-end`}
             >
                 Voir le projet
