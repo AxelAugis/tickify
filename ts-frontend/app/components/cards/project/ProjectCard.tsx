@@ -26,7 +26,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ item, deleteSelf }) => {
         try {
             const response = await axios.delete(`/project/${item.id}/delete`);
             if (response.status === 204) {
-                console.log('Projet supprimé avec succès');
                 deleteSelf?.(item.id);
             }
         } catch (error) {
