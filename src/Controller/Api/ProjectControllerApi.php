@@ -12,75 +12,52 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
-use Psr\Log\LoggerInterface;
 use OpenApi\Attributes as OA;
-use Nelmio\ApiDocBundle\Attribute\Model;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Uid\Uuid;
-
+use Psr\Log\LoggerInterface;
 #[Route('/api/project')]
 #[OA\Tag(name: 'Projects')]
 class ProjectControllerApi extends AbstractController
 {
     private Security $security;
+    private LoggerInterface $logger;
 
-    public function __construct(Security $security)
+    public function __construct(Security $security, LoggerInterface $logger)
     {
         $this->security = $security;
+        $this->logger = $logger;
     }
 
-    #[Route('/{id}/get-infos', name: 'api_project_get_infos', methods: ['GET'])]
-    public function getInfos(Project $project): JsonResponse
+    #[Route('/get-infos', name: 'api_project_get_infos', methods: ['GET'])]
+    public function getDetails(Request $request, ProjectRepository $projectRepository): JsonResponse
     {
-        $connectedUser = $this->getUser();
 
-        if (!$connectedUser) {
-            return $this->json(['message' => 'User not found'], 404);
-        }
+        $uuid = $request->query->get('uuid');
+        try {
+            $project = $projectRepository->findOneBy(['uuid' => $uuid]);
 
-        if (!$project) {
-            return $this->json(['message' => 'Project not found'], 404);
-        }
+            $connectedUser = $this->getUser();
 
-        $projectOwner = $project->getOwner();
-        
-        if($connectedUser !== $projectOwner) {
-            return $this->json(['message' => 'You are not the owner of this project'], 403);
-        }
-
-        $tickets = $project->getTickets();
-        $groupedTickets = ['todo' => [], 'in_progress' => [], 'done' => []];
-
-        foreach ($tickets as $ticket) {
-            $status = $ticket->getStatus()->value;
-        
-            if (array_key_exists($status, $groupedTickets)) {
-
-                $context = $ticket->getContext();
-
-                $contextArray = [
-                    'id' => $context->getId(),
-                    'name' => $context->getName(),
-                    'color' => $context->getColor(),
-                ];
-
-                $groupedTickets[$status][] = [
-                    'id' => $ticket->getId(),
-                    'title' => $ticket->getTitle(),
-                    'description' => $ticket->getDescription(),
-                    'status' => $ticket->getStatus()->value,
-                    'created_at' => $ticket->getCreatedAt(),
-                    'context' => $contextArray,
-                ];
+            if (!$connectedUser) {
+                return $this->json(['message' => 'User not found'], 404);
             }
+
+            if (!$project) {
+                return $this->json(['message' => 'Project not found'], 404);
+            }
+
+            $projectOwner = $project->getOwner();
+            
+            if($connectedUser !== $projectOwner) {
+                return $this->json(['message' => 'You are not the owner of this project'], 403);
+            }
+
+            return $this->json(['message' => 'Project details fetched successfully', 'project' => $project], 200, [], ['groups' => ['project:read']]);
+        } catch (\Exception $e) {
+            return $this->json(['message' => 'Error fetching project details: ' . $e->getMessage()], 500);
         }
-
-        $data = [
-            'project' => $project,
-            'tickets' => $groupedTickets,
-        ];
-
-        return $this->json($data, 200, [], ['groups' => 'project:read']);
+      
     }
     
     #[Route('/create', name: 'api_project_create', methods: ['POST'])]
