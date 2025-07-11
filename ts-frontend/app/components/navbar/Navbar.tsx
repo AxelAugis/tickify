@@ -5,6 +5,8 @@ import type { AuthLinkProps } from "../authLink/AuthLink";
 import Burger, { BurgerProps } from "./burger/Burger";
 import NavbarDropdown, { NavbarDropdownProps } from "./dropdown/Dropdown";
 import Profile, { ProfileProps } from "./profile/Profile";
+import useUserStore from "@/store/useUserStore";
+import { useEffect } from "react";
 
 interface NavbarProps {
   item: {
@@ -12,6 +14,7 @@ interface NavbarProps {
     isDropdownActive: boolean;
     ref: React.RefObject<HTMLDivElement | null>;
     authLinks: AuthLinkProps["item"][];
+    loggedLinks?: AuthLinkProps["item"][];
     isLgScreen: boolean;
     burger: BurgerProps["item"];
     dropdown: NavbarDropdownProps["item"];
@@ -21,6 +24,13 @@ interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = ({ item }) => {
+
+    const { user, loading } = useUserStore();
+
+     useEffect(() => {
+            if (loading || !user) return;
+        }, [user, loading]);
+
     return (
         item.isDashboard ? (
           <nav ref={item.ref} className={`w-screen lg:w-full  3xl:max-w-screen  flex items-center justify-between px-4  py-5 mx-auto transition-colors duration-300 ${item.isDropdownActive ? "bg-accent-green/50" : "bg-transparent relative z-10"} backdrop-blur-md ${item.padding}`}>

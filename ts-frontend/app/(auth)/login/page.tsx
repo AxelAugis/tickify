@@ -1,6 +1,6 @@
 'use client';
 
-import React from "react";
+import React, { useEffect } from "react";
 import Input from "@/app/components/form/Input";
 import { useState } from "react";
 import Checkbox from "@/app/components/checkbox/Checkbox";
@@ -8,10 +8,20 @@ import Button from "@/app/components/buttons/Button";
 import axios from "@/utils/axios";
 import { isAxiosError } from "axios";
 import { useRouter } from "next/navigation";
+import useUserStore from "@/store/useUserStore";
 
 export default function LoginPage() {
 
   const router = useRouter();
+
+    const { user, loading } = useUserStore();
+
+    useEffect(() => {
+          if (loading || !user) return;
+          if(!loading && user) {
+            router.push("/dashboard");
+          }
+      }, [user, loading, router]);
 
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
