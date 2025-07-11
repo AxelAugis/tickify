@@ -37,18 +37,18 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ item, deleteSelf }) => {
 
     const displayDeleteModal = () => {
         openModal({
-            type: 'info',
+            type: 'warning',
             title: 'Supprimer le projet',
             content: `Êtes-vous sûr de vouloir supprimer le projet "${item.name}" ? Cette action est irréversible.`,
             buttons: [
                 {
-                    type: 'info',
+                    type: 'warning',
                     action: 'cancel',
                     label: 'Annuler',
                     onClick: () => useModalStore.getState().closeModal(),
                 },
                 {
-                    type: 'info',
+                    type: 'warning',
                     action: 'confirm',
                     label: 'Supprimer',
                     onClick: handleDeleteProject,
