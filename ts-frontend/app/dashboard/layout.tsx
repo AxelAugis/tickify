@@ -9,6 +9,7 @@ import BurgerStyles from '@/app/components/navbar/burger/Burger.module.css';
 import DropdownStyles from '@/app/components/navbar/dropdown/Dropdown.module.css';
 import Navbar from "../components/navbar/Navbar";
 import ProfileDropdownStyle from "@/app/components/navbar/profile/dropdown/ProfileDropdown.module.css";
+import Modal from "../components/modal/Modal";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
     const router = useRouter();
@@ -34,8 +35,8 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
     }, [initializeScreenListener]);
 
     const handleBurgerClick = () => {
-      // document.body.classList.toggle("max-h-screen");
-      // document.body.classList.toggle("overflow-hidden");
+      document.body.classList.toggle("max-h-screen");
+      document.body.classList.toggle("overflow-hidden");
       setIsBurgerOpen(!isBurgerOpen);
     }
 
@@ -124,6 +125,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
     return (
         <section className={`w-screen h-screen bg-light`}>
             <Navbar item={navbar} />
+            <Modal />
             {children}
         </section>
     );

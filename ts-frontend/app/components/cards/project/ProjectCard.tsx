@@ -4,17 +4,58 @@ import Link from "next/link";
 import TicketStatusComponent from "./TicketStatus";
 import MeatballMenu from "../../meatball/MeatballMenu";
 import { useState } from "react";
+import { useModalStore } from "@/app/store/useModalStore";
+import axios from "@/utils/axios";
 
 export interface ProjectCardProps {
     item: ProjectProps;
+    deleteSelf?: (projectId: number) => void;
 }
 
-const ProjectCard: React.FC<ProjectCardProps> = ({ item }) => {
+const ProjectCard: React.FC<ProjectCardProps> = ({ item, deleteSelf }) => {
 
+    const { openModal, closeModal } = useModalStore();
     const [isMeatballMenuOpen, setIsMeatballMenuOpen] = useState(false);
+
 
     const handleMeatballMenuClick = () => {
         setIsMeatballMenuOpen(!isMeatballMenuOpen);
+    }
+
+    const handleDeleteProject = async () => {
+        try {
+            const response = await axios.delete(`/project/${item.id}/delete`);
+            if (response.status === 204) {
+                console.log('Projet supprimé avec succès');
+                deleteSelf?.(item.id);
+            }
+        } catch (error) {
+            console.error('Erreur lors de la suppression du projet:', error);
+        }
+        setIsMeatballMenuOpen(false);
+        closeModal();
+    }
+
+    const displayDeleteModal = () => {
+        openModal({
+            type: 'info',
+            title: 'Supprimer le projet',
+            content: `Êtes-vous sûr de vouloir supprimer le projet "${item.name}" ? Cette action est irréversible.`,
+            buttons: [
+                {
+                    type: 'info',
+                    action: 'cancel',
+                    label: 'Annuler',
+                    onClick: () => useModalStore.getState().closeModal(),
+                },
+                {
+                    type: 'info',
+                    action: 'confirm',
+                    label: 'Supprimer',
+                    onClick: handleDeleteProject,
+                }
+            ]
+        });
     }
 
     const meatballMenu = {
@@ -35,7 +76,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ item }) => {
                 {
                     isLink: false,
                     text: "Supprimer",
-                    onclick: () => alert("Suppression du projet non implémentée"),
+                    onclick: () => displayDeleteModal(),
                     icon: {
                         src: "/images/icons/delete.svg",
                         alt: "Delete",
