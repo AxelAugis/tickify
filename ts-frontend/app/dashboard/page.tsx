@@ -7,15 +7,15 @@ import ScreenLoader from "../components/screenLoader/ScreenLoader";
 import Link from "next/link";
 import ProjectCard from "../components/cards/project/ProjectCard";
 import Image from "next/image";
+import { ProjectProps } from "@/types/project";
 
 const DashboardHomepage = () => {
 
     const { user, loading } = useUserStore();
-    const [projects, setProjects] = useState([]);
+    const [projects, setProjects] = useState<ProjectProps[]>([]);
     const [displayProjectSentences, setDisplayProjectSentences] = useState("");
 
     useEffect(() => {
-        // wait for user to be loaded
         if (loading || !user) return;
         
         const fetchProjects = async () => {
@@ -34,6 +34,10 @@ const DashboardHomepage = () => {
         }
         fetchProjects();
     }, [user, loading]);
+
+    const handleRemoveSelf = (projectId: number) => {
+        setProjects(prevProjects => prevProjects.filter(project => project.id !== projectId));
+    }
 
     return (
         loading ? (
@@ -73,7 +77,7 @@ const DashboardHomepage = () => {
                             <div className={`w-full grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4`}>
                                 {
                                     projects.map((project, index) => (
-                                        <ProjectCard key={index} item={project} />
+                                        <ProjectCard key={index} item={project} deleteSelf={handleRemoveSelf} />
                                     ))
                                 }
                             </div>

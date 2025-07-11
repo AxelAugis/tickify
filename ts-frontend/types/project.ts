@@ -1,10 +1,11 @@
 import { TeamProps } from "./team";
-import { TicketStatus } from "./ticket";
+import { TicketStatusEnum } from "./ticket";
 
 export interface ProjectProps {
     id: number;
     name: string;
     description: string;
     teams?: TeamProps[];
-    tickets_count?: Record<TicketStatus, number>;
+    tickets_count?: Record<TicketStatusEnum, number>;
+    uuid: string;
 }
