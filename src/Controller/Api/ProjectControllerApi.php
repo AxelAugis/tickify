@@ -85,8 +85,13 @@ class ProjectControllerApi extends AbstractController
             $project->setUpdatedAt($updatedAt);
             $project->setUuid(Uuid::v7());
 
+            $firstColor = $data['firstColor'] ?? '#FAFAFA';
+            $secondColor = $data['secondColor'] ?? '#FFFFFF';
+
+            $project->setFirstColor($firstColor);
+            $project->setSecondColor($secondColor);
+
             $entityManager->persist($project);
-            $entityManager->flush();
 
             // Create teams for the projects with teams array
             $teams = $data['teams'] ?? [];
@@ -99,7 +104,6 @@ class ProjectControllerApi extends AbstractController
                 $team->setUpdatedAt($updatedAt);
 
                 $entityManager->persist($team);
-                $entityManager->flush();
             }
 
             // Create master branch if one is provided
@@ -114,8 +118,9 @@ class ProjectControllerApi extends AbstractController
                 $master->setUpdatedAt($updatedAt);
 
                 $entityManager->persist($master);
-                $entityManager->flush();
             }
+
+            $entityManager->flush();
 
             return $this->json(['message' => 'Project created!', 'uuid' => $project->getUuid()], 201);
         } catch (\Exception $e) {

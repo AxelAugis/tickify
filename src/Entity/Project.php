@@ -66,6 +66,14 @@ class Project
     #[Groups(['project:read', 'project:write'])]
     private ?string $uuid = null;
 
+    #[ORM\Column(length: 255, options: ['default' => '#FAFAFA'])]
+    #[Groups(['project:read', 'project:write'])]
+    private ?string $first_color = null;
+
+    #[ORM\Column(length: 255, options: ['default' => '#FAFAFA'])]
+    #[Groups(['project:read', 'project:write'])]
+    private ?string $second_color = null;
+
     public function __construct()
     {
         $this->tickets = new ArrayCollection();
@@ -267,6 +275,30 @@ class Project
     public function setUuid(string $uuid): static
     {
         $this->uuid = $uuid;
+
+        return $this;
+    }
+
+    public function getFirstColor(): ?string
+    {
+        return $this->first_color;
+    }
+
+    public function setFirstColor(string $first_color): static
+    {
+        $this->first_color = $first_color;
+
+        return $this;
+    }
+
+    public function getSecondColor(): ?string
+    {
+        return $this->second_color;
+    }
+
+    public function setSecondColor(string $second_color): static
+    {
+        $this->second_color = $second_color;
 
         return $this;
     }

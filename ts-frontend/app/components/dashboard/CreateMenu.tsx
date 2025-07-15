@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { SubmenuProps } from "./Submenu";
+import { SubmenuProps } from "./Menu";
 import Link from "next/link";
 
 interface CreateMenuProps {

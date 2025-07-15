@@ -11,7 +11,7 @@ interface ProgressBarProps {
 const ProgressBar: React.FC<ProgressBarProps> = ({ item }) => {
     const width = item.width ? `${item.width} mx-auto` : 'w-full';
     return (
-        <div className={`${width}  rounded-full h-2.5 flex items-center gap-x-10 `}>
+        <div className={`${width}  rounded-full h-2.5 flex items-center gap-x-2 lg:gap-x-10 `}>
            {
             Array.from({ length: item.steps }, (_, index) => (
                <ProgressBarStep key={index}  isActive={index < item.currentStep} />

@@ -33,6 +33,10 @@ export default function CreateProjectPage() {
     });
 
     const [showColorPicker, setShowColorPicker] = useState(false);
+    const [showProjectColorPicker, setShowProjectColorPicker] = useState({
+        firstColor: false,
+        secondColor: false
+    });
 
     const [formData, setFormData] = useState({
         projectName: '',
@@ -40,7 +44,9 @@ export default function CreateProjectPage() {
         projectType: '',
         teams: [] as TeamProps[],
         branchName: '',
-        branchDescription: ''
+        branchDescription: '',
+        firstColor: '',
+        secondColor: '',
     })
 
     const [formErrors, setFormErrors] = useState({
@@ -51,7 +57,9 @@ export default function CreateProjectPage() {
         teamColor: '',
         branchName: '',
         branchDescription: '',
-        submitError: ''
+        submitError: '',
+        firstColor: '',
+        secondColor: '',
     });
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -163,6 +171,13 @@ export default function CreateProjectPage() {
         }));
     };
 
+    const handleProjectColorChange = (color: { hex: string }, colorType: 'firstColor' | 'secondColor') => {
+        setFormData(prev => ({
+            ...prev,
+            [colorType]: color.hex
+        }));
+    };
+
     const addTeam = () => {
         if(currentTeam.name.trim() === '') return;
         setTeams(prevTeams => [
@@ -194,7 +209,9 @@ export default function CreateProjectPage() {
             branch: {
                 name: formData.branchName,
                 description: formData.branchDescription
-            }
+            },
+            firstColor: formData.firstColor,
+            secondColor: formData.secondColor,
         }
         try {
             const response = await axios.post("/project/create", body)
@@ -308,6 +325,48 @@ export default function CreateProjectPage() {
                     }
                 },
                 {
+                    title: "Couleurs du projet",
+                    description: "Choisissez les couleurs représentant votre projet.",
+                    fields: [
+                        {
+                            label: {
+                                text: "Couleur principale",
+                                htmlFor: "firstColor"
+                            },
+                            input: {
+                                type: "text",
+                                id: "firstColor",
+                                name: "firstColor",
+                                placeholder: "Entrez la couleur principale",
+                                value: formData.firstColor,
+                                onChange: handleInputChange
+                            },
+                            error: formErrors.firstColor,
+                            textColor: "text-dark",
+                            borderColor: "border-dark/20",
+                            colorPicker: true
+                        },
+                        {
+                            label: {
+                                text: "Couleur secondaire",
+                                htmlFor: "secondColor"
+                            },
+                            input: {
+                                type: "text",
+                                id: "secondColor",
+                                name: "secondColor",
+                                placeholder: "Entrez la couleur secondaire",
+                                value: formData.secondColor,
+                                onChange: handleInputChange
+                            },
+                            error: formErrors.secondColor,
+                            textColor: "text-dark",
+                            borderColor: "border-dark/20",
+                            colorPicker: true
+                        }
+                    ]
+                },
+                {
                     title: "Ajouter une branche principale",
                     description: "Initialisez votre projet avec votre première branche.",
                     fields: [
@@ -356,15 +415,15 @@ export default function CreateProjectPage() {
                     width: "w-2/5 xl:w-1/5"
                 },
                 {
-                    label: step < 3 ? "Suivant" : "Valider",
-                    type: step < 3 ? "button" : "submit" as "button" | "submit",
-                    onClick: step < 3 ? () => handleStep('next') : undefined,
+                    label: step < 4 ? "Suivant" : "Valider",
+                    type: step < 4 ? "button" : "submit" as "button" | "submit",
+                    onClick: step < 4 ? () => handleStep('next') : undefined,
                     width: "w-2/5 xl:w-1/5"
                 }
             ]
         },
         progressBar: {
-            steps: 3,
+            steps: 4,
             currentStep: step,
             color: "bg-accent-dark-green",
             width: "w-3/4"
@@ -506,8 +565,63 @@ export default function CreateProjectPage() {
                             )}
                         </div>
                     )}
-
                     {step === 3 && (
+                        <div className={`flex flex-col ${isLargeScreen ? 'gap-y-6' : 'gap-y-4'}`}>
+                            <div className={isLargeScreen ? "flex  gap-4 items-center justify-between" : "flex flex-col gap-y-4"}>
+                                <div className={`flex items-center gap-x-6`}>
+                                    {/* Couleur principale */}
+                                    <div className={isLargeScreen ? "flex flex-col gap-y-2 col-span-4" : "flex flex-col gap-y-2"}>
+                                        <div className="relative w-full ">
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowProjectColorPicker(prev => ({ ...prev, firstColor: !prev.firstColor }))}
+                                                className="w-10 h-10 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-dark-green"
+                                                style={{ backgroundColor: formData.firstColor || '#000000' }}
+                                            />
+                                            {showProjectColorPicker.firstColor && (
+                                                <div className="absolute top-12 left-0 z-10">
+                                                    <div className="fixed inset-0" onClick={() => setShowProjectColorPicker(prev => ({ ...prev, firstColor: false }))} />
+                                                    <SketchPicker
+                                                        color={formData.firstColor || '#000000'}
+                                                        onChange={color => handleProjectColorChange(color, 'firstColor')}
+                                                    />
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                    {/* Couleur secondaire */}
+                                    <div className={isLargeScreen ? "flex flex-col gap-y-2 col-span-4" : "flex flex-col gap-y-2 "}>
+                                        <div className="relative w-full ">
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowProjectColorPicker(prev => ({ ...prev, secondColor: !prev.secondColor }))}
+                                                className="w-10 h-10 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-dark-green"
+                                                style={{ backgroundColor: formData.secondColor || '#000000' }}
+                                            />
+                                            {showProjectColorPicker.secondColor && (
+                                                <div className="absolute top-12 left-0 z-10">
+                                                    <div className="fixed inset-0" onClick={() => setShowProjectColorPicker(prev => ({ ...prev, secondColor: false }))} />
+                                                    <SketchPicker
+                                                        color={formData.secondColor || '#000000'}
+                                                        onChange={color => handleProjectColorChange(color, 'secondColor')}
+                                                    />
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                                {/* Preview with linear gradient to bottom right */}
+                                <div className={`flex items-center justify-center px-3 py-2 rounded-lg text-white text-sm font-medium w-full lg:w-3/4 h-40`}
+                                    style={{
+                                        background: `linear-gradient(to bottom right, ${formData.firstColor || '#000000'}, ${formData.secondColor || '#000000'})`
+                                    }}
+                                >
+                                    Aperçu des couleurs du projet
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                    {step === 4 && (
                        <>
                        {
                          pageContent.form.steps[step -1].fields?.map((field, index) => (
