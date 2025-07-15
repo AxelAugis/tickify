@@ -1,8 +1,14 @@
 import Image from "next/image";
+import CreateMenu from "./CreateMenu";
 
-interface SubmenuProps {
+export interface SubmenuElement {
+    url: string;
+    label: string;
+}
+
+export interface SubmenuProps {
     item: {
-        context: string | undefined;
+        isLargeScreen?: boolean;
         create?: {
             isOpen: boolean;
             onClick: () => void;
@@ -13,35 +19,43 @@ interface SubmenuProps {
                 width: number;
                 height: number;
             };
-            // elements: {
-            //     url: string;
-            //     label: string;
-            // }
-        }
+            elements?: SubmenuElement[];
+        },
     }
 }
 
 const Submenu: React.FC<SubmenuProps> = ({ item }) => {
     return (
-        <div className={`w-full flex justify-between px-4 lg:px-24  py-5 bg-accent-dark text-light`}>
+        <div className={`w-full flex items-center justify-between px-4 lg:px-24  py-3 bg-gray-100 text-light`}>
             <div className={`flex items-center gap-x-12`}>
-                <h2 className={` text-xl font-medium font-ubuntu`}>{item.context}</h2>
                 {item.create && (
-                    <div onClick={item.create.onClick} className={`flex gap-x-3 items-center`}>
-                        <button className={``}
-                        {item.create.icon && (
-                            <Image
-                                src={item.create.icon.src}
-                                alt={item.create.icon.alt}
-                                width={item.create.icon.width}
-                                height={item.create.icon.height}
-                                className={`${item.create.isOpen ? "rotate-0 transition-transform duration-300" : "rotate-45 transition-transform duration-300"}`}
-                            />
-                        )}
-                        <span className={`text-cabin`}>{item.create.text}</span>
-                    </div>
+                    <CreateMenu item={item.create} />
                 )}
             </div>
+            <form className={`relative w-1/3 h-fit`}>
+                <div className={`w-full grid grid-cols-8 items-center rounded-lg border border-neutral-300   text-dark bg-light/10 `}>
+                    <input 
+                        className={`bg-transparent col-span-7 px-3 py-2 focus:outline-none focus:ring focus:ring-accent-dark-green rounded-l-lg`}
+                        type="text"
+                        placeholder="Rechercher..."
+                        aria-label="Rechercher"
+                        autoComplete="off"
+                        spellCheck="false"
+                    />
+                    <button 
+                        type="button"
+                        className={`col-span-1 flex justify-center items-center border-l border-l-accent-dark-green/20  transition-colors duration-150 h-full cursor-pointer`}
+                    >
+                        <Image
+                            src="/images/icons/search.svg"
+                            alt="Rechercher"
+                            width={20}
+                            height={20}
+                            className={`text-light`}
+                        />
+                    </button>
+                </div>
+            </form>
         </div>
     )
 }

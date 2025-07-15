@@ -1,5 +1,6 @@
 'use client';
 import Submenu from "@/app/components/submenu/Submenu";
+import useScreenStore from "@/store/useScreenStore";
 import { ProjectProps } from "@/types/project";
 import axios from "@/utils/axios";
 import { useParams, useRouter } from "next/navigation";
@@ -15,6 +16,12 @@ const ProjectPage = () => {
     const [project, setProject] = useState<ProjectProps | null>(null);
     const [loadError, setLoadError] = useState<string | null>(null);
     const [isSBDrawerOpen, setIsSBDrawerOpen] = useState(false);
+    const { isLargeScreen, initializeScreenListener } = useScreenStore();
+
+    useEffect(() => {
+        const cleanup = initializeScreenListener();
+        return cleanup;
+    }, [initializeScreenListener]);
 
     useEffect(() => {
         const getProjectDetails = async () => {
@@ -40,7 +47,7 @@ const ProjectPage = () => {
     const pageContent = {
         loadError: loadError,
         submenu: {
-            context: project?.name,
+            isLargeScreen: isLargeScreen,
             create: {
                 isOpen: isSBDrawerOpen,
                 onClick: () => setIsSBDrawerOpen(!isSBDrawerOpen),
@@ -50,7 +57,12 @@ const ProjectPage = () => {
                     alt: "Ajouter un projet",
                     width: 20,
                     height: 20
-                }
+                },
+                elements: [
+                    { url: `/dashboard/project/${uuid}/add-ticket`, label: "Ticket" },
+                    { url: `/dashboard/project/${uuid}/add-master`, label: "Master" },
+                    { url: `/dashboard/project/${uuid}/add-team`, label: "Équipe" },
+                ]
             }
         }
     }
@@ -62,7 +74,11 @@ const ProjectPage = () => {
             </div>
         ) : (
             <div className={``}>
-                <Submenu item={pageContent.submenu} />
+                {
+                    isLargeScreen && (
+                        <Submenu item={pageContent.submenu} />
+                    )
+                }
             </div>
         )
     )
