@@ -1,5 +1,6 @@
 import Image from "next/image";
-import CreateMenu from "./CreateMenu";
+import MenuButton, { MenuButtonProps } from "./Button";
+import Hub, { HubProps } from "@/app/components/dashboard/hub/Hub";
 
 export interface MenuElement {
     url: string;
@@ -8,6 +9,10 @@ export interface MenuElement {
 
 export interface MenuProps {
     item: {
+        hub: {
+            button: MenuButtonProps["item"];
+            dropdown: HubProps["item"];
+        };
         isLargeScreen?: boolean;
         create?: {
             isOpen: boolean;
@@ -25,15 +30,13 @@ export interface MenuProps {
 }
 
 const Menu: React.FC<MenuProps> = ({ item }) => {
+
+
     return (
-        <div className={`w-full flex items-center justify-between px-4 lg:px-24  py-3 bg-dark/20 backdrop-blur-lg text-light`}>
-            {/* <div className={`flex items-center gap-x-12`}>
-                {item.create && (
-                    <CreateMenu item={item.create} />
-                )}
-            </div> */}
+        <div className={`w-full flex items-center justify-between px-4 py-3 bg-dark/20 backdrop-blur-lg text-light relative`}>
+            <MenuButton item={item.hub.button} />
             <form className={`relative w-1/3 h-fit`}>
-                <div className={`w-full grid grid-cols-8 items-center rounded-lg border border-neutral-300   text-dark bg-light/20 `}>
+                <div className={`w-full grid grid-cols-8 items-center rounded-lg border border-neutral-300   text-dark bg-light/40 `}>
                     <input 
                         className={`bg-transparent col-span-7 px-3 py-2 focus:outline-none  rounded-l-lg`}
                         type="text"
@@ -56,6 +59,7 @@ const Menu: React.FC<MenuProps> = ({ item }) => {
                     </button>
                 </div>
             </form>
+            <Hub item={item.hub.dropdown} />
         </div>
     )
 }

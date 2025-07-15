@@ -8,16 +8,22 @@ import Link from "next/link";
 import ProjectCard from "../components/cards/project/ProjectCard";
 import Image from "next/image";
 import { ProjectProps } from "@/types/project";
+import { useRouter } from "next/navigation";
 
 const DashboardHomepage = () => {
 
+    const router = useRouter();
     const { user, loading } = useUserStore();
     const [projects, setProjects] = useState<ProjectProps[]>([]);
     const [displayProjectSentences, setDisplayProjectSentences] = useState("");
 
     useEffect(() => {
         if (loading || !user) return;
-        
+        if(!loading && !user) {
+            router.push("/login");
+            return;
+        }
+
         const fetchProjects = async () => {
             try {
                 const response = await getProjects();
@@ -33,7 +39,7 @@ const DashboardHomepage = () => {
             }
         }
         fetchProjects();
-    }, [user, loading]);
+    }, [user, loading, router]);
 
     const handleRemoveSelf = (projectId: number) => {
         setProjects(prevProjects => prevProjects.filter(project => project.id !== projectId));
