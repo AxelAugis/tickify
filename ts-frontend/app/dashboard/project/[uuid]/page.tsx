@@ -27,8 +27,7 @@ const ProjectPage = () => {
     useEffect(() => {
         const getProjectDetails = async () => {
             if (!uuid) {
-                console.error("Project UUID is required");
-                return;
+                router.push("/dashboard");
             } else {
                 try {
                     const response = await axios.get(`/project/get-infos`, { params: { uuid } });

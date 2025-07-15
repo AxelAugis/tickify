@@ -95,9 +95,7 @@ export default function LoginPage() {
       }
 
       const response = await axios.post("/login_check", datas);
-      
-      // Avec la configuration split_cookie, les cookies jwt_hp et jwt_s sont automatiquement créés
-      // par Symfony/Lexik JWT - pas besoin de gérer manuellement les cookies
+
       if(response.status === 204) {
         router.push("/dashboard");
       }
