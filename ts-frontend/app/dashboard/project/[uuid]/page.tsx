@@ -57,14 +57,9 @@ const ProjectPage = () => {
                 <h1 className={`text-dark text-lg`}>{loadError}</h1>
             </div>
         ) : (
-            null
-            // <div className={``}>
-            //     {
-            //         isLargeScreen && (
-            //             <Menu item={pageContent.menu} />
-            //         )
-            //     }
-            // </div>
+            <div className={`w-full py-4 pl-6 pr-4 bg-dark/30 backdrop-blur-xl`}>
+               <h2 className={`text-light text-xl font-semibold `}>{project?.name}</h2>
+            </div>
         )
     )
 }
