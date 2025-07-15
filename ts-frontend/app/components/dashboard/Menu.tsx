@@ -33,7 +33,7 @@ const Menu: React.FC<MenuProps> = ({ item }) => {
 
 
     return (
-        <div className={`w-full flex items-center justify-between px-4 py-3 bg-dark/20 backdrop-blur-lg text-light relative`}>
+        <div className={`w-full flex items-center justify-between px-4 py-3 bg-dark/20 backdrop-blur-lg text-light relative z-20`}>
             <MenuButton item={item.hub.button} />
             <form className={`relative w-1/3 h-fit`}>
                 <div className={`w-full grid grid-cols-8 items-center rounded-lg border border-neutral-300   text-dark bg-light/40 `}>

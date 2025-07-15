@@ -46,10 +46,7 @@ const ProjectPage = () => {
         getProjectDetails();
     }, [uuid]);
 
-    const pageContent = {
-        loadError: loadError,
 
-    }
 
     return (
         loadError ? (
