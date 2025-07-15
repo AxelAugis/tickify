@@ -48,20 +48,14 @@ const Navbar: React.FC<NavbarProps> = ({ item }) => {
             </Link>
             {item.profile && item.isLgScreen ? (
               <Profile item={item.profile} />
-              ) : <Burger item={item.burger} />
+              ) : 
+              <>
+                <Burger item={item.burger} />
+                <NavbarDropdown item={item.dropdown} />
+              </>
             }
-            <NavbarDropdown item={item.dropdown} />
-            {
-              item.isLgScreen && (
-                <div className={`flex items-center gap-x-8`}>
-                  {
-                    item.loggedLinks?.map((link, index) => (
-                      <AuthLink key={index} item={link} />
-                    ))
-                  }
-                </div>
-              )
-            }
+            
+            
           </nav>
         ) : (
           <nav ref={item.ref} className={`w-screen lg:w-full max-w-screen-xl 2xl:max-w-screen-2xl flex items-center justify-between px-4 lg:px-0 py-5 lg:left-1/2 lg:-translate-x-1/2 fixed top-0 z-50 transition-colors duration-300 ${item.isDropdownActive ? "bg-accent-green/50" : "bg-transparent"} backdrop-blur-md ${item.padding}`}>
