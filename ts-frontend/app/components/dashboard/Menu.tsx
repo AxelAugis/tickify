@@ -1,12 +1,12 @@
 import Image from "next/image";
 import CreateMenu from "./CreateMenu";
 
-export interface SubmenuElement {
+export interface MenuElement {
     url: string;
     label: string;
 }
 
-export interface SubmenuProps {
+export interface MenuProps {
     item: {
         isLargeScreen?: boolean;
         create?: {
@@ -19,23 +19,23 @@ export interface SubmenuProps {
                 width: number;
                 height: number;
             };
-            elements?: SubmenuElement[];
+            elements?: MenuElement[];
         },
     }
 }
 
-const Submenu: React.FC<SubmenuProps> = ({ item }) => {
+const Menu: React.FC<MenuProps> = ({ item }) => {
     return (
-        <div className={`w-full flex items-center justify-between px-4 lg:px-24  py-3 bg-gray-100 text-light`}>
-            <div className={`flex items-center gap-x-12`}>
+        <div className={`w-full flex items-center justify-between px-4 lg:px-24  py-3 bg-dark/20 backdrop-blur-lg text-light`}>
+            {/* <div className={`flex items-center gap-x-12`}>
                 {item.create && (
                     <CreateMenu item={item.create} />
                 )}
-            </div>
+            </div> */}
             <form className={`relative w-1/3 h-fit`}>
-                <div className={`w-full grid grid-cols-8 items-center rounded-lg border border-neutral-300   text-dark bg-light/10 `}>
+                <div className={`w-full grid grid-cols-8 items-center rounded-lg border border-neutral-300   text-dark bg-light/20 `}>
                     <input 
-                        className={`bg-transparent col-span-7 px-3 py-2 focus:outline-none focus:ring focus:ring-accent-dark-green rounded-l-lg`}
+                        className={`bg-transparent col-span-7 px-3 py-2 focus:outline-none  rounded-l-lg`}
                         type="text"
                         placeholder="Rechercher..."
                         aria-label="Rechercher"
@@ -60,4 +60,4 @@ const Submenu: React.FC<SubmenuProps> = ({ item }) => {
     )
 }
 
-export default Submenu;
+export default Menu;

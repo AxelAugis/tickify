@@ -1,5 +1,6 @@
 'use client';
-import Submenu from "@/app/components/submenu/Submenu";
+import Menu from "@/app/components/dashboard/Menu";
+import useBackgroundProjectStore from "@/store/useBackgroundProjectStore";
 import useScreenStore from "@/store/useScreenStore";
 import { ProjectProps } from "@/types/project";
 import axios from "@/utils/axios";
@@ -15,8 +16,8 @@ const ProjectPage = () => {
 
     const [project, setProject] = useState<ProjectProps | null>(null);
     const [loadError, setLoadError] = useState<string | null>(null);
-    const [isSBDrawerOpen, setIsSBDrawerOpen] = useState(false);
     const { isLargeScreen, initializeScreenListener } = useScreenStore();
+    const { setFirstColor, setSecondColor } = useBackgroundProjectStore();
 
     useEffect(() => {
         const cleanup = initializeScreenListener();
@@ -33,6 +34,8 @@ const ProjectPage = () => {
                     const response = await axios.get(`/project/get-infos`, { params: { uuid } });
                     if(response.status === 200) {
                         setProject(response.data.project);
+                        setFirstColor(response.data.project.first_color);
+                        setSecondColor(response.data.project.second_color);
                     } else {
                         setLoadError("Une erreur s'est produite lors du chargement des informations du projet.");
                     }
@@ -46,25 +49,7 @@ const ProjectPage = () => {
 
     const pageContent = {
         loadError: loadError,
-        submenu: {
-            isLargeScreen: isLargeScreen,
-            create: {
-                isOpen: isSBDrawerOpen,
-                onClick: () => setIsSBDrawerOpen(!isSBDrawerOpen),
-                text: "Ajouter",
-                icon: {
-                    src: "/images/icons/crosses/green-cross.svg",
-                    alt: "Ajouter un projet",
-                    width: 20,
-                    height: 20
-                },
-                elements: [
-                    { url: `/dashboard/project/${uuid}/add-ticket`, label: "Ticket" },
-                    { url: `/dashboard/project/${uuid}/add-master`, label: "Master" },
-                    { url: `/dashboard/project/${uuid}/add-team`, label: "Équipe" },
-                ]
-            }
-        }
+
     }
 
     return (
@@ -73,13 +58,14 @@ const ProjectPage = () => {
                 <h1 className={`text-dark text-lg`}>{loadError}</h1>
             </div>
         ) : (
-            <div className={``}>
-                {
-                    isLargeScreen && (
-                        <Submenu item={pageContent.submenu} />
-                    )
-                }
-            </div>
+            null
+            // <div className={``}>
+            //     {
+            //         isLargeScreen && (
+            //             <Menu item={pageContent.menu} />
+            //         )
+            //     }
+            // </div>
         )
     )
 }

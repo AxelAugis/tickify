@@ -1,28 +1,31 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import useUserStore from "@/store/useUserStore";
 import useScreenStore from "@/store/useScreenStore";
 import ScreenLoader from "../components/screenLoader/ScreenLoader";
-import BurgerStyles from '@/app/components/navbar/burger/Burger.module.css';
-import DropdownStyles from '@/app/components/navbar/dropdown/Dropdown.module.css';
-import Navbar from "../components/navbar/Navbar";
-import ProfileDropdownStyle from "@/app/components/navbar/profile/dropdown/ProfileDropdown.module.css";
+
 import Modal from "../components/modal/Modal";
-import { logout } from "@/utils/auth";
+import Menu from "../components/dashboard/Menu";
+import useBackgroundProjectStore from "@/store/useBackgroundProjectStore";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
     const router = useRouter();
+    const pathname = usePathname();
     const { user, loading, error, fetchCurrentUser } = useUserStore();
     const { isLargeScreen, initializeScreenListener } = useScreenStore();
-    const navbarRef = useRef<HTMLDivElement | null>(null);
-    const [isBurgerOpen, setIsBurgerOpen] = useState(false);
-    const [isProfileOpen, setIsProfileOpen] = useState(false);
+    const [isSBDrawerOpen, setIsSBDrawerOpen] = useState(false);
+    const { clearColors, firstColor, secondColor } = useBackgroundProjectStore();
+
+    const isDashboardPage = pathname === "/dashboard";
 
     useEffect(() => {
         fetchCurrentUser();
-    }, [fetchCurrentUser]);
+        if(isDashboardPage) {
+            clearColors();
+        }
+    }, [fetchCurrentUser, clearColors, isDashboardPage]);
 
     useEffect(() => {
         if (error && !loading && !user) {
@@ -35,92 +38,27 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
         return cleanup;
     }, [initializeScreenListener]);
 
-    const handleBurgerClick = () => {
-      document.body.classList.toggle("max-h-screen");
-      document.body.classList.toggle("overflow-hidden");
-      setIsBurgerOpen(!isBurgerOpen);
-    }
-
-    const handleLogout = async () => {
-        if (await logout()) {
-            router.push("/login");
-        }
-    }
-
-    const navbar = {
-        isDashboard: true,
-        ref: navbarRef,
-        isDropdownActive: isBurgerOpen,
-        authLinks: [
-            {
-                url: "/login",
-                label: "Se connecter",
-            },
-            {
-                url: "/register",
-                label: "Inscription",
-            },
-        ],
-        isLgScreen: isLargeScreen,
-        burger: {
-            isOpen: isBurgerOpen,
-            onclick: handleBurgerClick,
-            styles: {
-                burger: BurgerStyles.burger,
-                active: BurgerStyles.active,
-            },
-        },
-        dropdown: {
-            isActive: isBurgerOpen,
-            styles: {
-                dropdown: DropdownStyles.dropdown,
-                active: DropdownStyles.active,
-            },
-        },
-        padding: 'lg:px-24 ',
-        profile: {
-            isOpen: isProfileOpen,
-            onclick: () => setIsProfileOpen(!isProfileOpen),
-            dropdown: {
-                isOpen: isProfileOpen,
-                onclick: () => setIsProfileOpen(false),
-                styles: {
-                    dropdown: ProfileDropdownStyle.dropdown,
-                    active: ProfileDropdownStyle.active,
-                },
-                elements: [
-                    {
-                        isLink: true,
-                        url: "/profile",
-                        label: "Mon Profil",
-                        image: {
-                            src: "/images/icons/profile.svg",
-                            alt: "Profile",
-                            width: 24,
-                            height: 24,
-                        }
-                    },
-                    {
-                        isLink: false,
-                        label: "Se déconnecter",
-                        image: {
-                            src: "/images/icons/logout.svg",
-                            alt: "Logout",
-                            width: 24,
-                            height: 24,
-                        },
-                        onClick: handleLogout,
-                    }
-                ]
-            }
-        }
-    }
 
     if (loading) {
         return (
         <ScreenLoader />
         );
     }
+
+    const menu = {
+            isLargeScreen: isLargeScreen,
+            create: {
+                isOpen: isSBDrawerOpen,
+                onClick: () => setIsSBDrawerOpen(!isSBDrawerOpen),
+                text: "Ajouter",
+                icon: {
+                    src: "/images/icons/crosses/green-cross.svg",
+                    alt: "Ajouter un projet",
+                    width: 20,
+                    height: 20
+                },
+            }
+        }
 
     if (error && !user) {
         return (
@@ -131,8 +69,13 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
     }
 
     return (
-        <section className={`w-screen h-screen bg-light`}>
-            
+        <section 
+            className={`w-screen h-screen `}
+            style={{
+                background: `linear-gradient(to bottom right, ${firstColor}, ${secondColor})`,
+            }}
+        >
+            <Menu item={menu} />
             <Modal />
             {children}
         </section>
