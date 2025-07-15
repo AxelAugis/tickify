@@ -11,7 +11,7 @@ export interface HubItemProps {
             alt: string;
 
         }
-        url: string;
+        url?: string;
     }
 }
 
@@ -36,7 +36,7 @@ const HubItem: React.FC<HubItemProps> = ({ item }) => {
             </button>
         ) : (
             <Link
-                href={item.url}
+                href={item.url || "#"}
                 className={commonStyles}
             >
                 <Image
