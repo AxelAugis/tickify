@@ -18,19 +18,24 @@ class Project
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['project:read', 'project:write'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['project:read', 'project:write'])]
     private ?string $description = null;
 
     #[ORM\ManyToOne(inversedBy: 'projects')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['project:read', 'project:write'])]
     private ?User $owner = null;
 
     #[ORM\Column]
+    #[Groups(['project:read', 'project:write'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
+    #[Groups(['project:read', 'project:write'])]
     private ?\DateTime $updatedAt = null;
 
     /**
@@ -58,6 +63,7 @@ class Project
     private Collection $teams;
 
     #[ORM\Column(type: Types::GUID)]
+    #[Groups(['project:read', 'project:write'])]
     private ?string $uuid = null;
 
     public function __construct()
