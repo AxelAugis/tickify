@@ -2,6 +2,7 @@ import type { NextConfig } from "next";
 
 /** @type {import('next').NextConfig} */
 const nextConfig: NextConfig = {
+  reactStrictMode: false,
   // Force le polling pour Docker
   webpack: (config) => {
     config.watchOptions = {

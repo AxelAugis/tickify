@@ -1,6 +1,7 @@
 import Image from "next/image";
 import MenuButton, { MenuButtonProps } from "./Button";
 import Hub, { HubProps } from "@/app/components/dashboard/hub/Hub";
+import { RefObject } from "react";
 
 export interface MenuElement {
     url: string;
@@ -10,6 +11,7 @@ export interface MenuElement {
 export interface MenuProps {
     item: {
         hub: {
+            ref: RefObject<HTMLDivElement | null>;
             button: MenuButtonProps["item"];
             dropdown: HubProps["item"];
         };
@@ -34,7 +36,14 @@ const Menu: React.FC<MenuProps> = ({ item }) => {
 
     return (
         <div className={`w-full flex items-center justify-between px-4 py-3 bg-dark/20 backdrop-blur-lg text-light relative z-20`}>
-            <MenuButton item={item.hub.button} />
+            <div 
+                ref={item.hub.ref}
+                className={`relative z-20`}
+            >
+                <MenuButton item={item.hub.button} />
+                <Hub item={item.hub.dropdown} />
+            </div>
+
             <form className={`relative w-1/3 h-fit`}>
                 <div className={`w-full grid grid-cols-8 items-center rounded-lg border border-neutral-300   text-dark bg-light/40 `}>
                     <input 
@@ -59,7 +68,6 @@ const Menu: React.FC<MenuProps> = ({ item }) => {
                     </button>
                 </div>
             </form>
-            <Hub item={item.hub.dropdown} />
         </div>
     )
 }
