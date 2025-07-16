@@ -42,6 +42,7 @@ class Project
      * @var Collection<int, Ticket>
      */
     #[ORM\OneToMany(targetEntity: Ticket::class, mappedBy: 'project')]
+    #[Groups(['project:read', 'project:write'])]
     private Collection $tickets;
 
     /**

@@ -12,7 +12,7 @@ export interface SelectorDropdownProps<T> {
 const Dropdown = <T,>({ item }: SelectorDropdownProps<T>) => {
     const activeClass = item.isOpen ? 'visible translate-y-0 opacity-100 z-20' : 'invisible -translate-y-2 opacity-0 z-0';
     return (
-        <div className={`absolute top-[110%] left-0 w-full bg-dark/20 backdrop-blur-lg rounded-lg shadow-lg mt-2 z-10 ${activeClass} transition-all duration-150 ease-in-out`}>
+        <div className={`absolute top-[110%] left-0 w-full bg-dark/80 backdrop-blur-lg rounded-lg shadow-lg mt-2 z-10 ${activeClass} transition-all duration-150 ease-in-out`}>
             <ul className={`max-h-60 overflow-y-auto`}>
                 {
                    item.options.map((option, index) => (

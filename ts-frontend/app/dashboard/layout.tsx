@@ -9,7 +9,7 @@ import ScreenLoader from "../components/screenLoader/ScreenLoader";
 import Modal from "../components/modal/Modal";
 import Menu from "../components/dashboard/Menu";
 import useBackgroundProjectStore from "@/store/useBackgroundProjectStore";
-import { useClickOutside } from "@/app/utils/hooks/useClickOutside";
+import { useClickOutside } from "@/utils/hooks/useClickOutside";
 import { logout } from "@/utils/auth";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {

@@ -16,7 +16,7 @@ const Hub: React.FC<HubProps> = ({ item }) => {
 
     return (
         <div
-            className={`absolute top-[135%] w-64 rounded-lg bg-dark/30 backdrop-blur-lg shadow-default flex flex-col items-center justify-between  text-light ${hubStyle} transition-all duration-150 ease-in-out p-2`}
+            className={`absolute top-[135%] w-64 rounded-lg bg-dark/20 backdrop-blur-lg shadow-default flex flex-col items-center justify-between  text-light ${hubStyle} transition-all duration-150 ease-in-out p-2 border border-light/20`}
             style={{ height: '75vh'}}
         >
            <div className={`w-full`}>
