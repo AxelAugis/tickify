@@ -16,17 +16,22 @@ use OpenApi\Attributes as OA;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Uid\Uuid;
 use Psr\Log\LoggerInterface;
+use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
+
 #[Route('/api/project')]
 #[OA\Tag(name: 'Projects')]
 class ProjectControllerApi extends AbstractController
 {
     private Security $security;
     private LoggerInterface $logger;
+    private CacheInterface $cache;
 
-    public function __construct(Security $security, LoggerInterface $logger)
+    public function __construct(Security $security, LoggerInterface $logger, CacheInterface $cache)
     {
         $this->security = $security;
         $this->logger = $logger;
+        $this->cache = $cache;
     }
 
     #[Route('/get-infos', name: 'api_project_get_infos', methods: ['GET'])]
@@ -59,126 +64,5 @@ class ProjectControllerApi extends AbstractController
         }
       
     }
-    
-    #[Route('/create', name: 'api_project_create', methods: ['POST'])]
-    public function create(Request $request, EntityManagerInterface $entityManager): JsonResponse
-    {
-        // get the connected user
-        $connectedUser = $this->security->getUser();
-        if (!$connectedUser) {
-            return $this->json(['message' => 'User not found'], 404);
-        }
-
-        $createdAt = new \DateTimeImmutable();
-        $updatedAt = new \DateTime();
-
-        try {
-            $data = json_decode($request->getContent(), true);
-
-            // Create project
-            $project = new Project();
-
-            $project->setName($data['name']);
-            $project->setDescription($data['description']);
-            $project->setOwner($connectedUser);
-            $project->setCreatedAt($createdAt);
-            $project->setUpdatedAt($updatedAt);
-            $project->setUuid(Uuid::v7());
-
-            $firstColor = $data['firstColor'] ?? '#FAFAFA';
-            $secondColor = $data['secondColor'] ?? '#FFFFFF';
-
-            $project->setFirstColor($firstColor);
-            $project->setSecondColor($secondColor);
-
-            $entityManager->persist($project);
-
-            // Create teams for the projects with teams array
-            $teams = $data['teams'] ?? [];
-            foreach ($teams as $teamData) {
-                $team = new Team();
-                $team->setProject($project);
-                $team->setName($teamData['name']);
-                $team->setColor($teamData['color']);
-                $team->setCreatedAt($createdAt);
-                $team->setUpdatedAt($updatedAt);
-
-                $entityManager->persist($team);
-            }
-
-            // Create master branch if one is provided
-            $branch = $data['branch'] ?? null;
-
-            if ($branch) {
-                $master= new Master();
-                $master->setProject($project);
-                $master->setTitle($branch['name']);
-                $master->setDescription($branch['description'] ?? '');
-                $master->setCreatedAt($createdAt);
-                $master->setUpdatedAt($updatedAt);
-
-                $entityManager->persist($master);
-            }
-
-            $entityManager->flush();
-
-            return $this->json(['message' => 'Project created!', 'uuid' => $project->getUuid()], 201);
-        } catch (\Exception $e) {
-            return $this->json(['message' => 'Error creating project: ' . $e->getMessage()], 500);
-        }
-    }
-
-    #[Route('/{id}/delete', name: 'api_project_delete', methods: ['DELETE'])]
-    public function delete(Project $project, EntityManagerInterface $entityManager): JsonResponse
-    {
-        $connectedUser = $this->security->getUser();
-        if (!$connectedUser) {
-            return $this->json(['message' => 'User not found'], 404);
-        }
-
-        if ($project->getOwner() !== $connectedUser) {
-            return $this->json(['message' => 'Access denied'], 403);
-        }
-
-        $entityManager->remove($project);
-        $entityManager->flush();
-
-        return $this->json(['message' => 'Project deleted'], 204);
-    }
-
-    #[Route('/check-duplicate', name: 'api_project_check_duplicate', methods: ['POST'])]
-    public function checkDuplicate(Request $request, ProjectRepository $projectRepository, LoggerInterface $logger): JsonResponse
-    {
-        $data = json_decode($request->getContent(), true);
-        $name = $data['params']['projectName'] ?? null;
-        $id = $data['params']['projectId'] ?? null;
-        $connectedUser = $this->security->getUser();
-
-        if (!$name || !$connectedUser) {
-            return $this->json(['status' => 400, 'message' => 'Missing required parameters'], 400);
-        }
-
-        $existingProject = null;
-
-        if (empty($id)) {
-            $existingProject = $projectRepository->findOneBy(['name' => $name, 'owner' => $connectedUser]);
-        } else {
-            $queryBuilder = $projectRepository->createQueryBuilder('p');
-            $existingProject = $queryBuilder
-                ->where('p.name = :name')
-                ->andWhere('p.owner = :userId')
-                ->andWhere('p.id != :id')
-                ->setParameter('name', $name)
-                ->setParameter('userId', $connectedUser)
-                ->setParameter('id', $id)
-                ->getQuery()
-                ->getOneOrNullResult();
-        }
-
-        if ($existingProject) {
-            return $this->json(['status' => 400, 'duplicate' => true], 400);
-        }
-        
-        return $this->json(['status' => 200, 'duplicate' => false], 200);
-    }
 }
+   

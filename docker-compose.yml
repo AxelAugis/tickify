@@ -50,6 +50,22 @@ services:
     networks:
       - tickame-network
 
+  redis:
+    image: redis:7
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - tickame-network
+
+  redisinsight:
+    image: redis/redisinsight:latest
+    container_name: redisinsight
+    ports:
+      - "5540:5540"
+    networks:
+      - tickame-network
+
 volumes:
   postgres_data:
 
