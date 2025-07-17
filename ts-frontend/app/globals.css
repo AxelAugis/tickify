@@ -28,6 +28,7 @@
 
   /* shadows */
   --shadow-default : 10px 24px 24px #0000000F;
+  --height-fullwodbnav : calc(100vh - 66px);
 
 
 }

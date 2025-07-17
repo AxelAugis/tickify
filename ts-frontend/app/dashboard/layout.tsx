@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import useUserStore from "@/store/useUserStore";
 import useScreenStore from "@/store/useScreenStore";
@@ -9,6 +9,7 @@ import ScreenLoader from "../components/screenLoader/ScreenLoader";
 import Modal from "../components/modal/Modal";
 import Menu from "../components/dashboard/Menu";
 import useBackgroundProjectStore from "@/store/useBackgroundProjectStore";
+import { useClickOutside } from "@/utils/hooks/useClickOutside";
 import { logout } from "@/utils/auth";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
@@ -23,6 +24,8 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
         create: { active: false, hovered: false },
     })
     const { clearColors, firstColor, secondColor } = useBackgroundProjectStore();
+
+    const hubRef = useRef<HTMLDivElement | null>(null);
 
     const isDashboardPage = pathname === "/dashboard";
 
@@ -45,6 +48,18 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
         return cleanup;
     }, [initializeScreenListener]);
 
+    const onHubClose = () => {
+        setIsMenuButtonsActive(prev => ({
+            ...prev,
+            hub: { ...prev.hub, 
+                active: false,
+                hovered: false 
+            }
+        }));
+        setIsHubOpen(false);
+    }
+
+    useClickOutside(hubRef, isHubOpen, onHubClose);
 
     if (loading) {
         return (
@@ -98,6 +113,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
 
     const menu = {
             hub: {
+                ref: hubRef,
                 button: {
                     isActive: isMenuButtonsActive.hub.active,
                     isHovered: isMenuButtonsActive.hub.hovered,
@@ -113,6 +129,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
                 },
                 dropdown: {
                     isOpen: isHubOpen,
+                    setIsOpen: setIsHubOpen,
                     links: {
                         headers: [
                             {
