@@ -17,7 +17,7 @@ export interface HubItemProps {
 
 const HubItem: React.FC<HubItemProps> = ({ item }) => {
 
-    const commonStyles = `flex items-center gap-x-3 w-full p-2 rounded-md bg-transparent hover:bg-light/20 transition-colors duration-150 text-dark/80 font-cabin font-medium cursor-pointer`;
+    const commonStyles = `flex items-center gap-x-3 w-full p-2 rounded-md bg-transparent hover:bg-light/20 transition-colors duration-150 text-light/80 font-cabin font-medium cursor-pointer`;
 
     return (
         item.isBtn ? (
