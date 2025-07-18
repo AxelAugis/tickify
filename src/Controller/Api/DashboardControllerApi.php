@@ -13,25 +13,32 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use OpenApi\Attributes as OA;
 use Nelmio\ApiDocBundle\Annotation\Model;
+use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('/api/dashboard')]
 #[OA\Tag(name: 'Dashboard')]
 class DashboardControllerApi extends AbstractController
 {
-    private $entityManager;
     private $security;
     private $userRepository;
-    private $projectTicketService;
+    private SerializerInterface $serializer;
+    private ProjectTicketService $projectTicketService;
+    private $cache;
 
     public function __construct(
         EntityManagerInterface $entityManager, 
         Security $security, 
         UserRepository $userRepository,
-        ProjectTicketService $projectTicketService
+        ProjectTicketService $projectTicketService,
+        SerializerInterface $serializer,
+        CacheInterface $cache
     ) {
-        $this->entityManager = $entityManager;
         $this->security = $security;
         $this->userRepository = $userRepository;
+        $this->serializer = $serializer;
+        $this->cache = $cache;
         $this->projectTicketService = $projectTicketService;
     }
 
@@ -78,28 +85,40 @@ class DashboardControllerApi extends AbstractController
     )]
     public function getProjectsByUser(ProjectRepository $projectRepository): JsonResponse
     {
+        $hashedUI = hash('sha256', $this->getUser()->getUserIdentifier());
+        $cacheKey = 'dashboard_projects_user_' . $hashedUI;
+
         try {
-            $connectedUser = $this->security->getUser();
+            $projectsData = $this->cache->get($cacheKey, function (ItemInterface $item) use ($projectRepository) {
+                $item->expiresAfter(7200);
+
+                // Get the connected user
+                $connectedUser = $this->security->getUser();
+                if (!$connectedUser) {
+                    throw new \Exception('User not found', 404);
+                }
+
+                // Find the user by email
+                $user = $this->userRepository->findOneBy(['email' => $connectedUser->getUserIdentifier()]);
+                if (!$user) {
+                    throw new \Exception('User not found', 404);
+                }
+
+                $projects = $projectRepository->findBy(['owner' => $user]);
+
+                if (!$projects) {
+                    return new JsonResponse([], 200);
+                }
+
+                $projectsWithTickets = $this->projectTicketService->formatProjectsWithTicketCounts($projects);
+
+                return $this->serializer->serialize($projectsWithTickets, 'json', ['groups' => 'project:read']);
+            });
+
+            return new JsonResponse(json_decode($projectsData, true), 200);
+
         } catch (\Exception $e) {
-            $connectedUser = null;
+            return new JsonResponse(['message' => 'Error fetching projects: ' . $e->getMessage()], $e->getCode() ?: 500);
         }
-
-        if ($connectedUser) {
-            $user = $this->userRepository->findOneBy(['email' => $connectedUser->getUserIdentifier()]);
-        }
-
-        if(!$user) {
-            return new JsonResponse(['message' => 'Unauthorized'], 403);
-        }
-
-        $projects = $projectRepository->findBy(['owner' => $user]);
-
-        if (!$projects) {
-            return new JsonResponse([]);
-        }
-
-        $projectsWithTickets = $this->projectTicketService->formatProjectsWithTicketCounts($projects);
-
-        return $this->json($projectsWithTickets, 200, [], ['groups' => 'dashboard:project:read']);
     }
 }
