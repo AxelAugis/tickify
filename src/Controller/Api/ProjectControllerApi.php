@@ -14,171 +14,67 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use OpenApi\Attributes as OA;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\Uid\Uuid;
 use Psr\Log\LoggerInterface;
+use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
+use Symfony\Component\Serializer\SerializerInterface;
+
 #[Route('/api/project')]
 #[OA\Tag(name: 'Projects')]
 class ProjectControllerApi extends AbstractController
 {
     private Security $security;
     private LoggerInterface $logger;
+    private CacheInterface $cache;
+    private SerializerInterface $serializer;
 
-    public function __construct(Security $security, LoggerInterface $logger)
+    public function __construct(Security $security, LoggerInterface $logger, CacheInterface $cache, SerializerInterface $serializer)
     {
         $this->security = $security;
         $this->logger = $logger;
+        $this->cache = $cache;
+        $this->serializer = $serializer;
     }
+
 
     #[Route('/get-infos', name: 'api_project_get_infos', methods: ['GET'])]
     public function getDetails(Request $request, ProjectRepository $projectRepository): JsonResponse
     {
-
         $uuid = $request->query->get('uuid');
-        try {
-            $project = $projectRepository->findOneBy(['uuid' => $uuid]);
-
-            $connectedUser = $this->getUser();
-
-            if (!$connectedUser) {
-                return $this->json(['message' => 'User not found'], 404);
-            }
-
-            if (!$project) {
-                return $this->json(['message' => 'Project not found'], 404);
-            }
-
-            $projectOwner = $project->getOwner();
-            
-            if($connectedUser !== $projectOwner) {
-                return $this->json(['message' => 'You are not the owner of this project'], 403);
-            }
-
-            return $this->json(['message' => 'Project details fetched successfully', 'project' => $project], 200, [], ['groups' => ['project:read']]);
-        } catch (\Exception $e) {
-            return $this->json(['message' => 'Error fetching project details: ' . $e->getMessage()], 500);
-        }
-      
-    }
-    
-    #[Route('/create', name: 'api_project_create', methods: ['POST'])]
-    public function create(Request $request, EntityManagerInterface $entityManager): JsonResponse
-    {
-        // get the connected user
-        $connectedUser = $this->security->getUser();
-        if (!$connectedUser) {
-            return $this->json(['message' => 'User not found'], 404);
-        }
-
-        $createdAt = new \DateTimeImmutable();
-        $updatedAt = new \DateTime();
+        $hashedUI = hash('sha256', $this->getUser()->getUserIdentifier());
+        $cacheKey = 'project_' . $uuid. '_user_' . $hashedUI;
 
         try {
-            $data = json_decode($request->getContent(), true);
+            $projectData = $this->cache->get($cacheKey, function (ItemInterface $item) use ($projectRepository, $uuid) {
+                $item->expiresAfter(7200);
 
-            // Create project
-            $project = new Project();
+                // Get the project by UUID
+                $project = $projectRepository->findOneBy(['uuid' => $uuid]);
+                if (!$project) {
+                    throw new \Exception('Project not found', 404);
+                }
 
-            $project->setName($data['name']);
-            $project->setDescription($data['description']);
-            $project->setOwner($connectedUser);
-            $project->setCreatedAt($createdAt);
-            $project->setUpdatedAt($updatedAt);
-            $project->setUuid(Uuid::v7());
+                $connectedUser = $this->security->getUser();
+                if (!$connectedUser) {
+                    throw new \Exception('User not found', 404);
+                }
 
-            $firstColor = $data['firstColor'] ?? '#FAFAFA';
-            $secondColor = $data['secondColor'] ?? '#FFFFFF';
+                // Check if the user is the owner
+                if ($connectedUser !== $project->getOwner()) {
+                    throw new \Exception('You are not the owner of this project', 403);
+                }
 
-            $project->setFirstColor($firstColor);
-            $project->setSecondColor($secondColor);
+                // Serialize the project with the project:read group (includes tickets)
+                return $this->serializer->serialize($project, 'json', ['groups' => ['project:read']]);
+            });
 
-            $entityManager->persist($project);
-
-            // Create teams for the projects with teams array
-            $teams = $data['teams'] ?? [];
-            foreach ($teams as $teamData) {
-                $team = new Team();
-                $team->setProject($project);
-                $team->setName($teamData['name']);
-                $team->setColor($teamData['color']);
-                $team->setCreatedAt($createdAt);
-                $team->setUpdatedAt($updatedAt);
-
-                $entityManager->persist($team);
-            }
-
-            // Create master branch if one is provided
-            $branch = $data['branch'] ?? null;
-
-            if ($branch) {
-                $master= new Master();
-                $master->setProject($project);
-                $master->setTitle($branch['name']);
-                $master->setDescription($branch['description'] ?? '');
-                $master->setCreatedAt($createdAt);
-                $master->setUpdatedAt($updatedAt);
-
-                $entityManager->persist($master);
-            }
-
-            $entityManager->flush();
-
-            return $this->json(['message' => 'Project created!', 'uuid' => $project->getUuid()], 201);
+            return new JsonResponse([
+                'message' => 'Project details fetched successfully',
+                'project' => json_decode($projectData, true)
+            ], 200);
         } catch (\Exception $e) {
-            return $this->json(['message' => 'Error creating project: ' . $e->getMessage()], 500);
+            return $this->json(['message' => 'Error fetching project details: ' . $e->getMessage()], $e->getCode() ?: 500);
         }
-    }
-
-    #[Route('/{id}/delete', name: 'api_project_delete', methods: ['DELETE'])]
-    public function delete(Project $project, EntityManagerInterface $entityManager): JsonResponse
-    {
-        $connectedUser = $this->security->getUser();
-        if (!$connectedUser) {
-            return $this->json(['message' => 'User not found'], 404);
-        }
-
-        if ($project->getOwner() !== $connectedUser) {
-            return $this->json(['message' => 'Access denied'], 403);
-        }
-
-        $entityManager->remove($project);
-        $entityManager->flush();
-
-        return $this->json(['message' => 'Project deleted'], 204);
-    }
-
-    #[Route('/check-duplicate', name: 'api_project_check_duplicate', methods: ['POST'])]
-    public function checkDuplicate(Request $request, ProjectRepository $projectRepository, LoggerInterface $logger): JsonResponse
-    {
-        $data = json_decode($request->getContent(), true);
-        $name = $data['params']['projectName'] ?? null;
-        $id = $data['params']['projectId'] ?? null;
-        $connectedUser = $this->security->getUser();
-
-        if (!$name || !$connectedUser) {
-            return $this->json(['status' => 400, 'message' => 'Missing required parameters'], 400);
-        }
-
-        $existingProject = null;
-
-        if (empty($id)) {
-            $existingProject = $projectRepository->findOneBy(['name' => $name, 'owner' => $connectedUser]);
-        } else {
-            $queryBuilder = $projectRepository->createQueryBuilder('p');
-            $existingProject = $queryBuilder
-                ->where('p.name = :name')
-                ->andWhere('p.owner = :userId')
-                ->andWhere('p.id != :id')
-                ->setParameter('name', $name)
-                ->setParameter('userId', $connectedUser)
-                ->setParameter('id', $id)
-                ->getQuery()
-                ->getOneOrNullResult();
-        }
-
-        if ($existingProject) {
-            return $this->json(['status' => 400, 'duplicate' => true], 400);
-        }
-        
-        return $this->json(['status' => 200, 'duplicate' => false], 200);
     }
 }
+   
