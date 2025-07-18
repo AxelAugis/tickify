@@ -1,0 +1,56 @@
+name: Symfony CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup PHP 8.3
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.3
+          extensions: pdo_pgsql, intl
+          tools: composer
+
+      - name: Install composer dependencies
+        run: composer install --no-progress --prefer-dist --optimize-autoloader
+
+      - name: Create .env.test
+        run: echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" > .env.test
+
+      - name: Wait for PostgreSQL to be ready
+        run: |
+          for i in {1..30}; do
+            pg_isready -h localhost -p 5432 && break
+            sleep 1
+          done
+
+      - name: Run migrations
+        run: php bin/console doctrine:migrations:migrate --env=test --no-interaction
+
+      - name: Run tests
+        run: php bin/phpunit --testsuite=unit
+
