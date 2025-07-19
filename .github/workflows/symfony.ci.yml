@@ -52,7 +52,7 @@ jobs:
           docker ps -a -f ancestor=postgres:15
 
       - name: Install PostgreSQL client
-        run: apt-get update && apt-get install -y postgresql-client
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client
 
       - name: Wait for PostgreSQL to be ready
         run: |
