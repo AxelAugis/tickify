@@ -16,12 +16,13 @@ jobs:
           POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
           POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
-
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+        ports:
+          - 5432:5432
 
     steps:
       - name: Checkout code
@@ -41,21 +42,38 @@ jobs:
         run: composer install --no-progress --prefer-dist --optimize-autoloader
 
       - name: Create .env.test
-        run: echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" > .env.test
+        run: echo "DATABASE_URL=postgresql://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@127.0.0.1:5432/${{ secrets.POSTGRES_DB }}" > .env.test
 
-      - name: Debug DNS resolution for postgres
-        run: nslookup postgres || dig postgres || ping -c 3 postgres
+      - name: Debug PostgreSQL container creation
+        run: |
+          echo "Listing all containers (running or stopped):"
+          docker ps -a
+          echo "Listing containers with image postgres:15:"
+          docker ps -a -f ancestor=postgres:15
+
+      - name: Install PostgreSQL client
+        run: apt-get update && apt-get install -y postgresql-client
 
       - name: Wait for PostgreSQL to be ready
         run: |
-          for i in {1..30}; do
-            pg_isready -h localhost -p 5432 && break
+          for i in {1..10}; do
+            pg_isready -h 127.0.0.1 -p 5432 && break
+            echo "Waiting for PostgreSQL ($i/10)..."
             sleep 1
           done
+
+      - name: Test PostgreSQL connection
+        run: psql -h 127.0.0.1 -U ${{ secrets.POSTGRES_USER }} -d ${{ secrets.POSTGRES_DB }} -c "SELECT 1"
+        env:
+          PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      
+      - name: Run Symfony commands
+        run: |
+          php bin/console cache:clear --env=test
+          php bin/console doctrine:database:create --if-not-exists --env=test
 
       - name: Run migrations
         run: php bin/console doctrine:migrations:migrate --env=test --no-interaction
 
       - name: Run tests
         run: php bin/phpunit --testsuite=unit
-
