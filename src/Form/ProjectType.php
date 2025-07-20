@@ -20,7 +20,12 @@ class ProjectType extends AbstractType
                 'class' => User::class,
                 'choice_label' => 'firstname',
             ])
-        ;
+            ->add('firstColor', null, [
+                'label' => 'Première couleur',
+            ])
+            ->add('secondColor', null, [
+                'label' => 'Deuxième couleur',
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

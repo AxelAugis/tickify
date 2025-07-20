@@ -45,6 +45,8 @@ class ProjectFixtures extends Fixture
         $project->setCreatedAt(new \DateTimeImmutable());
         $project->setUpdatedAt(new \DateTime());
         $project->setUuid(UuidV7::v7());
+        $project->setFirstColor('#4A90E2');
+        $project->setSecondColor('#50E3C2');
         $manager->persist($project);
 
         $manager->flush();

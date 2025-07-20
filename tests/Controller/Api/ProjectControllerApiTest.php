@@ -24,8 +24,8 @@ class ProjectControllerApiTest extends WebTestCase
     public function testCreateProjectViaApi(): void
     {
         // Get user from loaded fixtures
-        $user = $this->entityManager->getRepository(User::class)->find(1);
-        $this->assertNotNull($user, 'L\'utilisateur avec l\'ID 1 doit exister dans les fixtures');
+        $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => 'augisax@test.com']);
+        $this->assertNotNull($user, 'L\'utilisateur avec l\'email augisax@test.com doit exister dans les fixtures');
 
         // Simulate user login
         $this->client->loginUser($user);
@@ -47,7 +47,9 @@ class ProjectControllerApiTest extends WebTestCase
             'branch' => [
                 'name' => 'main',
                 'description' => 'Branche principale du projet'
-            ]
+            ], 
+            'first_color' => '#3498db',
+            'second_color' => '#2ecc71'
         ];
 
         // Request
@@ -94,13 +96,21 @@ class ProjectControllerApiTest extends WebTestCase
         $this->assertCount(1, $masters);
         $this->assertEquals('main', $masters->first()->getTitle());
         $this->assertEquals('Branche principale du projet', $masters->first()->getDescription());
+
+        // Check colors
+        $this->assertEquals('#3498db', $project->getFirstColor());
+        $this->assertEquals('#2ecc71', $project->getSecondColor());
     }
 
     public function testCreateProjectWithoutAuthentication(): void
     {
         $projectData = [
             'name' => 'Projet Non Autorisé',
-            'description' => 'Ce projet ne devrait pas être créé'
+            'description' => 'Ce projet ne devrait pas être créé',
+            'teams' => [],
+            'branch' => null,
+            'first_color' => '#3498db',
+            'second_color' => '#2ecc71'
         ];
 
         // Envoyer la requête sans authentification
@@ -123,8 +133,8 @@ class ProjectControllerApiTest extends WebTestCase
     public function testCreateProjectWithMinimalData(): void
     {
         // Get user from loaded fixtures
-        $user = $this->entityManager->getRepository(User::class)->find(1);
-        $this->assertNotNull($user, 'L\'utilisateur avec l\'ID 1 doit exister dans les fixtures');
+        $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => 'augisax@test.com']);
+        $this->assertNotNull($user, 'L\'utilisateur avec l\'email augisax@test.com doit exister dans les fixtures');
 
         // Simulate user login
         $this->client->loginUser($user);
@@ -132,7 +142,11 @@ class ProjectControllerApiTest extends WebTestCase
         // Datas
         $projectData = [
             'name' => 'Projet Minimal',
-            'description' => 'Description minimale'
+            'description' => 'Description minimale',
+            'teams' => [],
+            'branch' => null,
+            'first_color' => '#3498db',
+            'second_color' => '#2ecc71'
         ];
 
         // Request

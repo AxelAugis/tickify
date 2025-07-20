@@ -18,6 +18,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Uid\Uuid;
 
 #[Route('/api/project')]
 #[OA\Tag(name: 'Projects')]
@@ -76,5 +77,106 @@ class ProjectControllerApi extends AbstractController
             return $this->json(['message' => 'Error fetching project details: ' . $e->getMessage()], $e->getCode() ?: 500);
         }
     }
+
+    #[Route('/create', name: 'api_project_create', methods: ['POST'])]
+public function create(Request $request, EntityManagerInterface $entityManager): JsonResponse
+    {
+        // get the connected user
+        $connectedUser = $this->security->getUser();
+        if (!$connectedUser) {
+            return $this->json(['message' => 'User not found'], 404);
+        }
+
+        $createdAt = new \DateTimeImmutable();
+        $updatedAt = new \DateTime();
+
+        try {
+            $data = json_decode($request->getContent(), true);
+
+            // Create project
+            $project = new Project();
+
+            $project->setName($data['name']);
+            $project->setDescription($data['description']);
+            $project->setOwner($connectedUser);
+            $project->setCreatedAt($createdAt);
+            $project->setUpdatedAt($updatedAt);
+            $project->setUuid(Uuid::v7());
+            $project->setFirstColor($data['first_color'] ?? '#3498db');
+            $project->setSecondColor($data['second_color'] ?? '#2ecc71');
+
+            $entityManager->persist($project);
+            $entityManager->flush();
+
+            // Create teams for the projects with teams array
+            $teams = $data['teams'] ?? [];
+            foreach ($teams as $teamData) {
+                $team = new Team();
+                $team->setProject($project);
+                $team->setName($teamData['name']);
+                $team->setColor($teamData['color']);
+                $team->setCreatedAt($createdAt);
+                $team->setUpdatedAt($updatedAt);
+
+                $entityManager->persist($team);
+                $entityManager->flush();
+            }
+
+            // Create master branch if one is provided
+            $branch = $data['branch'] ?? null;
+
+            if ($branch) {
+                $master= new Master();
+                $master->setProject($project);
+                $master->setTitle($branch['name']);
+                $master->setDescription($branch['description'] ?? '');
+                $master->setCreatedAt($createdAt);
+                $master->setUpdatedAt($updatedAt);
+
+                $entityManager->persist($master);
+                $entityManager->flush();
+            }
+
+            return $this->json(['message' => 'Project created!', 'uuid' => $project->getUuid()], 201);
+        } catch (\Exception $e) {
+            return $this->json(['message' => 'Error creating project: ' . $e->getMessage()], 500);
+        }
+    }
+
+    #[Route('/check-duplicate', name: 'api_project_check_duplicate', methods: ['POST'])]
+     public function checkDuplicate(Request $request, ProjectRepository $projectRepository, LoggerInterface $logger): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $name = $data['params']['projectName'] ?? null;
+        $id = $data['params']['projectId'] ?? null;
+        $connectedUser = $this->security->getUser();
+
+        if (!$name || !$connectedUser) {
+            return $this->json(['status' => 400, 'message' => 'Missing required parameters'], 400);
+        }
+
+        $existingProject = null;
+
+        if (empty($id)) {
+            // Création d'un nouveau projet : vérifier si un projet avec ce nom existe déjà pour cet utilisateur
+            $existingProject = $projectRepository->findOneBy(['name' => $name, 'owner' => $connectedUser]);
+        } else {
+            $queryBuilder = $projectRepository->createQueryBuilder('p');
+            $existingProject = $queryBuilder
+                ->where('p.name = :name')
+                ->andWhere('p.owner = :userId')
+                ->andWhere('p.id != :id')
+                ->setParameter('name', $name)
+                ->setParameter('userId', $connectedUser)
+                ->setParameter('id', $id)
+                ->getQuery()
+                ->getOneOrNullResult();
+        }
+
+        if ($existingProject) {
+            return $this->json(['status' => 400, 'duplicate' => true], 400);
+        }
+        
+        return $this->json(['status' => 200, 'duplicate' => false], 200);
+    }
 }
-   

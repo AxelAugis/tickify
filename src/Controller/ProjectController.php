@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Uid\UuidV7;
 use Symfony\Component\Validator\Constraints\DateTime;
 
 class ProjectController extends AbstractController
@@ -67,8 +68,9 @@ class ProjectController extends AbstractController
         $form = $this->createForm(ProjectType::class, $project);
         $form->handleRequest($request);
 
+        $project->setUuid(UuidV7::v7());
         $project->setCreatedAt(new \DateTimeImmutable());
-        $project->setUpdatedAt(new \DateTimeImmutable());
+        $project->setUpdatedAt(new \DateTime());
 
         if ($form->isSubmitted() && $form->isValid()) {
 
@@ -95,7 +97,7 @@ class ProjectController extends AbstractController
         $form = $this->createForm(ProjectType::class, $project);
         $form->handleRequest($request);
 
-        $project->setUpdatedAt(new \DateTimeImmutable());
+        $project->setUpdatedAt(new \DateTime());
 
         if ($form->isSubmitted() && $form->isValid()) {
 

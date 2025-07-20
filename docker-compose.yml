@@ -1,6 +1,7 @@
 services:
-  database:
+  postgres:
     image: postgres:15
+    container_name: tickame_db
     restart: always
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -20,7 +21,7 @@ services:
     container_name: tickame_backend
     restart: unless-stopped
     depends_on:
-      - database
+      - postgres
     ports:
       - "8000:8000"
     volumes:
@@ -28,7 +29,7 @@ services:
       - ./var:/var/www/html/var
     environment:
       - APP_ENV=dev
-      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database:5432/${POSTGRES_DB}?serverVersion=16&charset=utf8
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@tickame_db:5432/${POSTGRES_DB}?serverVersion=16&charset=utf8
     networks:
       - tickame-network
 
