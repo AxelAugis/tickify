@@ -174,8 +174,8 @@ class ProjectControllerApiTest extends WebTestCase
     public function testCheckDuplicateProjectName(): void
     {
         // Retrieve the existing user with ID 1 from fixtures
-        $user = $this->entityManager->getRepository(User::class)->find(1);
-        $this->assertNotNull($user, 'The user with ID 1 must exist in the fixtures');
+        $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => 'augisax@test.com']);
+        $this->assertNotNull($user, 'The user with email augisax@test.com must exist in the fixtures');
 
         // Create an existing project for this test
         $existingProject = new Project();
@@ -185,6 +185,8 @@ class ProjectControllerApiTest extends WebTestCase
         $existingProject->setCreatedAt(new \DateTimeImmutable());
         $existingProject->setUpdatedAt(new \DateTime());
         $existingProject->setUuid('123e4567-e89b-12d3-a456-426614174000');
+        $existingProject->setFirstColor('#FF5733');
+        $existingProject->setSecondColor('#33FF57');
         
         $this->entityManager->persist($existingProject);
         $this->entityManager->flush();
