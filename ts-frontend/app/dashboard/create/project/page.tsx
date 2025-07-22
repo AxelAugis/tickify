@@ -434,6 +434,7 @@ export default function CreateProjectPage() {
         <div className={`w-screen text-dark bg-light flex flex-col gap-y-4 xl:gap-y-8 justify-between px-4 lg:px-24 py-5 fhwn maxhwn border-t border-accent-dark-green/20 mx-auto`}>
             <h1 className="text-4xl font-bold text-center xl:text-start  ">Créer un projet</h1>
             <form
+                data-testid="create-project-form"
                 onSubmit={handleSubmit} 
                 className={`w-full xl:w-3/5 mx-auto flex flex-col flex-1 justify-between gap-y-4 shadow-default py-6 px-3 xl:p-6  rounded-lg bg-light`}
             >
@@ -573,6 +574,7 @@ export default function CreateProjectPage() {
                                     <div className={isLargeScreen ? "flex flex-col gap-y-2 col-span-4" : "flex flex-col gap-y-2"}>
                                         <div className="relative w-full ">
                                             <button
+                                                name="firstColorBtn"
                                                 type="button"
                                                 onClick={() => setShowProjectColorPicker(prev => ({ ...prev, firstColor: !prev.firstColor }))}
                                                 className="w-10 h-10 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-dark-green"
@@ -593,6 +595,7 @@ export default function CreateProjectPage() {
                                     <div className={isLargeScreen ? "flex flex-col gap-y-2 col-span-4" : "flex flex-col gap-y-2 "}>
                                         <div className="relative w-full ">
                                             <button
+                                                name="secondColorBtn"
                                                 type="button"
                                                 onClick={() => setShowProjectColorPicker(prev => ({ ...prev, secondColor: !prev.secondColor }))}
                                                 className="w-10 h-10 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-dark-green"
@@ -628,7 +631,7 @@ export default function CreateProjectPage() {
                             <Input key={index} item={field} />
                         ))}
                         {formErrors.submitError && (
-                            <p className={`text-red-500 bg-red-100  px-4 py-2 rounded-lg`}>{formErrors.submitError}</p>
+                            <p data-testid="submit-error" className={`text-red-500 bg-red-100  px-4 py-2 rounded-lg`}>{formErrors.submitError}</p>
 
                         )}
                        </>
