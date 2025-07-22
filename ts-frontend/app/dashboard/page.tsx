@@ -29,8 +29,6 @@ const DashboardHomepage = () => {
                 const response = await getProjects();
                 if(response.status === 200) {
                     const data = response.data;
-                    console.log("Fetched projects:", data);
-                    
                     if (data.length > 0) {
                         setProjects(data);
                         setDisplayProjectSentences(`Vos projets`);

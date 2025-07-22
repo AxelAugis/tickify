@@ -89,7 +89,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ item, deleteSelf }) => {
     }
 
     return (
-        <div className={`text-dark w-full bg-white p-4 rounded-lg shadow-default hover:shadow-xl transition duration-300 ease-in-out flex flex-col gap-y-12 justify-between `}>
+        <div data-testid="project-card" className={`text-dark w-full bg-white p-4 rounded-lg shadow-default hover:shadow-xl transition duration-300 ease-in-out flex flex-col gap-y-12 justify-between `}>
             <div className={`flex flex-col gap-y-6`}>
                 <div className={`flex flex-col gap-y-2`}>
                     <div className={`flex items-center justify-between`}>

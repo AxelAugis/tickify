@@ -9,7 +9,7 @@ const dots = {
 
 const ScreenLoader = () => {
     return (
-        <div className={`w-screen h-screen flex flex-col items-center justify-center gap-y-10 bg-gradient-to-br from-accent-green from-10% to-accent-dark`}>
+        <div data-testid="screen-loader" className={`w-screen h-screen flex flex-col items-center justify-center gap-y-10 bg-gradient-to-br from-accent-green from-10% to-accent-dark`}>
             <div className="text-center text-light mb-4">
             </div>
             <Dots item={dots} />
