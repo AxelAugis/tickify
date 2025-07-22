@@ -1,6 +1,6 @@
 import { TeamProps } from "./team";
 
-export interface ProjectDraft {
+export interface ProjectDraftProps {
     title: string;
     description: string;
     teams?: TeamProps[];
