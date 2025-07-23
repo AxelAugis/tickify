@@ -35,7 +35,7 @@ const Menu: React.FC<MenuProps> = ({ item }) => {
 
 
     return (
-        <div className={`w-full flex items-center justify-between px-4 py-3 bg-dark/20 backdrop-blur-lg text-light relative z-20`}>
+        <div className={`w-full flex items-center justify-between px-4 py-3 bg-dark/10 backdrop-blur-lg text-light relative z-20`}>
             <div 
                 ref={item.hub.ref}
                 className={`relative z-20`}

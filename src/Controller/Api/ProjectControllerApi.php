@@ -187,4 +187,30 @@ class ProjectControllerApi extends AbstractController
         
         return $this->json(['status' => 200, 'duplicate' => false], 200);
     }
+
+    #[Route('/{id}/delete', name: 'api_project_delete', methods: ['DELETE'])]
+    public function delete(Request $request, EntityManagerInterface $entityManager, ProjectRepository $projectRepository, Project $project): JsonResponse
+    {
+        try {
+            $connectedUser = $this->security->getUser();
+
+            if (!$connectedUser) {
+                return $this->json(['message' => 'User not found'], 404);
+            }
+
+                if (!$project) {
+                return $this->json(['message' => 'Project not found'], 404);
+            }
+
+            $hashedUi = hash('sha256', $connectedUser->getUserIdentifier());
+            $this->projectCacheService->deleteProjectFromCache($hashedUi, $project);
+
+            $entityManager->remove($project);
+            $entityManager->flush();
+
+            return $this->json(['message' => 'Project deleted'], 204);
+        } catch (\Exception $e) {
+            return $this->json(['message' => 'Error deleting project: ' . $e->getMessage()], 500);
+        }
+    }
 }

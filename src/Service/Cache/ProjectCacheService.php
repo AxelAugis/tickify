@@ -21,7 +21,7 @@ class ProjectCacheService
         $this->serializer = $serializer;
     }
 
- public function updateProjectListCache(string $hashedUi, Project $newProject): void
+    public function updateProjectListCache(string $hashedUi, Project $newProject): void
     {
         $cacheKey = 'dashboard_projects_user_' . $hashedUi;
 
@@ -49,6 +49,36 @@ class ProjectCacheService
             });
         } catch (\Throwable $e) {
             throw new \Exception('Failed to update project list cache: ' . $e->getMessage(), 500);
+        }
+    }
+
+    public function deleteProjectFromCache(string $hashedUi, Project $project): void
+    {
+        $cacheKey = 'dashboard_projects_user_' . $hashedUi;
+
+        try {
+            // Get the existing cached project list
+            $projectsJson = $this->cache->get($cacheKey, function () {
+                return json_encode([]); // Return empty array as JSON string if cache is empty
+            });
+
+            // Decode the JSON string to an array
+            $projects = json_decode($projectsJson, true) ?? [];
+
+            // Filter out the project to be deleted
+            $projects = array_filter($projects, function ($p) use ($project) {
+                return $p['uuid'] !== $project->getUuid();
+            });
+
+            // Delete the old cache entry
+            $this->cache->delete($cacheKey);
+
+            // Store the updated project list in the cache
+            $this->cache->get($cacheKey, function () use ($projects) {
+                return json_encode(array_values($projects)); // Store as JSON string
+            });
+        } catch (\Throwable $e) {
+            throw new \Exception('Failed to delete project from cache: ' . $e->getMessage(), 500);
         }
     }
 }

@@ -12,7 +12,7 @@ interface SubmenuProps {
 
 const Submenu: React.FC<SubmenuProps> = ({ item }) => {
     return (
-        <div className={`w-full py-2.5 pl-6 pr-4 bg-dark/50 backdrop-blur-xl flex items-center gap-x-4 text-light/80 z-10`}>
+        <div className={`w-full py-2.5 pl-6 pr-4 bg-dark/30 backdrop-blur-xl flex items-center gap-x-4 text-light/80 z-10`}>
             <h2 className={` text-xl font-semibold `}>{item.project?.name}</h2>
             <span className={` font-medium`}>|</span>
             <Selector

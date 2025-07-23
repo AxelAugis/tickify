@@ -63,7 +63,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ item, deleteSelf }) => {
             elements: [
                 {
                     isLink: true,
-                    url: `/dashboard/projects/${item.uuid}/edit`,
+                    url: `/dashboard/project/${item.uuid}/edit`,
                     text: "Modifier",
                     icon: {
                         src: "/images/icons/edit.svg",

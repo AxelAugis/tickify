@@ -15,7 +15,7 @@ const DashboardHomepage = () => {
     const router = useRouter();
     const { user, loading } = useUserStore();
     const [projects, setProjects] = useState<ProjectProps[]>([]);
-    const [displayProjectSentences, setDisplayProjectSentences] = useState("");
+    const [displayProjectSentences, setDisplayProjectSentences] = useState<string>("");
 
     useEffect(() => {
         if (loading || !user) return;
