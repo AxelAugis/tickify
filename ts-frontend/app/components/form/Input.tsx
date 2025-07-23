@@ -13,6 +13,7 @@ interface InputProps {
             placeholder: string;
             isVisible?: boolean;
             onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+            onBlur?: (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
             value: string;
             button?: {
                 onClick: () => void;
@@ -43,6 +44,7 @@ const Input: React.FC<InputProps> = ({ item }) => {
                             placeholder={item.input.placeholder}
                             value={item.input.value}
                             onChange={item.input.onChange}
+                            onBlur={item.input.onBlur}
                         />
                         <button 
                             type="button"
@@ -66,6 +68,7 @@ const Input: React.FC<InputProps> = ({ item }) => {
                         placeholder={item.input.placeholder}
                         value={item.input.value}
                         onChange={item.input.onChange}
+                        onBlur={item.input.onBlur}
                         cols={30}
                         spellCheck="false"
                     />
@@ -79,6 +82,7 @@ const Input: React.FC<InputProps> = ({ item }) => {
                             className={`w-full h-12 py-2 px-4 bg-light/20 rounded-lg border ${borderStyle} focus:outline-none focus:ring-2 focus:ring-accent-dark/50 focus:border-transparent`}
                             placeholder={item.input.placeholder}
                             onChange={item.input.onChange}
+                            onBlur={item.input.onBlur}
                         />
                     )
                 )

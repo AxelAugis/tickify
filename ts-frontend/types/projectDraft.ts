@@ -1,8 +1,8 @@
 import { TeamProps } from "./team";
 
 export interface ProjectDraftProps {
-    title: string;
-    description: string;
+    projectName: string;
+    projectDescription: string;
     teams?: TeamProps[];
     branchName?: string;
     branchDescription?: string;

@@ -5,19 +5,22 @@ import Input from '@/app/components/form/Input';
 import ProgressBar from '@/app/components/progressBar/ProgressBar';
 import useUserStore from '@/store/useUserStore';
 import { checkProjectNameDuplicate } from '@/utils/database/checker';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { SketchPicker } from 'react-color';
 import { TeamProps } from '@/types/team';
 import axios from '@/utils/axios';
 import { useRouter } from 'next/navigation';
 import useScreenStore from '@/store/useScreenStore';
-
+import { debounce } from 'lodash';
+import ScreenLoader from '@/app/components/screenLoader/ScreenLoader';
+import { useModalStore } from '@/app/store/useModalStore';
 
 export default function CreateProjectPage() {
     const router = useRouter();
 
     const { user } = useUserStore();
     const { isLargeScreen, initializeScreenListener } = useScreenStore();
+    const { openModal, closeModal } = useModalStore();
 
     useEffect(() => {
         // Initialize screen listener for responsive design
@@ -25,8 +28,78 @@ export default function CreateProjectPage() {
         return cleanup;
     }, [initializeScreenListener]);
 
+    const [tmpRedisDraft, setTmpRedisDraft] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [formData, setFormData] = useState({
+        projectName: '',
+        projectDescription: '',
+        teams: [] as TeamProps[],
+        branchName: '',
+        branchDescription: '',
+        firstColor: '',
+        secondColor: '',
+    })
+
+    const displayDraftModal = useCallback(() => {
+         openModal({
+            type: 'info',
+            title: 'Brouillon trouvé',
+            content: 'Un brouillon de projet a été trouvé. Voulez-vous le charger ?',
+            buttons: [
+                {
+                    type: 'info',
+                    action: 'cancel',
+                    label: 'Recommencer',
+                    onClick: () => useModalStore.getState().closeModal(),
+                },
+                {
+                    type: 'info',
+                    action: 'confirm',
+                    label: 'Reprendre',
+                    onClick: () => {
+                        if(tmpRedisDraft) {
+                            console.log('tmpRedisDraft:', tmpRedisDraft);
+                            setFormData(tmpRedisDraft);
+                        }
+                        closeModal();
+                    }
+                }
+            ]
+        });
+    }, [openModal, closeModal, tmpRedisDraft, setFormData]);
+
+    useEffect(() => {
+        const fetchDraft = async () => {
+            try {
+                const response = await fetch('/api/project/draft', {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' },
+                });
+                if (response.ok) {
+                    const data = await response.json();                
+                    if (data.draft) {
+                        
+                        setTmpRedisDraft(data.draft);
+                    }
+                    } else {
+                    console.error('Erreur lors de la récupération du brouillon:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Erreur lors de la récupération du brouillon:', error);
+            }
+        };
+        fetchDraft();
+    }, []);
+
+    useEffect(() => {
+        if (tmpRedisDraft) {
+            displayDraftModal();
+        } else {
+            setIsLoading(false);
+        }
+    }, [tmpRedisDraft, displayDraftModal]);
+
     const [step, setStep] = useState(1);
-    const [teams, setTeams] = useState<TeamProps[]>([]);
     const [currentTeam, setCurrentTeam] = useState({
         name: '',
         color: '#000000'
@@ -38,21 +111,9 @@ export default function CreateProjectPage() {
         secondColor: false
     });
 
-    const [formData, setFormData] = useState({
-        projectName: '',
-        projectDescription: '',
-        projectType: '',
-        teams: [] as TeamProps[],
-        branchName: '',
-        branchDescription: '',
-        firstColor: '',
-        secondColor: '',
-    })
-
     const [formErrors, setFormErrors] = useState({
         projectName: '',
         projectDescription: '',
-        projectType: '',
         teamName: '',
         teamColor: '',
         branchName: '',
@@ -61,6 +122,22 @@ export default function CreateProjectPage() {
         firstColor: '',
         secondColor: '',
     });
+
+    const saveDraft = debounce(async (formData) => {
+        try {
+        const response = await fetch('/api/project/draft', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ data: formData }),
+        });
+        if (!response.ok) {
+            console.log(response);
+            
+        }
+        } catch (error) {
+        console.error('Erreur lors de la sauvegarde du brouillon:', error);
+        }
+    }, 1000);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -172,22 +249,37 @@ export default function CreateProjectPage() {
     };
 
     const handleProjectColorChange = (color: { hex: string }, colorType: 'firstColor' | 'secondColor') => {
-        setFormData(prev => ({
-            ...prev,
-            [colorType]: color.hex
-        }));
+        // setFormData(prev => ({
+        //     ...prev,
+        //     [colorType]: color.hex
+        // }));
+        setFormData(prevData => {
+            const updatedData = {
+                ...prevData,
+                [colorType]: color.hex
+            };
+            saveDraft(updatedData);
+            return updatedData;
+        });
     };
 
     const addTeam = () => {
         if(currentTeam.name.trim() === '') return;
-        setTeams(prevTeams => [
-            ...prevTeams,
-            {
-                id: teams.length == 0 ? 1 : teams[teams.length - 1].id + 1,
-                name: currentTeam.name,
-                color: currentTeam.color
-            }
-        ]);
+        setFormData(prevData => {
+            const updatedData = {
+                ...prevData,
+                teams: [
+                    ...prevData.teams,
+                    {
+                        id: formData.teams.length == 0 ? 1 : formData.teams[formData.teams.length - 1].id + 1,
+                        name: currentTeam.name,
+                        color: currentTeam.color
+                    }
+                ]
+            };
+            saveDraft(updatedData);
+            return updatedData;
+        });
         setCurrentTeam({
             name: '',
             color: '#000000'
@@ -196,7 +288,14 @@ export default function CreateProjectPage() {
     
 
     const removeTeam = (teamId: number) => {
-        setTeams(prevTeams => prevTeams.filter(team => team.id !== teamId));
+        setFormData(prevData => {
+            const updatedData = {
+                ...prevData,
+                teams: prevData.teams.filter(team => team.id !== teamId)
+            };
+            saveDraft(updatedData);
+            return updatedData;
+        });
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -205,7 +304,7 @@ export default function CreateProjectPage() {
         const body = {
             name: formData.projectName,
             description: formData.projectDescription,
-            teams: teams,
+            teams: formData.teams,
             branch: {
                 name: formData.branchName,
                 description: formData.branchDescription
@@ -216,6 +315,9 @@ export default function CreateProjectPage() {
         try {
             const response = await axios.post("/project/create", body)
             if(response.status === 201) {
+                await fetch("/api/project/draft", {
+                    method: "DELETE",
+                });
                 const uuid = response.data.uuid;
                 router.push(`/dashboard/project/${uuid}`);
             } else {
@@ -231,8 +333,6 @@ export default function CreateProjectPage() {
             }));
         }
     }
-        
-
 
     const pageContent = {
         form: {
@@ -252,7 +352,8 @@ export default function CreateProjectPage() {
                                 name: "projectName",
                                 placeholder: "Entrez le nom de votre projet",
                                 value: formData.projectName,
-                                onChange: handleInputChange
+                                onChange: handleInputChange,
+                                onBlur: () => saveDraft(formData)
                             },
                             error: formErrors.projectName,
                             textColor: "text-dark",
@@ -269,7 +370,8 @@ export default function CreateProjectPage() {
                                 name: "projectDescription",
                                 placeholder: "Entrez une description pour votre projet",
                                 value: formData.projectDescription,
-                                onChange: handleInputChange
+                                onChange: handleInputChange,
+                                onBlur: () => saveDraft(formData)
                             },
                             error: formErrors.projectDescription,
                             textColor: "text-dark",
@@ -381,7 +483,8 @@ export default function CreateProjectPage() {
                                 name: "branchName",
                                 placeholder: "Ex: Inviter les membres..., Définir les rôles...",
                                 value: formData.branchName,
-                                onChange: handleInputChange
+                                onChange: handleInputChange,
+                                onBlur: () => saveDraft(formData)
                             },
                             error: formErrors.branchName,
                             textColor: "text-dark",
@@ -398,7 +501,8 @@ export default function CreateProjectPage() {
                                 name: "branchDescription",
                                 placeholder: "Entrez une description pour votre branche",
                                 value: formData.branchDescription,
-                                onChange: handleInputChange
+                                onChange: handleInputChange,
+                                onBlur: () => saveDraft(formData)
                             },
                             error: formErrors.branchDescription,
                             textColor: "text-dark",
@@ -431,6 +535,9 @@ export default function CreateProjectPage() {
     }
 
     return (
+      isLoading ? (
+        <ScreenLoader />
+      ) : (
         <div className={`w-screen text-dark bg-light flex flex-col gap-y-4 xl:gap-y-8 justify-between px-4 lg:px-24 py-5 fhwn maxhwn border-t border-accent-dark-green/20 mx-auto`}>
             <h1 className="text-4xl font-bold text-center xl:text-start  ">Créer un projet</h1>
             <form
@@ -541,11 +648,11 @@ export default function CreateProjectPage() {
                                 )
                             }
                             
-                            {teams.length > 0 && (
+                            {formData.teams.length > 0 && (
                                 <div className="flex flex-col gap-y-4">
                                     <h3 className="text-lg font-semibold">Équipes ajoutées :</h3>
                                     <div className="flex flex-wrap gap-3">
-                                        {teams.map((team) => (
+                                        {formData.teams.map((team) => (
                                             <div
                                                 key={team.id}
                                                 className="flex items-center gap-2 pl-4 pr-2 py-2 rounded-full text-white"
@@ -625,21 +732,21 @@ export default function CreateProjectPage() {
                         </div>
                     )}
                     {step === 4 && (
-                       <>
-                       {
-                         pageContent.form.steps[step -1].fields?.map((field, index) => (
+                    <>
+                    {
+                        pageContent.form.steps[step -1].fields?.map((field, index) => (
                             <Input key={index} item={field} />
                         ))}
                         {formErrors.submitError && (
                             <p data-testid="submit-error" className={`text-red-500 bg-red-100  px-4 py-2 rounded-lg`}>{formErrors.submitError}</p>
 
                         )}
-                       </>
+                    </>
                     )}
                 </div>
                 
                 <div className={`flex items-center  ${step <= 1 ? 'justify-end' : 'justify-between'}`}>
-                   {
+                {
                     step > 1 ? (
                         pageContent.form.navigation.map((navItem, index) => (
                             <Button
@@ -653,12 +760,14 @@ export default function CreateProjectPage() {
                         />
 
                     )
-                   }
+                }
                 </div>
             </form>
             {
                 <ProgressBar item={pageContent.progressBar} />
             }
         </div>
+      )
+
     );
 }
