@@ -19,6 +19,7 @@ use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Uid\Uuid;
+use App\Service\Cache\ProjectCacheService;
 
 #[Route('/api/project')]
 #[OA\Tag(name: 'Projects')]
@@ -28,13 +29,15 @@ class ProjectControllerApi extends AbstractController
     private LoggerInterface $logger;
     private CacheInterface $cache;
     private SerializerInterface $serializer;
+    private ProjectCacheService $projectCacheService;
 
-    public function __construct(Security $security, LoggerInterface $logger, CacheInterface $cache, SerializerInterface $serializer)
+    public function __construct(Security $security, LoggerInterface $logger, CacheInterface $cache, SerializerInterface $serializer, ProjectCacheService $projectCacheService)
     {
         $this->security = $security;
         $this->logger = $logger;
         $this->cache = $cache;
         $this->serializer = $serializer;
+        $this->projectCacheService = $projectCacheService;
     }
 
 
@@ -79,7 +82,7 @@ class ProjectControllerApi extends AbstractController
     }
 
     #[Route('/create', name: 'api_project_create', methods: ['POST'])]
-public function create(Request $request, EntityManagerInterface $entityManager): JsonResponse
+    public function create(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
         // get the connected user
         $connectedUser = $this->security->getUser();
@@ -123,7 +126,7 @@ public function create(Request $request, EntityManagerInterface $entityManager):
             }
 
             // Create master branch if one is provided
-            $branch = $data['branch'] ?? null;
+            $branch = $data['branch'] && $data['branch']['name'] ?? null;
 
             if ($branch) {
                 $master= new Master();
@@ -134,8 +137,13 @@ public function create(Request $request, EntityManagerInterface $entityManager):
                 $master->setUpdatedAt($updatedAt);
 
                 $entityManager->persist($master);
-                $entityManager->flush();
             }
+
+            // Update the project list cache
+            $hashedUi = hash('sha256', $connectedUser->getUserIdentifier());
+            $this->projectCacheService->updateProjectListCache($hashedUi, $project);
+
+            $entityManager->flush();
 
             return $this->json(['message' => 'Project created!', 'uuid' => $project->getUuid()], 201);
         } catch (\Exception $e) {
