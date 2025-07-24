@@ -34,6 +34,7 @@ class Master
      * @var Collection<int, Ticket>
      */
     #[ORM\OneToMany(targetEntity: Ticket::class, mappedBy: 'master')]
+    #[Groups(['master:read'])]
     private Collection $tickets;
 
     #[ORM\Column]

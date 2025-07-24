@@ -17,6 +17,7 @@ export interface SelectorProps<T> {
                 height: number;
             };
         };
+        onSelect: (option: T) => void;
     };
     getLabel: (option: T) => string;
     getId: (option: T) => number;
@@ -46,11 +47,14 @@ const Selector = <T,>({ item, getLabel, getId }: SelectorProps<T>) => {
                     className={`opacity-70 transition-all duration-150 group-hover:opacity-100 ${item.isOpen ? 'rotate-180' : ''}`}
                 />
             </button>
-            <Dropdown item={{
+            <Dropdown<T> item={{
                 isOpen: item.isOpen,
                 getLabel: getLabel,
                 getId: getId,
-                options: item.options
+                options: item.options,
+                onSelect: (option: T) => {
+                   item.onSelect(option);
+                }
             }} />
         </div>
     )

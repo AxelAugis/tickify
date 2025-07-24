@@ -14,15 +14,15 @@ class Ticket
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'SEQUENCE')]
     #[ORM\Column]
-    #[Groups(['ticket:read', 'ticket:write', 'project:read', 'project:write'])]
+    #[Groups(['ticket:read', 'ticket:write', 'project:read', 'project:write', 'master:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['ticket:read', 'ticket:write', 'project:read', 'project:write'])]
+    #[Groups(['ticket:read', 'ticket:write', 'project:read', 'project:write', 'master:read'])]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['ticket:read', 'ticket:write', 'project:read', 'project:write'])]
+    #[Groups(['ticket:read', 'ticket:write', 'project:read', 'project:write', 'master:read'])]
     private ?string $description = null;
 
     #[ORM\ManyToOne(inversedBy: 'tickets')]
@@ -30,7 +30,7 @@ class Ticket
     private ?Project $project = null;
 
     #[ORM\Column(enumType: TicketStatus::class)]
-    #[Groups(['ticket:read', 'ticket:write', 'project:read', 'project:write'])]
+    #[Groups(['ticket:read', 'ticket:write', 'project:read', 'project:write', 'master:read'])]
     private ?TicketStatus $status = null;
 
     #[ORM\Column]

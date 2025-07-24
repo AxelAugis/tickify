@@ -13,14 +13,14 @@ interface ColumnProps {
     colIdx: number;
 }
 
-const Column: React.FC<ColumnProps> = ({ item, colIdx }) => {
+const Column: React.FC<ColumnProps> = ({ item }) => {
     return (
         <div className={`w-full h-fit rounded-xl flex flex-col bg-dark/20 backdrop-blur-xl`}>
             <div className={`flex flex-col`}>
                  <div className={`w-full py-2.5 px-4 flex rounded-t-lg font-semibold p-2 ${item.bgColor} ${item.color}`}>
                     {item.text}
                 </div>
-                <div className="flex-1 flex flex-col gap-2 p-2">
+                <div className="flex-1 flex flex-col gap-2 py-2 px-1.5">
                     {item.tickets.map((ticket, idx) => (
                         <Draggable draggableId={ticket.id.toString()} index={idx} key={ticket.id}>
                             {(provided) => (

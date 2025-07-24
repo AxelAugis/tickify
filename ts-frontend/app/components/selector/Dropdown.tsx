@@ -6,6 +6,7 @@ export interface SelectorDropdownProps<T> {
             getLabel: (option: T) => string;
             getId: (option: T) => number;
             options: T[];
+            onSelect: (option: T) => void;
     }
 }
 
@@ -18,7 +19,8 @@ const Dropdown = <T,>({ item }: SelectorDropdownProps<T>) => {
                    item.options.map((option, index) => (
                         <Option item={{ 
                                     id: item.getId(option), 
-                                    label: item.getLabel(option) 
+                                    label: item.getLabel(option),
+                                    onClick: () => item.onSelect(option)
                                 }} 
                                 key={item.getId(option)} 
                                 isFirst={index === 0} 

@@ -213,4 +213,22 @@ class ProjectControllerApi extends AbstractController
             return $this->json(['message' => 'Error deleting project: ' . $e->getMessage()], 500);
         }
     }
+
+    #[Route('/tickets', name: 'api_project_get_tickets', methods: ['GET'])]
+    public function getAllTickets(Request $request, ProjectRepository $projectRepository): JsonResponse
+    {
+        $uuid = $request->query->get('uuid');
+        $project = $projectRepository->findOneBy(['uuid' => $uuid]);
+
+        if (!$project) {
+            return new JsonResponse(['message' => 'Project not found'], 404);
+        }
+
+        $tickets = $project->getTickets();
+        if (!$tickets) {
+            return new JsonResponse(['message' => 'No tickets found for this project'], 404);
+        }
+
+        return new JsonResponse($this->serializer->serialize($tickets, 'json', ['groups' => ['ticket:read']]), 200, [], true);
+    }
 }
