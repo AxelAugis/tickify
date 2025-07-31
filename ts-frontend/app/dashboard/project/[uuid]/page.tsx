@@ -1,5 +1,5 @@
 'use client';
-import Submenu from "@/app/components/dashboard/submenu/Submenu";
+import Submenu, { LinkSelectorProps } from "@/app/components/dashboard/submenu/Submenu";
 import { useClickOutside } from "@/utils/hooks/useClickOutside";
 import useBackgroundProjectStore from "@/store/useBackgroundProjectStore";
 import useScreenStore from "@/store/useScreenStore";
@@ -36,10 +36,12 @@ const ProjectPage = () => {
         }
     ]);
     const [isMasterSelectorOpen, setIsMasterSelectorOpen] = useState(false);
+    const [isCreatorSelectorOpen, setIsCreatorSelectorOpen] = useState(false);
     const [selectedMaster, setSelectedMaster] = useState<MasterProps | null>(null);
     const [categories, setCategories] = useState<ticketStatus[]>([]);
 
-    const selectorRef = useRef<HTMLDivElement | null>(null);
+    const masterSelectorRef = useRef<HTMLDivElement | null>(null);
+    const creatorSelectorRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
         const cleanup = initializeScreenListener();
@@ -147,11 +149,17 @@ const ProjectPage = () => {
         }
     };
 
-    const onMasterSelectorClose = () => {
-        setIsMasterSelectorOpen(false);
+    const onSelectorClose = (selector: string) => {
+        if (selector === 'master') {
+            setIsMasterSelectorOpen(false);
+        }
+        if (selector === 'creator') {
+            setIsCreatorSelectorOpen(false);
+        }
     }
 
-    useClickOutside(selectorRef, isMasterSelectorOpen, onMasterSelectorClose);
+    useClickOutside(masterSelectorRef, isMasterSelectorOpen, () => onSelectorClose('master'));
+    useClickOutside(creatorSelectorRef, isCreatorSelectorOpen, () => onSelectorClose('creator'));
 
     const handleDragEnd = (result: DropResult) => {
         if (!result.destination) return;
@@ -177,7 +185,7 @@ const ProjectPage = () => {
                 name: project?.name || "Projet inconnu",
             },
             masterSelector: {
-                ref: selectorRef,
+                ref: masterSelectorRef,
                 selectedOption: selectedMaster,
                 isOpen: isMasterSelectorOpen,
                 options: masters || [],
@@ -192,11 +200,59 @@ const ProjectPage = () => {
                     }
                 },
                 onSelect: handleMasterOptionSelection,
+                getLabel: (option: MasterProps) => option.title,
+                getId: (option: MasterProps) => option.id,
                 dropdown: {
                     isOpen: isMasterSelectorOpen,
                     options: masters || [],
-                    getLabel: (option: MasterProps) => option.title,
-                    getId: (option: MasterProps) => option.id,
+                }
+            },
+            creatorSelector: {
+                ref: creatorSelectorRef,
+                isOpen: isCreatorSelectorOpen,
+                label: "Créer",
+                options: [
+                    {
+                        id: 0,
+                        isLink: true,
+                        url: `/dashboard/create/project`,
+                        label: "Créer un projet",
+                        icon: {
+                            src: "/images/icons/crosses/light-cross.svg",
+                            alt: "Créer un projet",
+                            width: 20,
+                            height: 20,
+                        }
+                    },
+                    {
+                        id: 1,
+                        isLink: true,
+                        url: `/dashboard/project/${uuid}/master/create`,
+                        label: "Ajouter une master",
+                        icon: {
+                            src: "/images/icons/crosses/light-cross.svg",
+                            alt: "Ajouter une master",
+                            width: 20,
+                            height: 20,
+                        }
+                    },
+                ],
+                button: {
+                    onClick: () => setIsCreatorSelectorOpen(!isCreatorSelectorOpen),
+                    text: "Créer",
+                    icon: {
+                        src: "/images/icons/crosses/light-cross.svg",
+                        alt: "Créer",
+                        width: 20,
+                        height: 20,
+                    }
+                },
+                getLabel: (option: LinkSelectorProps) => option.label,
+                getId: (option: LinkSelectorProps) => option.id,
+                dropdown: {
+                    isOpen: isCreatorSelectorOpen,
+                   
+
                 }
             }
        }

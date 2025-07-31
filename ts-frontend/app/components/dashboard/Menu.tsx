@@ -45,7 +45,7 @@ const Menu: React.FC<MenuProps> = ({ item }) => {
             </div>
 
             <form className={`relative w-1/3 h-fit`}>
-                <div className={`w-full grid grid-cols-8 items-center rounded-lg border border-neutral-300   text-dark bg-light/40 `}>
+                <div className={`w-full grid grid-cols-8 items-center rounded-lg border border-dark/10   text-dark bg-dark/10 `}>
                     <input 
                         className={`bg-transparent col-span-7 px-3 py-2 focus:outline-none  rounded-l-lg`}
                         type="text"

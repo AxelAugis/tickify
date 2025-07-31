@@ -5,8 +5,10 @@ export interface SelectorDropdownProps<T> {
             isOpen: boolean;
             getLabel: (option: T) => string;
             getId: (option: T) => number;
+            isLink?: boolean;
+            url?: string;
             options: T[];
-            onSelect: (option: T) => void;
+            onSelect?: (option: T) => void;
     }
 }
 
@@ -20,7 +22,10 @@ const Dropdown = <T,>({ item }: SelectorDropdownProps<T>) => {
                         <Option item={{ 
                                     id: item.getId(option), 
                                     label: item.getLabel(option),
-                                    onClick: () => item.onSelect(option)
+                                    onClick: () => item.onSelect?.(option),
+                                    icon: option.icon ? option.icon : undefined,
+                                    isLink: option.isLink,
+                                    url: option.url,
                                 }} 
                                 key={item.getId(option)} 
                                 isFirst={index === 0} 

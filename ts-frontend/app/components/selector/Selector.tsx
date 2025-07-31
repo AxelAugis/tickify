@@ -4,7 +4,8 @@ import Dropdown from "./Dropdown";
 export interface SelectorProps<T> {
     item: {
         ref: React.RefObject<HTMLDivElement | null>;
-        selectedOption: T | null;
+        selectedOption?: T | null;
+        label?: string;
         options: T[];
         isOpen: boolean;
         button: {
@@ -17,13 +18,14 @@ export interface SelectorProps<T> {
                 height: number;
             };
         };
-        onSelect: (option: T) => void;
+        onSelect?: (option: T) => void;
+        getLabel: (option: T) => string;
+        getId: (option: T) => number;
     };
-    getLabel: (option: T) => string;
-    getId: (option: T) => number;
+
 }
 
-const Selector = <T,>({ item, getLabel, getId }: SelectorProps<T>) => {
+const Selector = <T,>({ item }: SelectorProps<T>) => {
     return (
         <div 
             ref={item.ref}
@@ -32,11 +34,12 @@ const Selector = <T,>({ item, getLabel, getId }: SelectorProps<T>) => {
                 className={`py-1.5 pl-4 pr-3 w-full bg-transparent rounded-lg hover:bg-light/20 transition-colors duration-150 cursor-pointer text-start flex items-center justify-between`}
                 onClick={item.button.onClick}
             >
-                {
-                    item.selectedOption ? (
-                        getLabel(item.selectedOption)
-                    ) : (
-                        item.options && getLabel(item.options[0])
+                {item.label ? (
+                    <span className={`text-light/80 font-medium`}>{item.label}</span>
+                ) : item.selectedOption ? (
+                    item.getLabel(item.selectedOption)
+                ) : (
+                        item.options && item.getLabel(item.options[0])
                     )
                 }
                 <Image
@@ -49,11 +52,13 @@ const Selector = <T,>({ item, getLabel, getId }: SelectorProps<T>) => {
             </button>
             <Dropdown<T> item={{
                 isOpen: item.isOpen,
-                getLabel: getLabel,
-                getId: getId,
+                getLabel: item.getLabel,
+                getId: item.getId,
                 options: item.options,
                 onSelect: (option: T) => {
-                   item.onSelect(option);
+                   if (item.onSelect) {
+                       item.onSelect(option);
+                   }
                 }
             }} />
         </div>

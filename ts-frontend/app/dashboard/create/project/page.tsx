@@ -538,12 +538,12 @@ export default function CreateProjectPage() {
       isLoading ? (
         <ScreenLoader />
       ) : (
-        <div className={`w-screen text-dark bg-light flex flex-col gap-y-4 xl:gap-y-8 justify-between px-4 lg:px-24 py-5 fhwn maxhwn border-t border-accent-dark-green/20 mx-auto`}>
+        <div className={`w-screen text-dark  flex flex-col gap-y-4 xl:gap-y-8 justify-between px-4 lg:px-24 py-5 fhwn maxhwn border-t border-accent-dark-green/20 mx-auto bg-light/20`}>
             <h1 className="text-4xl font-bold text-center xl:text-start  ">Créer un projet</h1>
             <form
                 data-testid="create-project-form"
                 onSubmit={handleSubmit} 
-                className={`w-full xl:w-3/5 mx-auto flex flex-col flex-1 justify-between gap-y-4 shadow-default py-6 px-3 xl:p-6  rounded-lg bg-light`}
+                className={`w-full xl:w-3/5 mx-auto flex flex-col flex-1 justify-between gap-y-4 shadow-default py-6 px-3 xl:p-6  rounded-lg bg-light/20 backdrop-blur-md`}
             >
                 <div className={`flex flex-col gap-y-3 xl:gap-y-4`}>
                     <div className={`w-full flex flex-col gap-y-2`}>
